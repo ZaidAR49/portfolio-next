@@ -1,0 +1,103 @@
+.next/types/validator.ts(42,39): error TS2307: Cannot find module '../../app/page.js' or its corresponding type declarations.
+.next/types/validator.ts(57,39): error TS2307: Cannot find module '../../app/layout.js' or its corresponding type declarations.
+src/actions/project.ts(173,17): error TS2339: Property 'result' does not exist on type 'any[]'.
+src/actions/project.ts(173,25): error TS2339: Property 'error' does not exist on type 'any[]'.
+src/app/dashboard/page.tsx(12,21): error TS2307: Cannot find module '../components/dashboard/dashboard-shared' or its corresponding type declarations.
+src/app/dashboard/page.tsx(13,35): error TS2307: Cannot find module '../components/dashboard/dashboard-analysis' or its corresponding type declarations.
+src/app/dashboard/page.tsx(14,34): error TS2307: Cannot find module '../components/dashboard/dashboard-portfolios' or its corresponding type declarations.
+src/app/dashboard/page.tsx(15,35): error TS2307: Cannot find module '../components/dashboard/dashboard-experience' or its corresponding type declarations.
+src/app/dashboard/page.tsx(16,33): error TS2307: Cannot find module '../components/dashboard/dashboard-projects' or its corresponding type declarations.
+src/app/dashboard/page.tsx(17,31): error TS2307: Cannot find module '../components/dashboard/dashboard-skills' or its corresponding type declarations.
+src/app/page.tsx(10,49): error TS2307: Cannot find module '../lib/portfolio-service' or its corresponding type declarations.
+src/components/about-section.tsx(2,29): error TS2307: Cannot find module 'react-router-dom' or its corresponding type declarations.
+src/components/Capabilities.tsx(2,38): error TS2307: Cannot find module '../helpers/icon-mapper' or its corresponding type declarations.
+src/components/dashboard/dashboard-analysis.tsx(4,65): error TS2307: Cannot find module '../../data/portfolio-data' or its corresponding type declarations.
+src/components/dashboard/dashboard-analysis.tsx(6,65): error TS2307: Cannot find module '../../helpers/storage-helper' or its corresponding type declarations.
+src/components/dashboard/dashboard-analysis.tsx(8,29): error TS2307: Cannot find module 'react-router-dom' or its corresponding type declarations.
+src/components/dashboard/dashboard-analysis.tsx(9,24): error TS2307: Cannot find module '../../helpers/logger.healper' or its corresponding type declarations.
+src/components/dashboard/dashboard-analysis.tsx(12,36): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/components/dashboard/dashboard-experience.tsx(2,29): error TS2307: Cannot find module 'react-router-dom' or its corresponding type declarations.
+src/components/dashboard/dashboard-experience.tsx(5,32): error TS2307: Cannot find module '../../data/portfolio-data' or its corresponding type declarations.
+src/components/dashboard/dashboard-experience.tsx(9,30): error TS2307: Cannot find module '../../helpers/storage-helper' or its corresponding type declarations.
+src/components/dashboard/dashboard-experience.tsx(10,24): error TS2307: Cannot find module '../../helpers/logger.healper' or its corresponding type declarations.
+src/components/dashboard/dashboard-experience.tsx(13,36): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/components/dashboard/dashboard-experience.tsx(44,31): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/components/dashboard/dashboard-experience.tsx(47,18): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/components/dashboard/dashboard-portfolios.tsx(2,29): error TS2307: Cannot find module 'react-router-dom' or its corresponding type declarations.
+src/components/dashboard/dashboard-portfolios.tsx(7,31): error TS2307: Cannot find module '../../data/portfolio-data' or its corresponding type declarations.
+src/components/dashboard/dashboard-portfolios.tsx(9,30): error TS2307: Cannot find module '../../helpers/storage-helper' or its corresponding type declarations.
+src/components/dashboard/dashboard-portfolios.tsx(12,36): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/components/dashboard/dashboard-portfolios.tsx(49,31): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/components/dashboard/dashboard-portfolios.tsx(52,19): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/components/dashboard/dashboard-projects.tsx(2,29): error TS2307: Cannot find module 'react-router-dom' or its corresponding type declarations.
+src/components/dashboard/dashboard-projects.tsx(7,29): error TS2307: Cannot find module '../../data/portfolio-data' or its corresponding type declarations.
+src/components/dashboard/dashboard-projects.tsx(9,30): error TS2307: Cannot find module '../../helpers/storage-helper' or its corresponding type declarations.
+src/components/dashboard/dashboard-projects.tsx(10,24): error TS2307: Cannot find module '../../helpers/logger.healper' or its corresponding type declarations.
+src/components/dashboard/dashboard-projects.tsx(28,36): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/components/dashboard/dashboard-projects.tsx(76,29): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/components/dashboard/dashboard-projects.tsx(80,19): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/components/dashboard/dashboard-skills.tsx(2,29): error TS2307: Cannot find module 'react-router-dom' or its corresponding type declarations.
+src/components/dashboard/dashboard-skills.tsx(6,61): error TS2307: Cannot find module '../../helpers/icon-mapper' or its corresponding type declarations.
+src/components/dashboard/dashboard-skills.tsx(7,27): error TS2307: Cannot find module '../../data/portfolio-data' or its corresponding type declarations.
+src/components/dashboard/dashboard-skills.tsx(10,30): error TS2307: Cannot find module '../../helpers/storage-helper' or its corresponding type declarations.
+src/components/dashboard/dashboard-skills.tsx(12,24): error TS2307: Cannot find module '../../helpers/logger.healper' or its corresponding type declarations.
+src/components/dashboard/dashboard-skills.tsx(15,36): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/components/dashboard/dashboard-skills.tsx(34,56): error TS7006: Parameter 'tech' implicitly has an 'any' type.
+src/components/dashboard/dashboard-skills.tsx(38,27): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/components/dashboard/dashboard-skills.tsx(41,19): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/components/dashboard/dashboard-skills.tsx(175,53): error TS7006: Parameter 'tech' implicitly has an 'any' type.
+src/components/error-boundary.tsx(2,24): error TS2307: Cannot find module '../helpers/logger.healper' or its corresponding type declarations.
+src/components/hero.tsx(4,38): error TS2307: Cannot find module '../helpers/icon-mapper' or its corresponding type declarations.
+src/components/loading.tsx(1,20): error TS2307: Cannot find module 'lottie-react' or its corresponding type declarations.
+src/config/email.ts(2,20): error TS2307: Cannot find module 'dotenv' or its corresponding type declarations.
+src/lib/utils/client/icon-mapper.tsx(3,144): error TS2724: '"react-icons/si"' has no exported member named 'SiCss3'. Did you mean 'SiCss'?
+src/lib/utils/client/icon-mapper.tsx(3,394): error TS2305: Module '"react-icons/si"' has no exported member 'SiOracle'.
+src/lib/utils/client/icon-mapper.tsx(3,473): error TS2305: Module '"react-icons/si"' has no exported member 'SiAmazonwebservices'.
+src/lib/utils/client/icon-mapper.tsx(3,746): error TS2305: Module '"react-icons/si"' has no exported member 'SiTableau'.
+src/lib/utils/client/icon-mapper.tsx(3,1032): error TS2724: '"react-icons/si"' has no exported member named 'SiNuxtdotjs'. Did you mean 'SiNextdotjs'?
+src/lib/utils/server/cloud-helper.ts(1,24): error TS2307: Cannot find module '../config/cloud-connection.js' or its corresponding type declarations.
+src/lib/utils/server/cloud-helper.ts(2,43): error TS7006: Parameter 'file' implicitly has an 'any' type.
+src/lib/utils/server/cloud-helper.ts(11,42): error TS7006: Parameter 'files' implicitly has an 'any' type.
+src/lib/utils/server/cloud-helper.ts(13,53): error TS7006: Parameter 'file' implicitly has an 'any' type.
+src/lib/utils/server/cloud-helper.ts(20,43): error TS7006: Parameter 'url' implicitly has an 'any' type.
+src/lib/utils/server/cloud-helper.ts(43,42): error TS7006: Parameter 'urls' implicitly has an 'any' type.
+src/lib/utils/server/cloud-helper.ts(50,52): error TS7006: Parameter 'url' implicitly has an 'any' type.
+src/lib/utils/server/logger-helper.ts(6,12): error TS7023: 'sanitize' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+src/lib/utils/server/logger-helper.ts(6,21): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/lib/utils/server/logger-helper.ts(23,29): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+src/lib/utils/server/logger-helper.ts(33,25): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+src/lib/utils/server/logger-helper.ts(35,25): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+src/lib/utils/server/logger-helper.ts(37,25): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+src/lib/utils/server/logger-helper.ts(47,26): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/lib/utils/server/logger-helper.ts(52,17): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/lib/utils/server/logger-helper.ts(59,20): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/lib/utils/server/logger-helper.ts(66,17): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/lib/utils/server/logger-helper.ts(73,18): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/lib/utils/server/logger-helper.ts(78,17): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+src/lib/utils/server/logger-helper.ts(79,47): error TS2339: Property 'stack' does not exist on type 'never'.
+src/lib/utils/server/logger-helper.ts(86,18): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/templates/email-template.ts(2,32): error TS7006: Parameter 'name' implicitly has an 'any' type.
+src/templates/email-template.ts(2,37): error TS7006: Parameter 'portfolioUrl' implicitly has an 'any' type.
+src/templates/email-template.ts(18,32): error TS7006: Parameter 'subject' implicitly has an 'any' type.
+src/templates/email-template.ts(18,40): error TS7006: Parameter 'name' implicitly has an 'any' type.
+src/templates/email-template.ts(18,45): error TS7006: Parameter 'email' implicitly has an 'any' type.
+src/templates/email-template.ts(18,51): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/templates/google-app-server-template.ts(7,16): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/templates/google-app-server-template.ts(10,23): error TS2304: Cannot find name 'PropertiesService'.
+src/templates/google-app-server-template.ts(14,12): error TS2304: Cannot find name 'ContentService'.
+src/templates/google-app-server-template.ts(16,20): error TS2304: Cannot find name 'ContentService'.
+src/templates/google-app-server-template.ts(19,3): error TS2304: Cannot find name 'MailApp'.
+src/templates/google-app-server-template.ts(28,3): error TS2304: Cannot find name 'MailApp'.
+src/templates/google-app-server-template.ts(35,10): error TS2304: Cannot find name 'ContentService'.
+src/templates/google-app-server-template.ts(41,17): error TS2304: Cannot find name 'ContentService'.
+src/templates/google-app-server-template.ts(44,24): error TS7006: Parameter 'name' implicitly has an 'any' type.
+src/templates/google-app-server-template.ts(44,29): error TS7006: Parameter 'portfolioUrl' implicitly has an 'any' type.
+src/templates/google-app-server-template.ts(60,26): error TS7006: Parameter 'subject' implicitly has an 'any' type.
+src/templates/google-app-server-template.ts(60,34): error TS7006: Parameter 'name' implicitly has an 'any' type.
+src/templates/google-app-server-template.ts(60,39): error TS7006: Parameter 'email' implicitly has an 'any' type.
+src/templates/google-app-server-template.ts(60,45): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/templates/security-code-email-template.ts(1,43): error TS7006: Parameter 'securityCode' implicitly has an 'any' type.
+src/templates/security-code-email-template.ts(1,57): error TS7006: Parameter 'link' implicitly has an 'any' type.
