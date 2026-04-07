@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 // you can run this code in Google Apps Script environment
 // https://script.google.com/home
 // then you can depoly it for web app and get the URL to use in your client app for free

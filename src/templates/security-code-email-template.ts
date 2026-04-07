@@ -1,75 +1,26 @@
-export const securityCodeEmailTemplate = (securityCode, link) => {
-    return `
-    <div style="
-      font-family: Arial, Helvetica, sans-serif;
-      background-color:#0b1220;
-      padding:40px;
-      color:#d1d5db;
-    ">
+export const securityCodeEmailTemplate = (securityCode: string, link: string) => `
+<div style="max-width:600px; margin:auto; font-family:Arial, sans-serif; background-color:#000; color:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.5);">
+  <h2 style="text-align:center; color:#eee;">🔐 Admin Login Access</h2>
+  <p style="text-align:center; color:#aaa;">You requested an access code for the portfolio dashboard.</p>
 
-      <div style="
-        max-width:520px;
-        margin:auto;
-        background:#0f1b2d;
-        border-radius:14px;
-        padding:32px;
-        box-shadow:0 0 25px rgba(0,0,0,0.4);
-      ">
+  <hr style="border: 1px solid #333; margin:20px 0;" />
 
-        <h2 style="
-          margin-top:0;
-          color:#4cc9f0;
-          font-size:22px;
-        ">
-          Admin Access Request
-        </h2>
-
-        <p style="font-size:15px; line-height:1.6;">
-          Use the following access code to enter your dashboard:
-        </p>
-
-        <!-- Security Code -->
-        <div style="
-          margin:24px 0;
-          background:#111827;
-          border:1px solid #1f2937;
-          padding:14px 22px;
-          border-radius:10px;
-          display:inline-block;
-          font-size:21px;
-          font-weight:bold;
-          color:#4cc9f0;
-        ">
-          ${securityCode}
-        </div>
-
-        <!-- CTA Button -->
-        <div style="margin-top:30px;">
-          <a href="${link}"
-             target="_blank"
-             style="
-               display:inline-block;
-               background:#38bdf8;
-               color:#0b1220;
-               text-decoration:none;
-               padding:12px 22px;
-               border-radius:999px;
-               font-size:14px;
-               font-weight:bold;
-             ">
-            Go to My Portfolio →
-          </a>
-        </div>
-
-        <p style="
-          margin-top:30px;
-          font-size:12px;
-          color:#9ca3af;
-        ">
-          If you did not request this access, you can safely ignore this email.
-        </p>
-
-      </div>
+  <div style="background:#111; padding:15px; border-radius:8px; text-align:center;">
+    <h3 style="color:#eee; margin-bottom:10px;">Your Security Code</h3>
+    <div style="font-size:24px; font-weight:bold; letter-spacing:4px; padding:10px; border-radius:5px; background:#222; color:rgb(6,182,212); border:1px dashed rgb(6,182,212); display:inline-block;">
+      ${securityCode}
     </div>
-  `
-}
+  </div>
+
+  <p style="color:#ccc; font-size:14px; margin-top:20px;">
+    🔑 <strong>Security Note:</strong> This code is valid until a new one is generated. Please do not share it with anyone.
+  </p>
+
+  <div style="text-align:center; margin-top:30px;">
+    <a href="${link}" style="display:inline-block; background:rgb(6,182,212); border-radius:5px; color:#fff; padding:12px 20px; text-decoration:none; font-weight:bold;">Go to Login Page</a>
+  </div>
+
+  <hr style="border: 1px solid #333; margin:20px 0;" />
+  <p style="text-align:center; font-size:12px; color:#666;">If you did not request this code, please ignore this email.</p>
+</div>
+`;

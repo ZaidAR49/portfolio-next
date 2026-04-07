@@ -1,281 +1,134 @@
-/* ---------------------------
-   Portfolio-derived Global CSS
-   - Themes: .light and .dark
-   - Variables, base, components, utilities, animations
-   ---------------------------*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Base resets & fonts */
 :root {
-  box-sizing: border-box;
-  --transition-time: 300ms;
-  --ease: cubic-bezier(.4,0,.2,1);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-
-/* Basic layout */
-html, body, #root {
-  height: 100%;
-  min-height: 100%;
-  margin: 0;
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  transition: background-color var(--transition-time) var(--ease), color var(--transition-time) var(--ease);
-  line-height: 1.5;
-}
-
-/* Theme variables (light/dark) */
-.light {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #b6bbc1;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --accent: #0ea5e9;
-  --accent-hover: #0284c7;
-
-  --glass-bg: rgba(255,255,255,0.70);
-  --glass-border: rgba(148,163,184,0.15);
-  --panel-shadow: 0 10px 30px rgba(2,6,23,0.06);
-
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  --bg: #ffffff;
+  --text: #0f172a;
+  --header-bg: transparent;
+  --link-color: #64748b;
+  --link-hover: #38bdf8;
+  --link-active: #0ea5e9;
+  --logo-text: #0f172a;
+  --heading-grad-start: #0f172a;
+  --heading-grad-end: #0ea5e9;
 }
 
 .dark {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --accent: #38bdf8;
-  --accent-hover: #0ea5e9;
-
-  --glass-bg: rgba(15,23,42,0.70);
-  --glass-border: rgba(148,163,184,0.08);
-  --panel-shadow: 0 10px 30px rgba(2,6,23,0.45);
-
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  --bg: #0b1120;
+  --text: #f8fafc;
+  --header-bg: transparent;
+  --link-color: #94a3b8;
+  --link-hover: #38bdf8;
+  --link-active: #38bdf8;
+  --logo-text: #f8fafc;
+  --heading-grad-start: #ffffff;
+  --heading-grad-end: #38bdf8;
 }
 
-/* Paragraph defaults per theme */
-.light p {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  line-height: 1.6;
-}
-@media (min-width: 640px) {
-  .light p { font-size: 1.125rem; }
-}
-
-.dark p {
-  color: #94a3b8;
-  font-size: 1rem;
-  line-height: 1.6;
-}
-@media (min-width: 640px) {
-  .dark p { font-size: 1.125rem; }
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: var(--font-geist-sans), sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
-/* Glass panel (used by cards, modals) */
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border);
-  border-radius: 1rem;
-  box-shadow: var(--panel-shadow);
-}
-
-/* ---------------------------
-   Components
-   ---------------------------*/
-
-/* Primary button (rounded, accent color, shadow, hover) */
-.btn-primary {
+/* Linear Gradient Headings */
+h1, h2, h3, h4, h5, h6 {
+  background: linear-gradient(to right, var(--heading-grad-start), var(--heading-grad-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   display: inline-block;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: var(--accent);
-  border: none;
-  cursor: pointer;
-  transition: transform var(--transition-time) var(--ease), box-shadow var(--transition-time) var(--ease), background-color var(--transition-time) var(--ease);
-  box-shadow: 0 10px 15px rgba(2,6,23,0.08);
-  text-decoration: none;
-}
-.btn-primary:hover {
-  background-color: var(--accent-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 0 15px var(--accent);
-}
-.btn-primary:active {
-  transform: scale(0.95);
+  margin: 0;
 }
 
-/* Header link with underline animation */
-.header-link {
+/* Header Styles */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  background-color: var(--header-bg);
+  z-index: 50;
   position: relative;
-  color: var(--text-secondary);
+}
+
+.site-header .logo a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   text-decoration: none;
-  transition: color var(--transition-time) var(--ease);
+}
+
+.site-header .logo .logo-mark {
+  color: #38bdf8;
+  font-weight: bold;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  width: 100px;
+}
+
+.site-header .logo .logo-text {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--logo-text);
+  letter-spacing: 0.05em;
+}
+
+.site-header nav ul.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header .nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--link-color);
+  text-decoration: none;
   font-weight: 500;
-}
-.header-link:hover { color: var(--accent); }
-.header-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  height: 2px;
-  width: 0;
-  background: var(--accent);
-  transition: width var(--transition-time) var(--ease);
-}
-.header-link:hover::after { width: 100%; }
-
-/* Section title with gradient text */
-.section-title {
-  font-size: 1.875rem; /* ~text-3xl */
-  font-weight: 700;
-  margin-bottom: 2rem;
-  text-align: center;
-  background: linear-gradient(90deg, var(--text-primary), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-@media (min-width: 768px) {
-  .section-title { font-size: 3rem; /* ~text-5xl */ }
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
 }
 
-/* Card (uses glass-panel) */
-.card {
-  border-radius: 1.25rem;
-  padding: 1.5rem;
-  transition: transform var(--transition-time) var(--ease), box-shadow var(--transition-time) var(--ease);
-}
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px rgba(2,6,23,0.25);
+.site-header .nav-links a:hover {
+  color: var(--link-hover);
 }
 
-/* Input primary */
-.input-primary {
-  width: 100%;
-  background: var(--bg-secondary);
-  border: 1px solid rgba(15,23,42,0.10);
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  color: var(--text-primary);
-  font-size: 1rem;
-  transition: box-shadow var(--transition-time) var(--ease), border-color var(--transition-time) var(--ease), transform var(--transition-time) var(--ease);
-  outline: none;
-  box-shadow: none;
-}
-.input-primary:focus {
-  box-shadow: 0 0 0 4px rgba(14,165,233,0.12);
-  border-color: var(--accent);
+.site-header .nav-links a.active {
+  color: var(--link-active);
 }
 
-/* Text gradient utility */
-.text-gradient {
-  background: linear-gradient(90deg, var(--text-primary), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.site-header .nav-links a svg {
+  font-size: 1.1rem;
 }
 
-/* Hover pause utility for animations */
-.hover-pause:hover {
-  animation-play-state: paused !important;
+/* Theme Toggle */
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--link-color);
+  cursor: pointer;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  margin-left: 1rem;
 }
 
-/* ---------------------------
-   Animations & Keyframes
-   ---------------------------*/
-
-/* Core spin keyframe (used by spin-slow) */
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.theme-toggle:hover {
+  color: var(--link-hover);
+  background-color: rgba(148, 163, 184, 0.1);
 }
-
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-@keyframes slideUp {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideDown {
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-@keyframes scaleIn {
-  0% { opacity: 0; transform: scale(0.9); }
-  100% { opacity: 1; transform: scale(1); }
-}
-@keyframes breathing {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-}
-@keyframes float-subtle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-@keyframes morph {
-  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
-}
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* Animation utility classes (names inspired by tailwind config) */
-.anim-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-.anim-slide-up { animation: slideUp 0.5s ease-out forwards; }
-.anim-slide-down { animation: slideDown 0.5s ease-out forwards; }
-.anim-scale-in { animation: scaleIn 0.3s ease-out forwards; }
-.anim-breathing { animation: breathing 3s ease-in-out infinite; }
-.anim-float { animation: float 6s ease-in-out infinite; }
-.anim-float-subtle { animation: float-subtle 6s ease-in-out infinite; }
-.anim-morph { animation: morph 8s ease-in-out infinite; }
-.anim-marquee { animation: marquee 40s linear infinite; }
-.anim-spin-slow { animation: spin 8s linear infinite; }
-
-/* ---------------------------
-   Small helpers (spacing, shadows, etc.)
-   ---------------------------*/
-
-/* Simple utility for centered container used often in portfolio layouts */
-.container {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-/* Tiny responsive helper */
-@media (min-width: 768px) {
-  .md\\:text-5xl { font-size: 3rem; }
-}
-
-/* Accessibility: prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  .anim-fade-in, .anim-slide-up, .anim-slide-down, .anim-scale-in, .anim-breathing, .anim-float, .anim-float-subtle, .anim-morph, .anim-marquee, .anim-spin-slow {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-/* End of file */

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    SiPython, SiJavascript, SiCplusplus, SiTypescript, SiPhp, SiRuby, SiGo, SiSwift, SiKotlin, SiRust, SiDart, SiScala, SiR, SiMysql, SiHtml5, SiCss3, SiReact, SiAngular, SiVuedotjs, SiNextdotjs, SiSvelte, SiJquery, SiBootstrap, SiTailwindcss, SiNodedotjs, SiDjango, SiFlask, SiSpringboot, SiDotnet, SiLaravel, SiExpress, SiRubyonrails, SiFastapi, SiGraphql, SiPostgresql, SiMongodb, SiRedis, SiOracle, SiSqlite, SiApachecassandra, SiElasticsearch, SiFirebase, SiMariadb, SiAmazonwebservices, SiGooglecloud, SiDocker, SiKubernetes, SiJenkins, SiTerraform, SiAnsible, SiGitlab, SiCircleci, SiNginx, SiApache, SiLinux, SiUbuntu, SiGnubash, SiGit, SiGithub, SiTensorflow, SiPytorch, SiScikitlearn, SiPandas, SiNumpy, SiApachespark, SiApachehadoop, SiTableau, SiFlutter, SiIonic, SiAndroid, SiIos, SiUnity, SiUnrealengine, SiFigma, SiPostman, SiJira, SiSelenium, SiCypress, SiWireshark, SiMetasploit, SiOwasp, SiSplunk, SiDatadog, SiPrometheus, SiGrafana, SiBlockchaindotcom, SiEthereum, SiSolidity, SiWebassembly, SiOpenai, SiAppium, SiNuxtdotjs, SiSwagger
+    SiPython, SiJavascript, SiCplusplus, SiTypescript, SiPhp, SiRuby, SiGo, SiSwift, SiKotlin, SiRust, SiDart, SiScala, SiR, SiMysql, SiHtml5, SiReact, SiAngular, SiVuedotjs, SiNextdotjs, SiSvelte, SiJquery, SiBootstrap, SiTailwindcss, SiNodedotjs, SiDjango, SiFlask, SiSpringboot, SiDotnet, SiLaravel, SiExpress, SiRubyonrails, SiFastapi, SiGraphql, SiPostgresql, SiMongodb, SiRedis, SiSqlite, SiApachecassandra, SiElasticsearch, SiFirebase, SiMariadb, SiGooglecloud, SiDocker, SiKubernetes, SiJenkins, SiTerraform, SiAnsible, SiGitlab, SiCircleci, SiNginx, SiApache, SiLinux, SiUbuntu, SiGnubash, SiGit, SiGithub, SiTensorflow, SiPytorch, SiScikitlearn, SiPandas, SiNumpy, SiApachespark, SiApachehadoop, SiFlutter, SiIonic, SiAndroid, SiIos, SiUnity, SiUnrealengine, SiFigma, SiPostman, SiJira, SiSelenium, SiCypress, SiWireshark, SiMetasploit, SiOwasp, SiSplunk, SiDatadog, SiPrometheus, SiGrafana, SiBlockchaindotcom, SiEthereum, SiSolidity, SiWebassembly, SiOpenai, SiAppium, SiSwagger
 } from "react-icons/si";
 import { FaDatabase, FaServer, FaCode, FaJava, FaMicrosoft, FaChartLine, FaRobot } from "react-icons/fa";
 import { BiLogoAws } from "react-icons/bi";
@@ -24,13 +24,10 @@ const iconMap: { [key: string]: React.ReactNode } = {
     "R": <SiR />,
     "SQL": <FaDatabase />,
     "HTML5": <SiHtml5 />,
-    "CSS3": <SiCss3 />,
     "React": <SiReact />,
     "Angular": <SiAngular />,
     "Vue.js": <SiVuedotjs />,
     "Next.js": <SiNextdotjs />,
-    "Nuxt": <SiNuxtdotjs />,
-    "Nuxt.js": <SiNuxtdotjs />,
     "Svelte": <SiSvelte />,
     "jQuery": <SiJquery />,
     "Bootstrap": <SiBootstrap />,
@@ -50,7 +47,6 @@ const iconMap: { [key: string]: React.ReactNode } = {
     "MySQL": <SiMysql />,
     "MongoDB": <SiMongodb />,
     "Redis": <SiRedis />,
-    "Oracle Database": <SiOracle />,
     "Microsoft SQL Server": <FaDatabase />, // Fixed: SiMicrosoftsqlserver not found
     "SQLite": <SiSqlite />,
     "Cassandra": <SiApachecassandra />,
@@ -58,7 +54,6 @@ const iconMap: { [key: string]: React.ReactNode } = {
     "Firebase": <SiFirebase />,
     "MariaDB": <SiMariadb />,
     "DynamoDB": <BiLogoAws />,
-    "AWS": <SiAmazonwebservices />,
     "Microsoft Azure": <FaMicrosoft />, // Fixed: SiMicrosoftazure not found
     "Google Cloud Platform": <SiGooglecloud />,
     "Docker": <SiDocker />,
@@ -82,7 +77,6 @@ const iconMap: { [key: string]: React.ReactNode } = {
     "NumPy": <SiNumpy />,
     "Apache Spark": <SiApachespark />,
     "Hadoop": <SiApachehadoop />,
-    "Tableau": <SiTableau />,
     "Power BI": <FaChartLine />, // Using generic chart icon if not found
     "Flutter": <SiFlutter />,
     "React Native": <SiReact />,

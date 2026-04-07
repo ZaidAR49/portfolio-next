@@ -1,6 +1,6 @@
 
- export const emailBodyTouser=(name,portfolioUrl)=>`<div style="max-width:600px; margin:auto; font-family:Arial, sans-serif; background-color:#000; color:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.5);">
-  <h2 style="color:#eee;">We've Received Your Messag</h2>
+export const emailBodyTouser = (name: string, portfolioUrl: string) => `<div style="max-width:600px; margin:auto; font-family:Arial, sans-serif; background-color:#000; color:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.5);">
+  <h2 style="color:#eee;">We've Received Your Message</h2>
 
   <hr style="border: 1px solid #333; margin:20px 0;" />
 
@@ -9,13 +9,13 @@
     <p style="color:#eee;">Thank you for reaching out! We have received your message and will get back to you shortly.</p>
 
     <p style="color:#eee;">Best regards,<br />Zaid Radaideh</p>
-       <a href=${portfolioUrl} style="display:inline-block; background:rgb(6,182,212); border-radius:5px; color:#fff; padding:12px 20px; text-decoration:none; font-weight:bold;">Go Back to Portfolio</a>
+       <a href="${portfolioUrl}" style="display:inline-block; background:rgb(6,182,212); border-radius:5px; color:#fff; padding:12px 20px; text-decoration:none; font-weight:bold;">Go Back to Portfolio</a>
 
   </div>
 </div>
 `;
 
-export const emailBodyToOwner=(subject,name,email,message)=>`<div style="max-width:600px; margin:auto; font-family:Arial, sans-serif; background-color:#000; color:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.5);">
+export const emailBodyToOwner = (subject: string, name: string, email: string, message: string) => `<div style="max-width:600px; margin:auto; font-family:Arial, sans-serif; background-color:#000; color:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.5);">
   <h2 style=" color:#eee"> message from your portfolio</h2>
   
 
@@ -35,4 +35,4 @@ export const emailBodyToOwner=(subject,name,email,message)=>`<div style="max-wid
     <p style="color:#eee;">${message}</p>
   </div>
 
-</div>`
+</div>`;

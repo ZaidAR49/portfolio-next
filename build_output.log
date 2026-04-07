@@ -1,0 +1,66 @@
+
+> apppp@0.1.0 build
+> next build
+
+▲ Next.js 16.2.2 (Turbopack)
+- Environments: .env
+- Cache Components enabled
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Found 1 warning while optimizing generated CSS:
+
+[2m│ }[22m
+[2m│ @media (min-width: 768px) {[22m
+[2m│[22m   .md\\:text-5xl {
+[2m┆[22m         [33m[2m^--[22m 'text-5xl' is not recognized as a valid pseudo-class. Did you mean '::text-5xl' (pseudo-element) or is this a typo?[39m
+[2m┆[22m
+[2m│     font-size: 3rem;[22m
+[2m│   }[22m
+
+Turbopack build encountered 1 warnings:
+./src/app/globals.css:2:57480
+Parsing CSS source code failed
+  [90m1 |[0m ...
+[31m[1m>[0m [90m2 |[0m ...g-right:[35m1[0mrem}@media (min-width:[35m768[0mpx){.md\\:text-[35m5[0mxl{font-size:[35m3[0mrem}}@media (prefers-red...
+  [90m  |[0m                                                [31m[1m^[0m
+
+'text-5xl' is not recognized as a valid pseudo-class. Did you mean '::text-5xl' (pseudo-element) or is this a typo?
+
+Generated code of PostCSS transform of file content of src/app/globals.css:
+./src/app/globals.css:2:57480
+  [90m1 |[0m ...
+[31m[1m>[0m [90m2 |[0m ...g-right:[35m1[0mrem}@media (min-width:[35m768[0mpx){.md\\:text-[35m5[0mxl{font-size:[35m3[0mrem}}@media (prefers-red...
+  [90m  |[0m                                                [31m[1m^[0m
+
+Import trace:
+  Client Component Browser:
+    ./src/app/globals.css [Client Component Browser]
+    ./src/app/layout.tsx [Server Component]
+
+
+✓ Compiled successfully in 10.0s
+  Running TypeScript ...
+  Finished TypeScript in 25.6s ...
+  Collecting page data using 7 workers ...
+✅ Database connected successfully
+✅ Database connected successfully
+  Generating static pages using 7 workers (0/6) ...
+✅ Database connected successfully
+Error: Route "/error": Uncached data was accessed outside of <Suspense>. This delays the entire page from rendering, resulting in a slow user experience. Learn more: https://nextjs.org/docs/messages/blocking-route
+    at <unknown> (src\app\error\page.tsx:41:20)
+    at body (<anonymous>)
+    at html (<anonymous>)
+  39 |
+  40 | const Error = () => {
+> 41 |     const router = useRouter();
+     |                    ^
+  42 |     const lottieRef = useRef<any>(null);
+  43 |     const location = useSearchParams();
+  44 |     const statusParam = location.get("status")
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/error" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/error". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /error/page: /error, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null

@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
     github_url VARCHAR(500),
     resume_url VARCHAR(500),
     picture_url VARCHAR(500),
-    portfolio_name VARCHAR(255) UNIQUE is_active BOOLEAN DEFAULT true
+    portfolio_name VARCHAR(255) UNIQUE,
+    is_active BOOLEAN DEFAULT true
 );
 -- Enable RLS for users
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
