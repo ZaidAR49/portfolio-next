@@ -5,7 +5,6 @@ import { uploadImage, deleteImage } from "@/lib/utils/server/could-upload";
 import { revalidatePath } from "next/cache";
 
 export async function getUsersAction() {
-    revalidatePath("/");
     try {
         return await getUsers();
     } catch (error) {
@@ -14,7 +13,6 @@ export async function getUsersAction() {
     }
 }
 export async function getUserByIdAction(id: number) {
-    revalidatePath("/");
     try {
         return await getUserById(id);
     } catch (error) {
@@ -50,7 +48,7 @@ export async function deleteUserAction(id: number) {
     }
 }
 export async function getActiveUserAction() {
-    revalidatePath("/");
+
     try {
         return await getActiveUser();
     } catch (error) {

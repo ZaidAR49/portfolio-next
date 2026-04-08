@@ -12,6 +12,20 @@
   --logo-text: #0f172a;
   --heading-grad-start: #0f172a;
   --heading-grad-end: #0ea5e9;
+
+  /* Hero */
+  --hero-accent: #38bdf8;
+  --hero-accent-glow: rgba(56, 189, 248, 0.25);
+  --hero-badge-bg: rgba(56, 189, 248, 0.1);
+  --hero-badge-border: rgba(56, 189, 248, 0.3);
+  --hero-bio-color: #64748b;
+  --hero-btn-secondary-border: rgba(15, 23, 42, 0.4);
+  --hero-btn-secondary-text: #0f172a;
+  --hero-card-bg: rgba(15, 23, 42, 0.06);
+  --hero-card-border: rgba(56, 189, 248, 0.2);
+  --hero-corner-color: #38bdf8;
+  --hero-label-bg: rgba(15, 23, 42, 0.75);
+  --hero-label-text: #f8fafc;
 }
 
 .dark {
@@ -24,7 +38,23 @@
   --logo-text: #f8fafc;
   --heading-grad-start: #ffffff;
   --heading-grad-end: #38bdf8;
+
+  /* Hero dark */
+  --hero-accent: #38bdf8;
+  --hero-accent-glow: rgba(56, 189, 248, 0.2);
+  --hero-badge-bg: rgba(56, 189, 248, 0.08);
+  --hero-badge-border: rgba(56, 189, 248, 0.25);
+  --hero-bio-color: #94a3b8;
+  --hero-btn-secondary-border: rgba(248, 250, 252, 0.25);
+  --hero-btn-secondary-text: #f8fafc;
+  --hero-card-bg: rgba(255, 255, 255, 0.04);
+  --hero-card-border: rgba(56, 189, 248, 0.2);
+  --hero-corner-color: #38bdf8;
+  --hero-label-bg: rgba(11, 17, 32, 0.8);
+  --hero-label-text: #f8fafc;
 }
+
+/* ─── Base ─────────────────────────────────── */
 
 body {
   background-color: var(--bg);
@@ -36,7 +66,7 @@ body {
   min-height: 100vh;
 }
 
-/* Linear Gradient Headings */
+/* Linear Gradient Headings (global default) */
 h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(to right, var(--heading-grad-start), var(--heading-grad-end));
   -webkit-background-clip: text;
@@ -47,7 +77,8 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
-/* Header Styles */
+/* ─── Header ────────────────────────────────── */
+
 .site-header {
   display: flex;
   justify-content: space-between;
@@ -131,4 +162,358 @@ h1, h2, h3, h4, h5, h6 {
 .theme-toggle:hover {
   color: var(--link-hover);
   background-color: rgba(148, 163, 184, 0.1);
+}
+
+/* ─── Hero Section ──────────────────────────── */
+
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 5rem 3rem 5rem;
+  min-height: calc(90vh - 80px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Left content */
+.hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 580px;
+  animation: heroFadeUp 0.7s ease both;
+}
+
+/* Badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hero-accent);
+  background: var(--hero-badge-bg);
+  border: 1px solid var(--hero-badge-border);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  width: fit-content;
+}
+
+.hero-badge::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hero-accent);
+  box-shadow: 0 0 6px var(--hero-accent);
+  animation: heroPulse 2s ease-in-out infinite;
+}
+
+/* Name heading — overrides the global h1 gradient */
+/* Container for each icon + text pair */
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 40px; /* Adjust spacing between items */
+    min-width: 80px;
+}
+
+/* Icon styling */
+.skill-icon {
+    font-size: 2.5rem; /* Adjust size based on your icon library */
+    color: #cbd5e1;    /* Light grayish color to match image */
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Text styling */
+.skill-name {
+    font-size: 0.75rem;
+    font-family: sans-serif;
+    color: #94a3b8;    /* Slightly dimmer than the icon */
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+/* Optional: Subtle glow/hover effect */
+.skill-item:hover .skill-icon {
+    color: #ffffff;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+    transition: all 0.3s ease;
+}
+.hero-name {
+  /* Reset global gradient */
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+  color: var(--text) !important;
+
+  display: block !important;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.hero-greeting {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+.hero-firstname {
+  color: var(--text);
+}
+
+.hero-lastname {
+  color: var(--hero-accent);
+  text-shadow: 0 0 40px var(--hero-accent-glow);
+}
+
+/* Bio */
+.hero-bio {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--hero-bio-color);
+  max-width: 480px;
+  margin: 0;
+  animation: heroFadeUp 0.7s 0.15s ease both;
+}
+
+/* CTA buttons */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: heroFadeUp 0.7s 0.25s ease both;
+}
+
+.hero-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  background: var(--hero-accent);
+  color: #0b1120;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 4px 20px var(--hero-accent-glow);
+}
+
+.hero-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--hero-accent-glow);
+  background: #7dd3fc;
+}
+
+.hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.68rem 1.6rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--hero-btn-secondary-border);
+  color: var(--hero-btn-secondary-text);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  background: transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.hero-btn-secondary:hover {
+  border-color: var(--hero-accent);
+  color: var(--hero-accent);
+  transform: translateY(-2px);
+}
+
+/* ─── Profile Card (right) ───────────────────── */
+
+.hero-profile-wrap {
+  flex-shrink: 0;
+  animation: heroFadeRight 0.8s 0.1s ease both;
+}
+
+.hero-profile-card {
+  position: relative;
+  width: clamp(240px, 28vw, 340px);
+  aspect-ratio: 3 / 4;
+  border-radius: 1.25rem;
+  background: var(--hero-card-bg);
+  border: 1px solid var(--hero-card-border);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+/* Tech corner brackets */
+.hero-profile-card::before,
+.hero-profile-card::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hero-profile-card::before {
+  top: -1px;
+  right: -1px;
+  border-top: 2.5px solid var(--hero-corner-color);
+  border-right: 2.5px solid var(--hero-corner-color);
+  border-top-right-radius: 4px;
+}
+
+.hero-profile-card::after {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 2.5px solid var(--hero-corner-color);
+  border-left: 2.5px solid var(--hero-corner-color);
+  border-bottom-left-radius: 4px;
+}
+
+/* Extra corners via pseudo on wrap */
+.hero-profile-wrap::before,
+.hero-profile-wrap::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hero-profile-wrap {
+  position: relative;
+}
+
+.hero-profile-wrap::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2.5px solid var(--hero-corner-color);
+  border-left: 2.5px solid var(--hero-corner-color);
+  border-top-left-radius: 4px;
+}
+
+.hero-profile-wrap::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2.5px solid var(--hero-corner-color);
+  border-right: 2.5px solid var(--hero-corner-color);
+  border-bottom-right-radius: 4px;
+}
+
+/* Image */
+.hero-profile-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-profile-img {
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* Label bar at the bottom */
+.hero-profile-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.55rem 1rem;
+  background: var(--hero-label-bg);
+  backdrop-filter: blur(6px);
+  color: var(--hero-label-text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  border-top: 1px solid var(--hero-card-border);
+}
+
+/* ─── Animations ─────────────────────────────── */
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes heroPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ─── Responsive ─────────────────────────────── */
+
+@media (max-width: 900px) {
+  .hero-section {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    padding: 3rem 1.5rem 4rem;
+    min-height: unset;
+    gap: 2rem;
+  }
+
+  .hero-profile-wrap {
+    align-self: center;
+  }
+
+  .hero-profile-card {
+    width: clamp(200px, 55vw, 280px);
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
 }
