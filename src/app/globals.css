@@ -76,6 +76,73 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-block;
   margin: 0;
 }
+.swiper {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Customizing the arrows/dots to match your theme */
+:root {
+  --swiper-theme-color: #38bdf8; /* Uses your header's blue */
+  --swiper-navigation-size: 16px;
+}
+
+/* Swiper Navigation Arrows */
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  backdrop-filter: blur(4px);
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  color: #f8fafc !important;
+  opacity: 0.9 !important;
+  transition: all 0.2s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: rgba(30, 41, 59, 1) !important;
+  transform: scale(1.05);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 14px !important;
+  font-weight: 900;
+}
+
+/* Swiper Pagination Dots */
+.swiper-pagination-bullet {
+  background: #64748b !important;
+  opacity: 0.5 !important;
+  width: 6px !important;
+  height: 6px !important;
+  transition: all 0.3s ease !important;
+  border-radius: 50% !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: #38bdf8 !important;
+  opacity: 1 !important;
+  width: 24px !important;
+  border-radius: 999px !important;
+}
+
 
 /* ─── Header ────────────────────────────────── */
 
@@ -94,6 +161,14 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
+}
+.project-card {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .site-header .logo .logo-mark {
@@ -292,7 +367,13 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   animation: heroFadeUp 0.7s 0.15s ease both;
 }
+p{
+  
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--hero-bio-color);
 
+}
 /* CTA buttons */
 .hero-actions {
   display: flex;

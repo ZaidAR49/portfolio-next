@@ -1,5 +1,5 @@
 import { Skill, SkillSchema } from "@/lib/models/skill";
-import { addSkill, deleteSkill, getSkills, updateSkill } from "@/lib/services/skills-service";
+import { addSkill, deleteSkill, getSkills, updateSkill, getActiveSkills } from "@/lib/services/skills-service";
 import { revalidatePath } from "next/cache";
 
 export async function addSkillAction(skill: Skill) {
@@ -12,6 +12,14 @@ export async function addSkillAction(skill: Skill) {
         return await addSkill(validatedSkill.data);
     } catch (error) {
         console.error("Error adding skill:", error);
+        throw error;
+    }
+}
+export async function getActiveSkillsAction() {
+    try {
+        return await getActiveSkills();
+    } catch (error) {
+        console.error("Error getting active skills:", error);
         throw error;
     }
 }

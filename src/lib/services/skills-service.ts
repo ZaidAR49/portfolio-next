@@ -8,6 +8,13 @@ export async function getSkills() {
     }
     return data;
 }
+export async function getActiveSkills() {
+    const { data, error } = await sql.from("skills").select("*,users!inner(is_active)").eq("users.is_active", true);
+    if (error) {
+        throw error;
+    }
+    return data;
+}
 export async function getSkillById(id: number) {
     const { data, error } = await sql.from("skills").select("*").eq("id", id).single();
     if (error) {
