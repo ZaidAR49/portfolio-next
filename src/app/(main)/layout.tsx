@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { ThemeProvider } from "next-themes";
@@ -38,6 +38,10 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          <div className="text-center py-4">
+            <hr className="border-gray-500 w-1/2 mx-auto" />
+            <p className="text-sm text-gray-500 mt-5">© {new Date().getFullYear()} Zaid Radaideh. All rights reserved.</p>
+          </div>
         </ThemeProvider>
       </body>
     </html>

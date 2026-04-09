@@ -43,3 +43,10 @@ export async function deleteSkill(id: number) {
     }
     return data;
 }
+export async function getSkillsCount() {
+    const { count, error } = await sql.from("skills").select(`*`, { count: "exact", head: true });
+    if (error) {
+        throw error;
+    }
+    return count;
+}

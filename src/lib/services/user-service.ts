@@ -69,3 +69,11 @@ export async function updateUserPicture(id: number, picture_url: string) {
     }
     return data;
 }
+
+export async function getUsersCount() {
+    const { count, error } = await sql.from("users").select(`*`, { count: "exact", head: true });
+    if (error) {
+        throw error;
+    }
+    return count;
+}

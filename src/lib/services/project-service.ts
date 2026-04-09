@@ -53,3 +53,10 @@ export async function getActiveProjects() {
     }
     return data;
 }
+export async function getProjectsCount() {
+    const { count, error } = await sql.from("projects").select(`*`, { count: "exact", head: true });
+    if (error) {
+        throw error;
+    }
+    return count;
+}

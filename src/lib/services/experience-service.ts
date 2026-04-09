@@ -17,14 +17,14 @@ export const getActiveExperiences = async () => {
 
 export const getExperiences = async () => {
     try {
-        const { data, error } = await sql.from("experiences").select("*");
+        const { data, error } = await sql.from("experiences").select(`*`, { count: "exact", head: true });
         if (error) {
             throw error;
         }
         return data;
     }
     catch (error) {
-        console.error("Error fetching experiences:", error);
+        console.error("Error fetching experiences count:", error);
         return [];
     }
 }
@@ -82,5 +82,19 @@ export const getExperienceById = async (id: number) => {
     catch (error) {
         console.error("Error fetching experience by id:", error);
         return [];
+    }
+}
+export const getExperiencesCount = async () => {
+    try {
+        const { count, error } = await sql.from("experiences").select("*", { count: "exact", head: true });
+        if (error) {
+            throw error;
+        }
+        console.log("experiences count", count);
+        return count;
+    }
+    catch (error) {
+        console.error("Error fetching experiences count:", error);
+        return 0;
     }
 }

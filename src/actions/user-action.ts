@@ -21,6 +21,11 @@ export async function getUserByIdAction(id: number) {
     }
 }
 export async function addUserAction(user: User) {
+    const { error } = UserSchema.safeParse(user);
+    if (error) {
+        console.error("Error adding user:", error);
+        throw error;
+    }
     revalidatePath("/");
     try {
         return await addUser(user);
@@ -30,6 +35,11 @@ export async function addUserAction(user: User) {
     }
 }
 export async function updateUserAction(user: User) {
+    const { error } = UserSchema.safeParse(user);
+    if (error) {
+        console.error("Error updating user:", error);
+        throw error;
+    }
     revalidatePath("/");
     try {
         return await updateUser(user);
