@@ -69,16 +69,17 @@ export async function getActiveUserAction() {
 export async function activateUserAction(id: number) {
     revalidatePath("/");
     try {
+        await deactivateUserAction();
         return await activateUser(id);
     } catch (error) {
         console.error("Error activating user:", error);
         throw error;
     }
 }
-export async function deactivateUserAction(id: number) {
+export async function deactivateUserAction() {
     revalidatePath("/");
     try {
-        return await deactivateUser(id);
+        return await deactivateUser();
     } catch (error) {
         console.error("Error deactivating user:", error);
         throw error;

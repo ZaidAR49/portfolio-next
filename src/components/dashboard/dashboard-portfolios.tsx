@@ -1,0 +1,115 @@
+"use client";
+import { FaBolt, FaEdit, FaTrash, FaExternalLinkAlt } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
+import { getUsersAction, activateUserAction, deleteUserAction } from "@/actions/user-action";
+import { User } from "@/lib/models/user";
+import { Suspense } from "react";
+import { Loading } from "@/components/loading";
+import Link from 'next/link';
+import { toast, Toaster } from "sonner";
+import { useState, useEffect } from "react";
+export function DashboardPortfolios() {
+    const [users, setUsers] = useState<User[]>([]);
+    useEffect(() => {
+        getUsersAction().then((users) => setUsers(users)).catch((error) => {
+            console.error(error);
+            toast.error("Failed to fetch users");
+        });
+    }, [users]);
+
+    const handleActivation = async (id: number) => {
+        try {
+            await activateUserAction(id);
+            toast.success("Portfolio activated successfully");
+            setUsers(users.map((user) => user.id === id ? { ...user, is_active: true } : user));
+        } catch (error) {
+            toast.error("Failed to activate portfolio");
+            console.error(error);
+        }
+    }
+
+    return (
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 className="text-3xl font-bold text-white mb-1">Portfolios</h2>
+                    <p className="text-slate-400">Manage your different portfolio profiles</p>
+                </div>
+                <Link
+                    href="?tab=portfolios&action=new"
+                    className="bg-[#38bdf8] hover:bg-[#0ea5e9] text-[#0f172a] font-bold py-2 px-6 rounded-full transition-colors shadow-lg shadow-sky-500/20 inline-block"
+                >
+                    Add New
+                </Link>
+            </div>
+            <Suspense fallback={<Loading />}>
+                <div className="flex flex-col gap-4 mt-8">
+                    {users?.map((user: User) => (
+                        <div
+                            key={user.id}
+                            className="bg-[#121929] border border-slate-800 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:border-slate-700 transition-all"
+                        >
+                            <div className="flex items-center gap-4">
+                                {/* Avatar */}
+                                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-slate-800 border border-slate-700 flex-shrink-0 flex items-center justify-center">
+                                    {user.picture_url ? (
+                                        <img src={user.picture_url} alt={user.name} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-sm font-bold text-slate-400">
+                                            {user.name?.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U'}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {/* Info */}
+                                <div className="flex flex-col">
+                                    <div className="flex items-center gap-3">
+                                        <h3 className="text-lg font-bold text-white">{user.name}</h3>
+                                        <span
+                                            className="text-xs px-2 py-0.5 rounded-full border bg-transparent text-slate-300 border-slate-600"
+                                        >
+                                            {user.portfolio_name}
+                                        </span>
+                                        {user.is_active && (
+                                            <span className="text-xs px-2 py-0.5 rounded-full bg-[#064e3b] text-[#10b981] flex items-center gap-1 font-medium">
+                                                <FaCheck className="text-[10px]" /> Active
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-slate-400 text-sm mt-0.5">{user.job_title}</p>
+                                </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-4">
+                                {user.is_active && (
+                                    <a href={`/${user.portfolio_name}`} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" title="View Portfolio">
+                                        <FaExternalLinkAlt />
+                                    </a>
+                                )}
+
+                                {/* Quick Action / Activate */}
+
+                                <button type="submit" className="text-amber-400 hover:text-amber-300 transition-colors" title="Quick Action" onClick={() => handleActivation(user.id)}>
+                                    <FaBolt />
+                                </button>
+
+                                <Link href={`?tab=portfolios&action=edit&id=${user.id}`} className="text-blue-400 hover:text-blue-300 transition-colors" title="Edit">
+                                    <FaEdit />
+                                </Link>
+
+                                {/* Delete */}
+                                <form action={deleteUserAction.bind(null, user.id)}>
+                                    <button type="submit" className="text-red-400 hover:text-red-300 transition-colors" title="Delete">
+                                        <FaTrash />
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Suspense>
+            <Toaster richColors position="bottom-center" duration={2000} />
+        </div>
+    );
+}

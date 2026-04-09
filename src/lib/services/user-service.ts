@@ -55,8 +55,8 @@ export async function activateUser(id: number) {
     }
     return data;
 }
-export async function deactivateUser(id: number) {
-    const { data, error } = await sql.from("users").update({ is_active: false }).eq("id", id);
+export async function deactivateUser() {
+    const { data, error } = await sql.from("users").update({ is_active: false }).eq("is_active", true);
     if (error) {
         throw error;
     }
