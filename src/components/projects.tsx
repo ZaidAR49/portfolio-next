@@ -10,11 +10,13 @@ import { FaGithub } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 export default function Projects({ projects }: { projects: Project[] }) {
+    projects.sort((a, b) => a.sort_order - b.sort_order);
     const ImageSlider = ({ imgeurl, projectName }: { imgeurl: string[], projectName: string }) => {
         return (
             <Swiper
                 modules={[Navigation, Pagination, Autoplay, EffectFade]}
                 effect="fade"
+                fadeEffect={{ crossFade: true }}
                 spaceBetween={0}
                 slidesPerView={1}
                 navigation
