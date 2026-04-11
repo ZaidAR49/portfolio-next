@@ -1,9 +1,11 @@
 import cloudinary from "../../cloud-connection";
+import fileToBase64 from "../server/to-base64";
 const folderName = process.env.NEXT_PUBLIC_ENV;
 
-export const uploadImage = async (filePath: string) => {
+export const uploadImage = async (file: File) => {
+    const base64 = await fileToBase64(file);
     try {
-        const result = await cloudinary.uploader.upload(filePath, {
+        const result = await cloudinary.uploader.upload(base64, {
             folder: folderName, // This creates the folder structure
             use_filename: true,
             unique_filename: true,

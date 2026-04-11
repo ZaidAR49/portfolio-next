@@ -1,6 +1,6 @@
 import ContactInfo from "@/components/contact-info";
 import { Suspense } from "react";
-import { ContactForm } from "@/components/contact-form";
+import { ContactForm } from "@/components/forms/contact-form";
 import { Loading } from "@/components/loading";
 export default function Footer() {
 

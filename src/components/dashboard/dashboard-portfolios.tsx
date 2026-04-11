@@ -8,23 +8,47 @@ import { Loading } from "@/components/loading";
 import Link from 'next/link';
 import { toast, Toaster } from "sonner";
 import { useState, useEffect } from "react";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
 export function DashboardPortfolios() {
     const [users, setUsers] = useState<User[]>([]);
-    useEffect(() => {
+    const [userToDelete, setUserToDelete] = useState<number | null>(null);
+    const fetchUsers = () => {
         getUsersAction().then((users) => setUsers(users)).catch((error) => {
             console.error(error);
             toast.error("Failed to fetch users");
         });
-    }, [users]);
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
     const handleActivation = async (id: number) => {
         try {
             await activateUserAction(id);
             toast.success("Portfolio activated successfully");
-            setUsers(users.map((user) => user.id === id ? { ...user, is_active: true } : user));
+            fetchUsers();
         } catch (error) {
             toast.error("Failed to activate portfolio");
             console.error(error);
+        }
+    }
+
+    const handleDeleteClick = (id: number) => {
+        setUserToDelete(id);
+    }
+
+    const handleConfirmDelete = async () => {
+        if (userToDelete === null) return;
+        try {
+            await deleteUserAction(userToDelete);
+            toast.success("Portfolio deleted successfully");
+            fetchUsers();
+        } catch (error) {
+            toast.error("Failed to delete portfolio");
+            console.error(error);
+        } finally {
+            setUserToDelete(null);
         }
     }
 
@@ -90,7 +114,7 @@ export function DashboardPortfolios() {
 
                                 {/* Quick Action / Activate */}
 
-                                <button type="submit" className="text-amber-400 hover:text-amber-300 transition-colors" title="Quick Action" onClick={() => handleActivation(user.id)}>
+                                <button type="submit" className="text-amber-400 hover:text-amber-300 transition-colors" title="Quick Action" onClick={() => { user.id && handleActivation(user.id) }}>
                                     <FaBolt />
                                 </button>
 
@@ -99,16 +123,26 @@ export function DashboardPortfolios() {
                                 </Link>
 
                                 {/* Delete */}
-                                <form action={deleteUserAction.bind(null, user.id)}>
-                                    <button type="submit" className="text-red-400 hover:text-red-300 transition-colors" title="Delete">
-                                        <FaTrash />
-                                    </button>
-                                </form>
+                                <button type="button" onClick={() => { user.id && handleDeleteClick(user.id) }} className="text-red-400 hover:text-red-300 transition-colors" title="Delete">
+                                    <FaTrash />
+                                </button>
                             </div>
                         </div>
                     ))}
                 </div>
             </Suspense>
+
+            <ConfirmModal
+                isOpen={userToDelete !== null}
+                onClose={() => setUserToDelete(null)}
+                onConfirm={handleConfirmDelete}
+                title="Delete Portfolio"
+                description="Are you sure you want to delete this portfolio? This action cannot be undone and will permanently remove all associated data."
+                confirmText="Delete"
+                cancelText="Cancel"
+                isDestructive={true}
+            />
+
             <Toaster richColors position="bottom-center" duration={2000} />
         </div>
     );

@@ -4,7 +4,7 @@ import {
 } from 'react-icons/fa';
 import { DashboardAnalysis } from '@/components/dashboard/dashboard-analysis';
 import { DashboardPortfolios } from '@/components/dashboard/dashboard-portfolios';
-import { DashboardPortfolioForm } from '@/components/dashboard/dashboard-portfolio-form';
+import { DashboardPortfolioForm } from '@/components/forms/user-form';
 
 export type TabKey = 'analysis' | 'portfolios' | 'experience' | 'projects' | 'skills';
 

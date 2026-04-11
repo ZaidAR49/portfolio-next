@@ -18,7 +18,7 @@ export async function getUserById(id: number) {
 }
 
 export async function addUser(user: User) {
-    const { data, error } = await sql.from("users").insert(user);
+    const { data, error } = await sql.from("users").insert(user).select().single();
     if (error) {
         throw error;
     }
@@ -26,11 +26,20 @@ export async function addUser(user: User) {
 }
 
 export async function updateUser(user: User) {
-    const { data, error } = await sql.from("users").update(user).eq("id", user.id);
-    if (error) {
-        throw error;
+    if (user.picture_url) {
+        const { data, error } = await sql.from("users").update(user).eq("id", user.id);
+        if (error) {
+            throw error;
+        }
+        return data;
     }
-    return data;
+    else {
+        const { data, error } = await sql.from("users").update({ name: user.name, job_title: user.job_title, email: user.email, hero_description: user.hero_description, about_description: user.about_description, capabilities_description: user.capabilities_description, about_title: user.about_title, linkedin_url: user.linkedin_url, github_url: user.github_url, resume_url: user.resume_url, portfolio_name: user.portfolio_name, is_active: user.is_active }).eq("id", user.id);
+        if (error) {
+            throw error;
+        }
+        return data;
+    }
 }
 
 export async function deleteUser(id: number) {
