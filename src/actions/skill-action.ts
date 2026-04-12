@@ -1,3 +1,4 @@
+"use server";
 import { Skill, SkillSchema } from "@/lib/models/skill";
 import { addSkill, deleteSkill, getSkills, updateSkill, getActiveSkills } from "@/lib/services/skills-service";
 import { revalidatePath } from "next/cache";

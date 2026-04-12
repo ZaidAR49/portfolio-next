@@ -1,3 +1,4 @@
+"use server";
 import { getProjects, getProjectById, getActiveProjects, addProject, updateProject, deleteProject, updateProjectImages } from "@/lib/services/project-service";
 import { Project, ProjectSchema } from "@/lib/models/project";
 import { revalidatePath } from "next/cache";

@@ -7,6 +7,7 @@ import { DashboardPortfolios } from '@/components/dashboard/dashboard-portfolios
 import { DashboardPortfolioForm } from '@/components/forms/user-form';
 import { DashboardExperience } from '@/components/dashboard/dashboard-experience';
 import { DashboardExperienceForm } from '@/components/forms/experience-form';
+import { DashboardSkills } from '@/components/dashboard/dashboard-skills';
 export type TabKey = 'analysis' | 'portfolios' | 'experience' | 'projects' | 'skills';
 
 interface DashboardPageProps {
@@ -79,7 +80,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     (action === 'new' || action === 'edit') ? <DashboardExperienceForm experienceId={id ? Number(id) : undefined} /> : <DashboardExperience />
                 )}
                 {activeTab === 'projects' && <div className="text-white">Projects Tab (Coming Soon)</div>}
-                {activeTab === 'skills' && <div className="text-white">Skills Tab (Coming Soon)</div>}
+                {activeTab === 'skills' && <DashboardSkills />}
             </main>
         </div>
     );
