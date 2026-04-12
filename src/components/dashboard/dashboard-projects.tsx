@@ -71,20 +71,23 @@ export function DashboardProjects() {
                                     key={proj.id || index}
                                     className="relative overflow-hidden bg-[#121929]/60  border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-sm hover:border-slate-700 transition-all gap-4 backdrop-blur-md"
                                 >
-                                    <div
-                                        className="absolute inset-0 -z-10 opacity-20"
-                                        style={{
-                                            backgroundImage: `url(${proj.images[0] || '/default-bg.jpg'})`,
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundBlendMode: 'overlay',
-                                            backgroundColor: '#121929',
-                                            opacity: 0.5,
-                                            zIndex: -1,
-                                            transition: 'all 0.3s ease-in-out',
-                                        }}
-                                    />
+                                    {proj.images && (
+                                        <div
+                                            className="absolute inset-0 -z-10 opacity-20"
+                                            style={{
+                                                backgroundImage: `url(${proj.images[0] || '/default-bg.jpg'})`,
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: 'center',
+                                                backgroundRepeat: 'no-repeat',
+                                                backgroundBlendMode: 'overlay',
+                                                backgroundColor: '#121929',
+                                                opacity: 0.5,
+                                                zIndex: -1,
+                                                transition: 'all 0.3s ease-in-out',
+                                            }}
+                                        />
+                                    )
+                                    }
                                     <div>
                                         <div className="flex items-center gap-3 mb-4">
                                             <span className="text-xs font-mono text-slate-400 border border-slate-700 px-2 py-1 rounded">#{proj.sort_order}</span>

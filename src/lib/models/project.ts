@@ -2,22 +2,31 @@ import z from "zod";
 
 export const ProjectSchema = z.object({
     id: z.number().optional(),
-    user_id: z.number().optional(),
+    user_id: z.number(),
     title: z.string().min(2, "Title must be at least 2 characters long"),
     client: z.string().min(2, "Client must be at least 2 characters long"),
     role: z.string().min(2, "Role must be at least 2 characters long"),
-    year: z.union([z.string(), z.number()]).transform(val => Number(val)),
+    year: z.number().min(4, "Year must be at least 4 digits").max(4, "Year must be at most 4 digits"),
     status: z.string().min(2, "Status must be at least 2 characters long"),
-    sort_order: z.union([z.string(), z.number()]).transform(val => Number(val)),
+    sort_order: z.number().min(1, "Sort order must be at least 1").max(100, "Sort order must be at most 100"),
     description: z.string().min(10, "Description must be at least 10 characters long"),
-    github_url: z.string().url("Invalid URL").or(z.literal("").transform(() => undefined)).optional(),
-    technologies: z.array(z.string()),
-    images: z.array(z.string()).optional().default([]),
+    github_url: z.string().url("Invalid URL").optional(),
+    technologies: z.string().min(2, "Please provide at least one technology"),
+    images: z.array(z.string().url()).max(5, "Maximum 5 images allowed").optional().nullable()
 });
 export type Project = z.infer<typeof ProjectSchema>;
 
-export const RequestProjectSchema = ProjectSchema.omit({ technologies: true }).extend({
-    technologies: z.string().min(2, "Please provide at least one technology"),
-    new_images: z.array(z.any()).optional(),
+export const RequestProjectSchema = ProjectSchema.omit({ images: true }).extend({
+    images: z
+        .array(
+            z.instanceof(File)
+                .refine((file) => file.size <= 5 * 1024 * 1024, `Max image size is 5MB.`)
+                .refine(
+                    (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+                    "Only .jpg, .jpeg, .png and .webp formats are supported."
+                )
+        )
+        .min(1, "At least one image is required")
+        .max(5, "Maximum 5 images allowed")
 });
 export type RequestProject = z.infer<typeof RequestProjectSchema>;
