@@ -124,7 +124,7 @@ export default function HeroSection({ user, skills }: { user: User, skills: Skil
                         <div className="w-full h-full rounded-[1.5rem] overflow-hidden relative bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5">
                             {user.picture_url && (
                                 <Image
-                                    src={"https://res.cloudinary.com/dxa0aylow/image/upload/v1769416147/qentbmtdh7xeslqkcs3a.png"}
+                                    src={user.picture_url}
                                     alt={user.name}
                                     fill
                                     sizes="(max-width: 768px) 280px, 320px"
