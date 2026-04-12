@@ -1,3 +1,4 @@
+"use server";
 import { getActiveExperiences, getExperiences, addExperience, updateExperience, deleteExperience, getExperienceById } from "@/lib/services/experience-service";
 import { Experience, ExperienceSchema } from "@/lib/models/experience";
 import { revalidatePath } from "next/cache";
