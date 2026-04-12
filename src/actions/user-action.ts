@@ -1,5 +1,5 @@
 "use server";
-import { RequestUser, requestUserSchema, UserSchema } from "@/lib/models/user";
+import { RequestUser, requestUserSchema, UserSchema, User } from "@/lib/models/user";
 import { getUsers, getUserById, addUser, updateUser, deleteUser, getActiveUser, activateUser, deactivateUser, updateUserPicture } from "@/lib/services/user-service";
 import { uploadImage, deleteImage } from "@/lib/utils/server/could-upload";
 import { revalidatePath } from "next/cache";
@@ -35,10 +35,18 @@ export async function addUserAction(user: RequestUser) {
                 throw new Error("Error uploading picture");
             }
             const newUser: User = {
-                ...user,
+                name: user.name,
+                job_title: user.job_title,
+                email: user.email,
+                hero_description: user.hero_description,
+                about_description: user.about_description,
+                capabilities_description: user.capabilities_description,
+                about_title: user.about_title,
+                linkedin_url: user.linkedin_url,
+                github_url: user.github_url,
+                resume_url: user.resume_url,
                 picture_url: url,
-                is_active: user.is_active ?? false,
-                id: user.id
+                portfolio_name: user.portfolio_name,
             }
             return await addUser(newUser);
         }
@@ -53,15 +61,17 @@ export async function addUserAction(user: RequestUser) {
 export async function updateUserAction(user: RequestUser) {
     const parsed = requestUserSchema.safeParse(user);
     if (!parsed.success) {
-        console.error("Error updating user:", parsed.error);
+        console.error(" Error parsing user:", parsed.error);
         throw parsed.error;
     }
 
     try {
+
         if (user.picture && user.id) {
             //delete old picture
-            const oldUser = await getUserByIdAction(user.id);
-            if (oldUser) {
+            const oldUserResult = await getUserByIdAction(user.id);
+            const oldUser = Array.isArray(oldUserResult) ? oldUserResult[0] : oldUserResult;
+            if (oldUser && oldUser.picture_url) {
                 await deleteImage(oldUser.picture_url);
             }
             const url = await uploadImage(user.picture);
@@ -69,24 +79,41 @@ export async function updateUserAction(user: RequestUser) {
                 throw new Error("Error uploading picture");
             }
             const newUser: User = {
-                ...user,
+                id: user.id,
+                name: user.name,
+                job_title: user.job_title,
+                email: user.email,
+                hero_description: user.hero_description,
+                about_description: user.about_description,
+                capabilities_description: user.capabilities_description,
+                about_title: user.about_title,
+                linkedin_url: user.linkedin_url,
+                github_url: user.github_url,
+                resume_url: user.resume_url,
                 picture_url: url,
-                is_active: user.is_active ?? false,
-                id: user.id
+                portfolio_name: user.portfolio_name,
             }
             revalidatePath("/");
             return await updateUser(newUser);
         }
         revalidatePath("/");
-        const newUserWithoutPic: User = { 
-            ...user, 
-            picture_url: null,
-            is_active: user.is_active ?? false,
-            id: user.id
+        const newUserWithoutPic: User = {
+            id: user.id,
+            name: user.name,
+            job_title: user.job_title,
+            email: user.email,
+            hero_description: user.hero_description,
+            about_description: user.about_description,
+            capabilities_description: user.capabilities_description,
+            about_title: user.about_title,
+            linkedin_url: user.linkedin_url,
+            github_url: user.github_url,
+            resume_url: user.resume_url,
+            portfolio_name: user.portfolio_name,
         };
         return await updateUser(newUserWithoutPic);
     } catch (error) {
-        console.error("Error updating user:", error);
+        console.error("Error updating user to DB:", error);
         throw error;
     }
 }

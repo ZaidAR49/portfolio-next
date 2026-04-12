@@ -114,9 +114,11 @@ export function DashboardPortfolios() {
 
                                 {/* Quick Action / Activate */}
 
-                                <button type="submit" className="text-amber-400 hover:text-amber-300 transition-colors" title="Quick Action" onClick={() => { user.id && handleActivation(user.id) }}>
-                                    <FaBolt />
-                                </button>
+                                {!user.is_active && (
+                                    <button type="submit" className="text-amber-400 hover:text-amber-300 transition-colors" title="Quick Action" onClick={() => { user.id && handleActivation(user.id) }}>
+                                        <FaBolt />
+                                    </button>
+                                )}
 
                                 <Link href={`?tab=portfolios&action=edit&id=${user.id}`} className="text-blue-400 hover:text-blue-300 transition-colors" title="Edit">
                                     <FaEdit />

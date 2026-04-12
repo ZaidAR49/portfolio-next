@@ -16,6 +16,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     const params = await searchParams;
     const activeTab = (params.tab as TabKey) || 'analysis';
     const action = params.action as string | undefined;
+    const id = params.id as string | undefined || null;
 
     const navItems = [
         { id: 'analysis', label: 'Analysis', icon: FaChartLine, color: '#0ea5e9' },
@@ -71,7 +72,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <main className="flex-1 p-6 md:p-8 lg:p-10 w-full max-w-[1600px] 2xl:max-w-[1800px] mx-auto space-y-8">
                 {activeTab === 'analysis' && <DashboardAnalysis />}
                 {activeTab === 'portfolios' && (
-                    action === 'new' ? <DashboardPortfolioForm /> : <DashboardPortfolios />
+                    (action === 'new' || action === 'edit') ? <DashboardPortfolioForm userId={id ? Number(id) : undefined} /> : <DashboardPortfolios />
                 )}
                 {activeTab === 'experience' && <div className="text-white">Experience Tab (Coming Soon)</div>}
                 {activeTab === 'projects' && <div className="text-white">Projects Tab (Coming Soon)</div>}

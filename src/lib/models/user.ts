@@ -12,14 +12,14 @@ export const UserSchema = z.object({
     linkedin_url: z.string().url("Invalid URL"),
     github_url: z.string().url("Invalid URL"),
     resume_url: z.string().url("Invalid URL"),
-    picture_url: z.string().url().nullable(),
+    picture_url: z.string().url().nullable().optional(),
     portfolio_name: z.string().min(2, "Portfolio name must be at least 2 characters long"),
-    is_active: z.boolean().optional().default(false),
+    is_active: z.boolean().optional()
 });
 export type User = z.infer<typeof UserSchema>;
 
 export const requestUserSchema = UserSchema
-    .omit({ picture_url: true, id: true, is_active: true })
+    .omit({ picture_url: true, is_active: true })
     .extend({
         picture: z.any()
             .transform((val) => {

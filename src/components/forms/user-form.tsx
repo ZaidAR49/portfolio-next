@@ -2,37 +2,95 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { addUserAction } from '@/actions/user-action';
+import { addUserAction, getUsersAction, updateUserAction, getUserByIdAction } from '@/actions/user-action';
 import { RequestUser, requestUserSchema } from "@/lib/models/user";
 import { toast, Toaster } from 'sonner';
 import Link from 'next/link';
 
-export function DashboardPortfolioForm() {
+export function DashboardPortfolioForm({ userId }: { userId?: number }) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const isEditMode = !!userId;
+    const [existingUser, setExistingUser] = useState<any>(null);
+    const [picturePreview, setPicturePreview] = useState<string | null>(null);
 
     const {
         register,
         handleSubmit,
         formState: { errors },
+        reset
     } = useForm<RequestUser>({
         resolver: zodResolver(requestUserSchema),
     });
+    const [names, setNames] = useState<string[]>([]);
+
+    useEffect(() => {
+        getUsersAction().then((users) => setNames(users.map((user: any) => user.portfolio_name))).catch((error) => {
+            console.error(error);
+            toast.error("Failed to fetch users");
+        });
+
+        if (userId) {
+            getUserByIdAction(userId).then((user) => {
+                if (user) {
+                    const userData = Array.isArray(user) ? user[0] : user;
+                    if (userData) {
+                        setExistingUser(userData);
+                        reset({
+                            id: userData.id,
+                            name: userData.name,
+                            portfolio_name: userData.portfolio_name,
+                            job_title: userData.job_title,
+                            email: userData.email,
+                            linkedin_url: userData.linkedin_url,
+                            github_url: userData.github_url,
+                            resume_url: userData.resume_url,
+                            hero_description: userData.hero_description,
+                            about_title: userData.about_title,
+                            about_description: userData.about_description,
+                            capabilities_description: userData.capabilities_description,
+                        });
+                        setPicturePreview(userData.picture_url);
+                    }
+                }
+            }).catch((error) => {
+                console.error(error);
+                toast.error("Failed to fetch user details");
+            });
+        }
+    }, [userId, reset]);
+
     const onSubmit = async (data: RequestUser) => {
-        console.log(" submitting");
+
         setIsSubmitting(true);
         setError(null);
+
+        const isNameChanged = existingUser && existingUser.portfolio_name !== data.portfolio_name;
+        if ((!isEditMode || isNameChanged) && names.includes(data.portfolio_name)) {
+            setError("Portfolio name already exists");
+            toast.error("Portfolio name already exists");
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
-            const userRes = await addUserAction(data);
+            if (isEditMode) {
+                data.id = userId;
+                await updateUserAction(data);
+                toast.success("Portfolio updated successfully");
+            } else {
+                await addUserAction(data);
+                toast.success("Portfolio added successfully");
+            }
             router.push('?tab=portfolios');
-            toast.success("Portfolio added successfully");
         } catch (err: any) {
-            console.error(err);
+
+            console.error("Error -->: ", err);
             setError(err.message || 'Something went wrong while submitting.');
-            toast.error("Failed to add portfolio");
+            toast.error(`Failed to ${isEditMode ? 'update' : 'add'} portfolio`);
         } finally {
             setIsSubmitting(false);
         }
@@ -42,8 +100,8 @@ export function DashboardPortfolioForm() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold text-white mb-1">Add Portfolio / User</h2>
-                    <p className="text-slate-400">Create a new portfolio profile with full details.</p>
+                    <h2 className="text-3xl font-bold text-white mb-1">{isEditMode ? 'Edit Portfolio / User' : 'Add Portfolio / User'}</h2>
+                    <p className="text-slate-400">{isEditMode ? 'Update the details of your portfolio.' : 'Create a new portfolio profile with full details.'}</p>
                 </div>
                 <Link
                     href="?tab=portfolios"
@@ -138,13 +196,25 @@ export function DashboardPortfolioForm() {
 
                     {/* Row 5: Profile Picture */}
                     <div>
-                        <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Profile Picture</label>
-                        <input
-                            type="file"
-                            accept="image/png, image/jpeg, image/jpg, image/webp"
-                            {...register('picture')}
-                            className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-700 file:text-slate-300 hover:file:bg-slate-600 transition-all cursor-pointer"
-                        />
+                        <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Profile Picture {isEditMode && <span className="text-sky-500 ml-1">(Optional - leave empty to keep current)</span>}</label>
+                        <span className="flex items-center gap-2">
+                            {picturePreview && <img src={picturePreview} alt="" className="w-16 h-16 rounded-full" />}
+                            <input
+
+                                type="file"
+                                accept="image/png, image/jpeg, image/jpg, image/webp"
+                                {...register('picture', {
+                                    onChange: (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            setPicturePreview(URL.createObjectURL(file))
+                                        }
+                                    }
+                                })}
+                                className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-700 file:text-slate-300 hover:file:bg-slate-600 transition-all cursor-pointer"
+                            />
+                        </span>
+
                         {errors.picture && <p className="text-red-400 text-xs mt-1">{errors.picture?.message as string}</p>}
                     </div>
 
