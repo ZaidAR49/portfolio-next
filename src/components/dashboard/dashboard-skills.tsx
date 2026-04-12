@@ -9,7 +9,7 @@ import { toast, Toaster } from "sonner";
 import { Loading } from "@/components/loading";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 
-export function DashboardSkills(userId: number) {
+export function DashboardSkills() {
     const [skills, setSkills] = useState<Skill[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [skillToDelete, setSkillToDelete] = useState<number | null>(null);
