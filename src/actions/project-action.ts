@@ -1,5 +1,8 @@
 "use server";
-import { getProjects, getProjectById, getActiveProjects, addProject, updateProject, deleteProject, updateProjectImages } from "@/lib/services/project-service";
+import {
+    getProjects, getProjectById, getActiveProjects, addProject,
+    updateProject, deleteProject, updateProjectImages, reorderProjects
+} from "@/lib/services/project-service";
 import { Project, ProjectSchema, RequestProject, RequestProjectSchema } from "@/lib/models/project";
 import { uploadImage, deleteImage } from "@/lib/utils/server/could-upload";
 import { revalidatePath } from "next/cache";
@@ -35,7 +38,11 @@ export async function addProjectAction(project: Project) {
     }
     try {
         revalidatePath("/");
-        return await addProject(validatedProject.data);
+        const res = await addProject(validatedProject.data);
+        if (validatedProject.data.user_id) {
+            await reorderProjects(validatedProject.data.user_id);
+        }
+        return res;
     } catch (error) {
         console.error("Error adding project:", error);
         throw error;
@@ -48,7 +55,11 @@ export async function updateProjectAction(project: Project) {
     }
     try {
         revalidatePath("/");
-        return await updateProject(validatedProject.data);
+        const res = await updateProject(validatedProject.data);
+        if (validatedProject.data.user_id) {
+            await reorderProjects(validatedProject.data.user_id);
+        }
+        return res;
     } catch (error) {
         console.error("Error updating project:", error);
         throw error;
@@ -56,8 +67,16 @@ export async function updateProjectAction(project: Project) {
 }
 export async function deleteProjectAction(id: number) {
     try {
+        const projectOrArray = await getProjectById(id);
+        const project = Array.isArray(projectOrArray) ? projectOrArray[0] : projectOrArray;
+        const userId = project?.user_id;
+
+        const res = await deleteProject(id);
+        if (userId) {
+            await reorderProjects(userId);
+        }
         revalidatePath("/");
-        return await deleteProject(id);
+        return res;
     } catch (error) {
         console.error("Error deleting project:", error);
         throw error;
@@ -79,7 +98,7 @@ export async function addProjectWithFilesAction(projectData: RequestProject) {
         console.error("Validation error:", parsed.error);
         throw parsed.error;
     }
-    
+
     try {
         const uploadedImages: string[] = [];
         if (parsed.data.new_images) {
@@ -88,13 +107,13 @@ export async function addProjectWithFilesAction(projectData: RequestProject) {
                 if (url) uploadedImages.push(url);
             }
         }
-        
+
         const newProject: Project = {
             ...parsed.data,
-            technologies: parsed.data.technologies.split(',').map(s => s.trim()).filter(s => s.length > 0),
+            technologies: parsed.data.technologies,
             images: [...(parsed.data.images || []), ...uploadedImages],
         };
-        
+
         return await addProjectAction(newProject);
     } catch (e) {
         console.error("Error adding project with files:", e);
@@ -108,13 +127,13 @@ export async function updateProjectWithFilesAction(projectData: RequestProject, 
         console.error("Validation error:", parsed.error);
         throw parsed.error;
     }
-    
+
     try {
         // Handle deletions of old images
         for (const imgUrl of imagesToDelete) {
             await deleteImage(imgUrl);
         }
-        
+
         const uploadedImages: string[] = [];
         if (parsed.data.new_images) {
             for (const file of parsed.data.new_images) {
@@ -122,19 +141,43 @@ export async function updateProjectWithFilesAction(projectData: RequestProject, 
                 if (url) uploadedImages.push(url);
             }
         }
-        
+
         const remainingImages = (parsed.data.images || []).filter(img => !imagesToDelete.includes(img));
-        
+
         const updatedProject: Project = {
             ...parsed.data,
             id: projectData.id,
-            technologies: parsed.data.technologies.split(',').map(s => s.trim()).filter(s => s.length > 0),
+            technologies: parsed.data.technologies,
             images: [...remainingImages, ...uploadedImages],
         };
-        
+
         return await updateProjectAction(updatedProject);
     } catch (e) {
         console.error("Error updating project with files:", e);
+        throw e;
+    }
+}
+
+export async function updateProjectImagesOnlyAction(id: number, existingImages: string[], newImages: File[], imagesToDelete: string[] = []) {
+    try {
+        for (const imgUrl of imagesToDelete) {
+            await deleteImage(imgUrl);
+        }
+
+        const uploadedImages: string[] = [];
+        if (newImages && newImages.length > 0) {
+            for (const file of newImages) {
+                const url = await uploadImage(file);
+                if (url) uploadedImages.push(url);
+            }
+        }
+
+        const remainingImages = existingImages.filter(img => !imagesToDelete.includes(img));
+        const finalImages = [...remainingImages, ...uploadedImages];
+
+        return await updateProjectImagesAction(id, finalImages);
+    } catch (e) {
+        console.error("Error updating project images only:", e);
         throw e;
     }
 }

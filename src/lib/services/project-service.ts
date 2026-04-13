@@ -60,3 +60,10 @@ export async function getProjectsCount() {
     }
     return count;
 }
+export async function reorderProjects(user_id: number) {
+    const { data, error } = await sql.rpc('reorder_projects_for_user', { target_user_id: user_id });
+    if (error) {
+        throw error;
+    }
+    return data;
+}

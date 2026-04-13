@@ -16,7 +16,9 @@ export function DashboardProjects() {
     const fetchProjects = () => {
         setIsLoading(true);
         getActiveProjectsAction().then((data) => {
+            data.sort((a: Project, b: Project) => a.sort_order - b.sort_order);
             setProjects(data);
+
         }).catch((error) => {
             console.error(error);
             toast.error("Failed to fetch projects");
