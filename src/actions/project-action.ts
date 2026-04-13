@@ -110,6 +110,7 @@ export async function addProjectWithFilesAction(projectData: RequestProject) {
 
         const newProject: Project = {
             ...parsed.data,
+            user_id: parsed.data.user_id as number,
             technologies: parsed.data.technologies,
             images: [...(parsed.data.images || []), ...uploadedImages],
         };
@@ -147,6 +148,7 @@ export async function updateProjectWithFilesAction(projectData: RequestProject, 
         const updatedProject: Project = {
             ...parsed.data,
             id: projectData.id,
+            user_id: parsed.data.user_id as number,
             technologies: parsed.data.technologies,
             images: [...remainingImages, ...uploadedImages],
         };
