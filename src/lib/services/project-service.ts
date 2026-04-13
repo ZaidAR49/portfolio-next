@@ -1,7 +1,11 @@
 import sql from "../database-conection";
 import { Project } from "../models/project";
+import { revalidateTag, cacheLife, cacheTag } from "next/cache";
 
 export async function getProjects() {
+    "use cache";
+    cacheTag("projects");
+    cacheLife("hours");
     const { data, error } = await sql.from("projects").select("*");
     if (error) {
         throw error;
@@ -9,6 +13,9 @@ export async function getProjects() {
     return data;
 }
 export async function getProjectById(id: number) {
+    "use cache";
+    cacheTag("projects");
+    cacheLife("hours");
     const { data, error } = await sql.from("projects").select("*").eq("id", id);
     if (error) {
         throw error;
@@ -21,6 +28,7 @@ export async function addProject(project: Project) {
     if (error) {
         throw error;
     }
+    revalidateTag("projects", "default");
     return data;
 }
 
@@ -29,6 +37,7 @@ export async function updateProject(project: Project) {
     if (error) {
         throw error;
     }
+    revalidateTag("projects", "default");
     return data;
 }
 
@@ -37,6 +46,7 @@ export async function deleteProject(id: number) {
     if (error) {
         throw error;
     }
+    revalidateTag("projects", "default");
     return data;
 }
 export async function updateProjectImages(id: number, images: string[]) {
@@ -44,9 +54,13 @@ export async function updateProjectImages(id: number, images: string[]) {
     if (error) {
         throw error;
     }
+    revalidateTag("projects", "default");
     return data;
 }
 export async function getActiveProjects() {
+    "use cache";
+    cacheTag("projects");
+    cacheLife("hours");
     const { data, error } = await sql.from("projects").select("*,users!inner(is_active)").eq("users.is_active", true)
     if (error) {
         throw error;
@@ -54,6 +68,9 @@ export async function getActiveProjects() {
     return data;
 }
 export async function getProjectsCount() {
+    "use cache";
+    cacheTag("projects");
+    cacheLife("hours");
     const { count, error } = await sql.from("projects").select(`*`, { count: "exact", head: true });
     if (error) {
         throw error;
@@ -65,5 +82,6 @@ export async function reorderProjects(user_id: number) {
     if (error) {
         throw error;
     }
+    revalidateTag("projects", "default");
     return data;
 }

@@ -1,8 +1,13 @@
 
 import sql from "../database-conection";
 import { User } from "../models/user";
+import { revalidateTag, cacheLife, cacheTag } from "next/cache";
 
 export async function getUsers() {
+    "use cache";
+    cacheTag("users");
+    cacheLife("hours");
+
     const { data, error } = await sql.from("users").select("*");
     if (error) {
         throw error;
@@ -10,6 +15,10 @@ export async function getUsers() {
     return data;
 }
 export async function getUserById(id: number) {
+    "use cache";
+    cacheTag("users");
+    cacheLife("hours");
+
     const { data, error } = await sql.from("users").select("*").eq("id", id);
     if (error) {
         throw error;
@@ -19,9 +28,11 @@ export async function getUserById(id: number) {
 
 export async function addUser(user: User) {
     const { data, error } = await sql.from("users").insert(user).select().single();
+
     if (error) {
         throw error;
     }
+    revalidateTag("users", "default");
     return data;
 }
 
@@ -31,6 +42,7 @@ export async function updateUser(user: User) {
         if (error) {
             throw error;
         }
+        revalidateTag("users", "default");
         return data;
     }
     else {
@@ -38,6 +50,7 @@ export async function updateUser(user: User) {
         if (error) {
             throw error;
         }
+        revalidateTag("users", "default");
         return data;
     }
 }
@@ -47,10 +60,14 @@ export async function deleteUser(id: number) {
     if (error) {
         throw error;
     }
+    revalidateTag("users", "default");
     return data;
 } ``
 
 export async function getActiveUser() {
+    "use cache";
+    cacheTag("users");
+    cacheLife("hours");
     const { data, error } = await sql.from("users").select("*").eq("is_active", true).single();
     if (error) {
         throw error;
@@ -58,10 +75,12 @@ export async function getActiveUser() {
     return data;
 }
 export async function activateUser(id: number) {
+
     const { data, error } = await sql.from("users").update({ is_active: true }).eq("id", id);
     if (error) {
         throw error;
     }
+    revalidateTag("users", "default");
     return data;
 }
 export async function deactivateUser() {
@@ -69,6 +88,7 @@ export async function deactivateUser() {
     if (error) {
         throw error;
     }
+    revalidateTag("users", "default");
     return data;
 }
 export async function updateUserPicture(id: number, picture_url: string) {
@@ -76,10 +96,14 @@ export async function updateUserPicture(id: number, picture_url: string) {
     if (error) {
         throw error;
     }
+    revalidateTag("users", "default");
     return data;
 }
 
 export async function getUsersCount() {
+    "use cache";
+    cacheTag("users");
+    cacheLife("hours");
     const { count, error } = await sql.from("users").select(`*`, { count: "exact", head: true });
     if (error) {
         throw error;
@@ -87,6 +111,9 @@ export async function getUsersCount() {
     return count;
 }
 export async function getPortfolioNames() {
+    "use cache";
+    cacheTag("users");
+    cacheLife("hours");
     const { data, error } = await sql.from("users").select("portfolio_name");
     if (error) {
         throw error;
@@ -94,6 +121,9 @@ export async function getPortfolioNames() {
     return data;
 }
 export async function getActivePortfolioName() {
+    "use cache";
+    cacheTag("users");
+    cacheLife("hours");
     const { data, error } = await sql.from("users").select("portfolio_name").eq("is_active", true).single();
     if (error) {
         throw error;

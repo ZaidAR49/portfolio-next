@@ -39,7 +39,7 @@ export default function RootLayout({
                 </ThemeProvider>
                 <div className="text-center py-10">
                     <hr className="border-gray-500 w-1/2 mx-auto" />
-                    <p className="text-sm text-gray-500 mt-5">© {new Date().getFullYear()} Zaid Radaideh. All rights reserved.</p>
+                    <p className="text-sm text-gray-500 mt-5">© Zaid Radaideh. All rights reserved.</p>
                 </div>
             </body>
         </html>

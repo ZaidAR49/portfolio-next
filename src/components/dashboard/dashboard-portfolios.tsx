@@ -138,20 +138,21 @@ export function DashboardPortfolios() {
                         </div>
                     ))}
                 </div>
+
+
+                <ConfirmModal
+                    isOpen={userToDelete !== null}
+                    onClose={() => setUserToDelete(null)}
+                    onConfirm={handleConfirmDelete}
+                    title="Delete Portfolio"
+                    description="Are you sure you want to delete this portfolio? This action cannot be undone and will permanently remove all associated data."
+                    confirmText="Delete"
+                    cancelText="Cancel"
+                    isDestructive={true}
+                />
+
+                <Toaster richColors position="bottom-right" duration={2000} />
             </Suspense>
-
-            <ConfirmModal
-                isOpen={userToDelete !== null}
-                onClose={() => setUserToDelete(null)}
-                onConfirm={handleConfirmDelete}
-                title="Delete Portfolio"
-                description="Are you sure you want to delete this portfolio? This action cannot be undone and will permanently remove all associated data."
-                confirmText="Delete"
-                cancelText="Cancel"
-                isDestructive={true}
-            />
-
-            <Toaster richColors position="bottom-right" duration={2000} />
         </div>
     );
 }

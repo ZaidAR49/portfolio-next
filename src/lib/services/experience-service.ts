@@ -1,7 +1,11 @@
 import { Experience, ExperienceSchema } from "../models/experience";
 import sql from "@/lib/database-conection";
+import { revalidateTag, cacheLife, cacheTag } from "next/cache";
 
 export const getActiveExperiences = async () => {
+    "use cache";
+    cacheTag("experiences");
+    cacheLife("hours");
     try {
         const { data, error } = await sql.from("experiences").select("*,users!inner(is_active)").eq("users.is_active", true);
         if (error) {
@@ -16,6 +20,9 @@ export const getActiveExperiences = async () => {
 }
 
 export const getExperiences = async () => {
+    "use cache";
+    cacheTag("experiences");
+    cacheLife("hours");
     try {
         const { data, error } = await sql.from("experiences").select(`*`, { count: "exact", head: true });
         if (error) {
@@ -35,6 +42,7 @@ export const addExperience = async (experience: Experience) => {
         if (error) {
             throw error;
         }
+        revalidateTag("experiences", "default");
         return data;
     }
     catch (error) {
@@ -49,6 +57,7 @@ export const updateExperience = async (experience: Experience) => {
         if (error) {
             throw error;
         }
+        revalidateTag("experiences", "default");
         return data;
     }
     catch (error) {
@@ -63,6 +72,7 @@ export const deleteExperience = async (id: number) => {
         if (error) {
             throw error;
         }
+        revalidateTag("experiences", "default");
         return data;
     }
     catch (error) {
@@ -72,6 +82,9 @@ export const deleteExperience = async (id: number) => {
 }
 //get experience by id
 export const getExperienceById = async (id: number) => {
+    "use cache";
+    cacheTag("experiences");
+    cacheLife("hours");
     try {
         const { data, error } = await sql.from("experiences").select("*").eq("id", id);
         if (error) {
@@ -85,6 +98,9 @@ export const getExperienceById = async (id: number) => {
     }
 }
 export const getExperiencesCount = async () => {
+    "use cache";
+    cacheTag("experiences");
+    cacheLife("hours");
     try {
         const { count, error } = await sql.from("experiences").select("*", { count: "exact", head: true });
         if (error) {

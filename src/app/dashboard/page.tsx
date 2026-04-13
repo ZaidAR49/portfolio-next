@@ -10,6 +10,7 @@ import { DashboardExperienceForm } from '@/components/forms/experience-form';
 import { DashboardSkills } from '@/components/dashboard/dashboard-skills';
 import { DashboardProjects } from '@/components/dashboard/dashboard-projects';
 import { DashboardProjectForm } from '@/components/forms/project-form';
+import { Suspense } from 'react';
 export type TabKey = 'analysis' | 'portfolios' | 'experience' | 'projects' | 'skills';
 
 interface DashboardPageProps {
@@ -63,6 +64,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
     return (
         <div className="min-h-screen pt-[104px] flex relative bg-[#0b1120]">
+
             {/* Sidebar */}
             <aside className="w-64 border-r border-[#1e293b] hidden lg:block bg-[#0b1120]/50 sticky top-[104px] h-[calc(100vh-104px)] overflow-y-auto">
                 <div className="p-6">
