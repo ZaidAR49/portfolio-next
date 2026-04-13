@@ -2,6 +2,7 @@ import { FaUsers, FaCode, FaProjectDiagram, FaBriefcase, FaFileExport, FaFileImp
 import { getAnalysisAction } from '@/actions/analysis-action';
 import { Suspense } from 'react';
 import { Loading } from '@/components/loading';
+import { ExportDataCard } from '@/components/dashboard/export-data-card';
 
 export async function DashboardAnalysis() {
     const analysis = await getAnalysisAction();
@@ -67,18 +68,7 @@ export async function DashboardAnalysis() {
             {/* Action Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 pt-10">
                 {/* Card 1 */}
-                <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center text-center shadow-lg hover:shadow-xl transition-all">
-                    <div className="mb-6">
-                        <FaFileExport className="text-[#0ea5e9] text-3xl" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-3">Export User Data</h3>
-                    <p className="text-slate-400 text-sm mb-8 leading-relaxed max-w-sm flex-1">
-                        Download all your active portfolio data including skills, projects, and experiences in JSON format.
-                    </p>
-                    <button className="bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-bold py-3 px-8 rounded-lg w-full max-w-[200px] transition-colors shadow-lg shadow-sky-500/20">
-                        Download Data
-                    </button>
-                </div>
+                <ExportDataCard />
 
                 {/* Card 2 */}
                 <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center text-center shadow-lg hover:shadow-xl transition-all">
