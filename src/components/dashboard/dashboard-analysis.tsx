@@ -3,7 +3,7 @@ import { getAnalysisAction } from '@/actions/analysis-action';
 import { Suspense } from 'react';
 import { Loading } from '@/components/loading';
 import { ExportDataCard } from '@/components/dashboard/export-data-card';
-
+import { ImportDataCard } from '@/components/dashboard/import-data-card';
 export async function DashboardAnalysis() {
     const analysis = await getAnalysisAction();
     return (
@@ -71,18 +71,7 @@ export async function DashboardAnalysis() {
                 <ExportDataCard />
 
                 {/* Card 2 */}
-                <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center text-center shadow-lg hover:shadow-xl transition-all">
-                    <div className="mb-6">
-                        <FaFileImport className="text-blue-500 text-3xl" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-3">Import User Data</h3>
-                    <p className="text-slate-400 text-sm mb-8 leading-relaxed max-w-sm flex-1">
-                        Upload a previously exported JSON file to load your portfolio data into the dashboard.
-                    </p>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg w-full max-w-[200px] transition-colors shadow-lg shadow-blue-600/20">
-                        Upload Data
-                    </button>
-                </div>
+                <ImportDataCard />
                 <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center text-center shadow-lg hover:shadow-xl transition-all">
                     <div className="mb-6 bg-red-500/10 p-4 rounded-full">
                         <FaSignOutAlt className="text-red-500 text-2xl" />

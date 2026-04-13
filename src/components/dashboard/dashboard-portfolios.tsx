@@ -125,7 +125,13 @@ export function DashboardPortfolios() {
                                 </Link>
 
                                 {/* Delete */}
-                                <button type="button" onClick={() => { user.id && handleDeleteClick(user.id) }} className="text-red-400 hover:text-red-300 transition-colors" title="Delete">
+                                <button type="button" onClick={() => {
+                                    if (user.is_active) {
+                                        toast.warning("Cannot delete an active portfolio. Please activate a different portfolio first");
+                                        return;
+                                    }
+                                    user.id && handleDeleteClick(user.id)
+                                }} className="text-red-400 hover:text-red-300 transition-colors" title="Delete">
                                     <FaTrash />
                                 </button>
                             </div>
@@ -145,7 +151,7 @@ export function DashboardPortfolios() {
                 isDestructive={true}
             />
 
-            <Toaster richColors position="bottom-center" duration={2000} />
+            <Toaster richColors position="bottom-right" duration={2000} />
         </div>
     );
 }
