@@ -80,16 +80,17 @@ SELECT USING (true);
 CREATE POLICY "Enable update for projects" ON projects FOR
 UPDATE USING (true);
 CREATE POLICY "Enable delete for projects" ON projects FOR DELETE USING (true);
-CREATE TABLE IF NOT EXISTS secret_key (
+CREATE TABLE IF NOT EXISTS auth_codes (
     id SERIAL PRIMARY KEY,
-    secret VARCHAR(255),
+    code_hash TEXT NOT NULL,
+    expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '10 minutes'),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
--- Enable RLS for secret_key
-ALTER TABLE secret_key ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Enable insert for secret_key" ON secret_key FOR
+-- Enable RLS for auth_codes
+ALTER TABLE auth_codes ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Enable insert for auth_codes" ON auth_codes FOR
 INSERT WITH CHECK (true);
-CREATE POLICY "Enable select for secret_key" ON secret_key FOR
+CREATE POLICY "Enable select for auth_codes" ON auth_codes FOR
 SELECT USING (true);
 CREATE POLICY "Enable update for secret_key" ON secret_key FOR
 UPDATE USING (true);
