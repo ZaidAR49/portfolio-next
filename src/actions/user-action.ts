@@ -1,6 +1,9 @@
 "use server";
 import { RequestUser, requestUserSchema, UserSchema, User } from "@/lib/models/user";
-import { getUsers, getUserById, addUser, updateUser, deleteUser, getActiveUser, activateUser, deactivateUser, updateUserPicture } from "@/lib/services/user-service";
+import {
+    getUsers, getUserById, addUser, updateUser, deleteUser, getActiveUser, activateUser,
+    deactivateUser, getPortfolioNames, getActivePortfolioName
+} from "@/lib/services/user-service";
 import { uploadImage, deleteImage } from "@/lib/utils/server/could-upload";
 import { revalidatePath } from "next/cache";
 
@@ -154,23 +157,21 @@ export async function deactivateUserAction() {
         throw error;
     }
 }
-// export async function updateUserPictureAction(id: number, picture: string) {
-//     revalidatePath("/");
-//     try {
-//         const user = await getUserByIdAction(id);
-//         if (user) {
-//             if (user.picture_url) {
-//                 await deleteImage(user.picture_url);
-//             }
-//             const url = await uploadImage(picture);
-//             if (!url) {
-//                 return null;
-//             }
-//             return await updateUserPicture(id, url);
-//         }
-//     } catch (error) {
-//         console.error("Error updating user picture:", error);
-//         throw error;
-//     }
-// }
+// get all portfolio names
+export async function getPortfolioNamesAction() {
+    try {
+        return await getPortfolioNames();
+    } catch (error) {
+        console.error("Error fetching portfolio names:", error);
+        throw error;
+    }
+}
+export async function getActivePortfolioNameAction() {
+    try {
+        return await getActivePortfolioName();
+    } catch (error) {
+        console.error("Error fetching active portfolio name:", error);
+        throw error;
+    }
+}
 

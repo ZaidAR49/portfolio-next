@@ -26,9 +26,14 @@ export async function importDataAction(data: any) {
             portfolio_name: data.user.portfolio_name,
             is_active: false
         };
-
-        const newUser = await addUser(newUserToInsert);
-        const newUserId = newUser.id;
+        let newUserId: number;
+        try {
+            const newUser = await addUser(newUserToInsert);
+            newUserId = newUser.id;
+        } catch (error) {
+            console.error("Error adding user:", error);
+            throw new Error("Failed to add user.");
+        }
 
         // 3. Prepare and add projects
         if (Array.isArray(data.projects)) {
@@ -46,7 +51,12 @@ export async function importDataAction(data: any) {
                     technologies: proj.technologies,
                     images: proj.images,
                 };
-                await addProject(newProj);
+                try {
+                    await addProject(newProj);
+                } catch (error) {
+                    console.error("Error adding project:", error);
+                    throw new Error("Failed to add project.");
+                }
             }
         }
 
@@ -58,7 +68,12 @@ export async function importDataAction(data: any) {
                     name: skill.name,
                     type: skill.type,
                 };
-                await addSkill(newSkill);
+                try {
+                    await addSkill(newSkill);
+                } catch (error) {
+                    console.error("Error adding skill:", error);
+                    throw new Error("Failed to add skill.");
+                }
             }
         }
 
@@ -72,7 +87,12 @@ export async function importDataAction(data: any) {
                     description: exp.description,
                     company: exp.company,
                 };
-                await addExperience(newExp);
+                try {
+                    await addExperience(newExp);
+                } catch (error) {
+                    console.error("Error adding experience:", error);
+                    throw new Error("Failed to add experience.");
+                }
             }
         }
 

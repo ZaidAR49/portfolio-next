@@ -30,6 +30,12 @@ export function DashboardPortfolioForm({ userId }: { userId?: number }) {
     const [names, setNames] = useState<string[]>([]);
 
     useEffect(() => {
+        if (!isEditMode) {
+            setIsLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
         getUsersAction().then((users) => setNames(users.map((user: any) => user.portfolio_name))).catch((error) => {
             console.error(error);
             toast.error("Failed to fetch users");

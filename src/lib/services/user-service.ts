@@ -86,3 +86,17 @@ export async function getUsersCount() {
     }
     return count;
 }
+export async function getPortfolioNames() {
+    const { data, error } = await sql.from("users").select("portfolio_name");
+    if (error) {
+        throw error;
+    }
+    return data;
+}
+export async function getActivePortfolioName() {
+    const { data, error } = await sql.from("users").select("portfolio_name").eq("is_active", true).single();
+    if (error) {
+        throw error;
+    }
+    return data;
+}

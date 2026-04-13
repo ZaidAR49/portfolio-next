@@ -1,13 +1,22 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaFileImport } from "react-icons/fa";
 import { importDataAction } from "@/actions/import-action";
 import { Toaster, toast } from "sonner";
+import { getPortfolioNamesAction } from "@/actions/user-action";
 
 export function ImportDataCard() {
+    const [portfolioNames, setPortfolioNames] = useState<string[]>([]);
     const [isImporting, setIsImporting] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        getPortfolioNamesAction().then((res) => {
+            const names = res.map((item: { portfolio_name: string }) => item.portfolio_name);
+            console.log("Portfolio Names -->: ", names);
+            setPortfolioNames(names);
+        });
+    }, []);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -20,6 +29,10 @@ export function ImportDataCard() {
             try {
                 const text = e.target?.result as string;
                 const data = JSON.parse(text);
+                console.log("Portfolio Name -->: ", data.user.portfolio_name);
+                if (portfolioNames.includes(data.user.portfolio_name)) {
+                    data.user.portfolio_name = data.user.portfolio_name + "_imported";
+                }
 
                 await importDataAction(data);
                 toast.success("Data imported successfully!");
