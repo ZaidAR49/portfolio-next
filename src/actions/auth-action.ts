@@ -1,5 +1,6 @@
 "use server";
-import { addAuthCode, verifyAndConsumeCode, } from "../lib/services/auth-service";
+import { addAuthCode, verifyAndConsumeCode } from "../lib/services/auth-service";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { sendAuthCode } from "./contact-action";
 import { createHash } from 'crypto';
@@ -58,4 +59,10 @@ export async function verifyAndConsumeCodeAction(code: string) {
         console.error("Error verifying and consuming code:", error);
         return { success: false, message: "Internal server error" };
     }
+}
+
+export async function signOutAction() {
+    const cookieStore = await cookies();
+    cookieStore.delete("auth_code");
+    redirect("/");
 }

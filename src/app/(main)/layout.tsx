@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 async function AuthHeader() {
   let openDashboard = false;
+  const cookieStore = await cookies();
   try {
-    const cookieStore = await cookies();
     const token = cookieStore.get('auth_code')?.value;
     if (token) {
       const isAuthenticated = await checkAuth(token);
