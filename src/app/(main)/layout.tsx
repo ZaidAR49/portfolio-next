@@ -5,6 +5,9 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { ThemeProvider } from "next-themes";
 import ParticlesBackground from "@/components/particles-background";
+import { cookies } from "next/headers";
+import { checkAuth } from "@/lib/auth";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +24,23 @@ export const metadata: Metadata = {
   description: "Zaid Alradaideh - Portfolio",
 };
 
+async function AuthHeader() {
+  let openDashboard = false;
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (token) {
+      const isAuthenticated = await checkAuth(token);
+      if (isAuthenticated) {
+        openDashboard = true;
+      }
+    }
+  } catch (error) {
+    console.error("Auth header check error:", error);
+  }
+  return <Header isAuthenticated={openDashboard} />;
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,7 +55,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class">
           <ParticlesBackground />
-          <Header />
+          <Suspense fallback={<Header isAuthenticated={false} />}>
+            <AuthHeader />
+          </Suspense>
           {children}
           <Footer />
           <div className="text-center py-4">

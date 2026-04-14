@@ -6,8 +6,18 @@ import {
 import { Project, ProjectSchema, RequestProject, RequestProjectSchema } from "@/lib/models/project";
 import { uploadImage, deleteImage } from "@/lib/utils/server/could-upload";
 import { revalidatePath } from "next/cache";
-
+import { checkAuth } from "@/lib/auth";
+import { cookies } from "next/headers";
 export async function getProjectsAction() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         return await getProjects();
     } catch (error) {
@@ -24,6 +34,15 @@ export async function getActiveProjectsAction() {
     }
 }
 export async function getProjectByIdAction(id: number) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         return await getProjectById(id);
     } catch (error) {
@@ -32,6 +51,15 @@ export async function getProjectByIdAction(id: number) {
     }
 }
 export async function addProjectAction(project: Project) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     const validatedProject = ProjectSchema.safeParse(project);
     if (!validatedProject.success) {
         throw new Error(validatedProject.error.message);
@@ -49,6 +77,15 @@ export async function addProjectAction(project: Project) {
     }
 }
 export async function updateProjectAction(project: Project) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     const validatedProject = ProjectSchema.safeParse(project);
     if (!validatedProject.success) {
         throw new Error(validatedProject.error.message);
@@ -66,6 +103,15 @@ export async function updateProjectAction(project: Project) {
     }
 }
 export async function deleteProjectAction(id: number) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         const projectOrArray = await getProjectById(id);
         const project = Array.isArray(projectOrArray) ? projectOrArray[0] : projectOrArray;
@@ -83,6 +129,15 @@ export async function deleteProjectAction(id: number) {
     }
 }
 export async function updateProjectImagesAction(id: number, images: string[]) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         revalidatePath("/");
         return await updateProjectImages(id, images);
@@ -93,6 +148,15 @@ export async function updateProjectImagesAction(id: number, images: string[]) {
 }
 
 export async function addProjectWithFilesAction(projectData: RequestProject) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     const parsed = RequestProjectSchema.safeParse(projectData);
     if (!parsed.success) {
         console.error("Validation error:", parsed.error);
@@ -123,6 +187,15 @@ export async function addProjectWithFilesAction(projectData: RequestProject) {
 }
 
 export async function updateProjectWithFilesAction(projectData: RequestProject, imagesToDelete: string[] = []) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     const parsed = RequestProjectSchema.safeParse(projectData);
     if (!parsed.success) {
         console.error("Validation error:", parsed.error);
@@ -161,6 +234,15 @@ export async function updateProjectWithFilesAction(projectData: RequestProject, 
 }
 
 export async function updateProjectImagesOnlyAction(id: number, existingImages: string[], newImages: File[], imagesToDelete: string[] = []) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         for (const imgUrl of imagesToDelete) {
             await deleteImage(imgUrl);

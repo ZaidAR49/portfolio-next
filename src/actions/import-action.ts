@@ -1,6 +1,7 @@
 "use server";
-
-import { addUser, deactivateUser } from "@/lib/services/user-service";
+import { checkAuth } from "@/lib/auth";
+import { cookies } from "next/headers";
+import { addUser } from "@/lib/services/user-service";
 import { addProject } from "@/lib/services/project-service";
 import { addSkill } from "@/lib/services/skills-service";
 import { addExperience } from "@/lib/services/experience-service";
@@ -8,6 +9,15 @@ import { revalidatePath } from "next/cache";
 
 export async function importDataAction(data: any) {
     try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get('auth_code')?.value;
+        if (!token) {
+            return { success: false, message: "Unauthorized", status: 401 };
+        }
+        const auth = await checkAuth(token);
+        if (!auth) {
+            return { success: false, message: "Unauthorized", status: 401 };
+        }
         if (!data.user || !data.projects || !data.skills || !data.experiences) {
             throw new Error("Invalid import data format.");
         }

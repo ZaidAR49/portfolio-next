@@ -6,8 +6,18 @@ import {
 } from "@/lib/services/user-service";
 import { uploadImage, deleteImage } from "@/lib/utils/server/could-upload";
 import { revalidatePath } from "next/cache";
-
+import { checkAuth } from "@/lib/auth";
+import { cookies } from "next/headers";
 export async function getUsersAction() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         return await getUsers();
     } catch (error) {
@@ -16,6 +26,15 @@ export async function getUsersAction() {
     }
 }
 export async function getUserByIdAction(id: number) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         return await getUserById(id);
     } catch (error) {
@@ -24,6 +43,15 @@ export async function getUserByIdAction(id: number) {
     }
 }
 export async function addUserAction(user: RequestUser) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     const parsed = requestUserSchema.safeParse(user);
 
     if (!parsed.success) {
@@ -62,6 +90,15 @@ export async function addUserAction(user: RequestUser) {
     }
 }
 export async function updateUserAction(user: RequestUser) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     const parsed = requestUserSchema.safeParse(user);
     if (!parsed.success) {
         console.error(" Error parsing user:", parsed.error);
@@ -121,6 +158,15 @@ export async function updateUserAction(user: RequestUser) {
     }
 }
 export async function deleteUserAction(id: number) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     revalidatePath("/");
     try {
         return await deleteUser(id);
@@ -139,6 +185,15 @@ export async function getActiveUserAction() {
     }
 }
 export async function activateUserAction(id: number) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     revalidatePath("/");
     try {
         await deactivateUserAction();
@@ -149,6 +204,15 @@ export async function activateUserAction(id: number) {
     }
 }
 export async function deactivateUserAction() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     revalidatePath("/");
     try {
         return await deactivateUser();
@@ -159,6 +223,15 @@ export async function deactivateUserAction() {
 }
 // get all portfolio names
 export async function getPortfolioNamesAction() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         return await getPortfolioNames();
     } catch (error) {
@@ -167,6 +240,15 @@ export async function getPortfolioNamesAction() {
     }
 }
 export async function getActivePortfolioNameAction() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         return await getActivePortfolioName();
     } catch (error) {

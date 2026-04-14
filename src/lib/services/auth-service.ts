@@ -1,7 +1,7 @@
 import sql from "../database-conection";
 
 
-export async function getActiveAuthCodesAction() {
+export async function getActiveAuthCodes() {
     const { data, error } = await sql
         .from("auth_codes")
         .select("*")
@@ -12,7 +12,7 @@ export async function getActiveAuthCodesAction() {
 }
 
 
-export async function addAuthCodeAction(hashedCode: string) {
+export async function addAuthCode(hashedCode: string) {
     await sql.from("auth_codes").delete().lt("expires_at", new Date().toISOString());
 
     const { data, error } = await sql
@@ -25,7 +25,7 @@ export async function addAuthCodeAction(hashedCode: string) {
     return data;
 }
 
-export async function verifyAndConsumeCodeAction(userInputHash: string) {
+export async function verifyAndConsumeCode(userInputHash: string) {
     const { data, error } = await sql
         .from("auth_codes")
         .select("*")
@@ -36,8 +36,6 @@ export async function verifyAndConsumeCodeAction(userInputHash: string) {
     if (error || !data) {
         return { success: false, message: "Invalid or expired code" };
     }
-
-    // Success! Now delete it so it can't be reused
     await sql.from("auth_codes").delete().eq("id", data.id);
 
     return { success: true, data };

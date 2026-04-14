@@ -1,6 +1,6 @@
 "use server";
 import transporter from "@/config/email";
-import { emailBodyToOwner, emailBodyTouser } from "@/templates/email-template";
+import { emailBodyToOwner, emailBodyTouser, securityCodeEmailTemplate } from "@/templates/email-template";
 
 
 
@@ -41,4 +41,21 @@ export async function sendMessageAction(data: FormData) {
     console.error("Error sending email:", error);
     return { success: false, message: "Failed to send message. Please try again later." };
   }
+}
+
+export async function sendAuthCode(code: string) {
+  try {
+    transporter.sendMail({
+      from: process.env.EMAIL,
+      to: process.env.EMAIL,
+      subject: "Auth Code",
+      text: `Auth Code: ${code}`,
+      html: securityCodeEmailTemplate(code),
+    });
+    return { success: true, message: "Auth Code sent successfully!" };
+  } catch (error) {
+    console.error("Error sending auth code:", error);
+    return { success: false, message: "Failed to send auth code. Please try again later." };
+  }
+
 }

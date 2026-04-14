@@ -2,6 +2,8 @@
 import { getActiveExperiences, getExperiences, addExperience, updateExperience, deleteExperience, getExperienceById } from "@/lib/services/experience-service";
 import { Experience, ExperienceSchema } from "@/lib/models/experience";
 import { revalidatePath } from "next/cache";
+import { checkAuth } from "@/lib/auth";
+import { cookies } from "next/headers";
 
 export const getActiveExperiencesAction = async () => {
     try {
@@ -13,6 +15,15 @@ export const getActiveExperiencesAction = async () => {
 }
 export const getExperiencesAction = async () => {
     try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get('auth_code')?.value;
+        if (!token) {
+            return { success: false, message: "Unauthorized", status: 401 };
+        }
+        const auth = await checkAuth(token);
+        if (!auth) {
+            return { success: false, message: "Unauthorized", status: 401 };
+        }
         return await getExperiences();
     } catch (error) {
         console.error("Error fetching experiences:", error);
@@ -21,6 +32,15 @@ export const getExperiencesAction = async () => {
 }
 export const addExperienceAction = async (experience: Experience) => {
     try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get('auth_code')?.value;
+        if (!token) {
+            return { success: false, message: "Unauthorized", status: 401 };
+        }
+        const auth = await checkAuth(token);
+        if (!auth) {
+            return { success: false, message: "Unauthorized", status: 401 };
+        }
         return await addExperience(experience);
     } catch (error) {
         console.error("Error adding experience:", error);
@@ -29,6 +49,15 @@ export const addExperienceAction = async (experience: Experience) => {
 }
 export const updateExperienceAction = async (experience: Experience) => {
     try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get('auth_code')?.value;
+        if (!token) {
+            return { success: false, message: "Unauthorized", status: 401 };
+        }
+        const auth = await checkAuth(token);
+        if (!auth) {
+            return { success: false, message: "Unauthorized", status: 401 };
+        }
         revalidatePath("/");
         return await updateExperience(experience);
     } catch (error) {
@@ -37,6 +66,15 @@ export const updateExperienceAction = async (experience: Experience) => {
     }
 }
 export const deleteExperienceAction = async (id: number) => {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         revalidatePath("/");
         return await deleteExperience(id);
@@ -46,6 +84,15 @@ export const deleteExperienceAction = async (id: number) => {
     }
 }
 export const getExperienceByIdAction = async (id: number) => {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_code')?.value;
+    if (!token) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
+    const auth = await checkAuth(token);
+    if (!auth) {
+        return { success: false, message: "Unauthorized", status: 401 };
+    }
     try {
         return await getExperienceById(id);
     } catch (error) {

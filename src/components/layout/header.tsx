@@ -2,12 +2,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaHome, FaProjectDiagram, FaUser, FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHome, FaProjectDiagram, FaUser, FaSun, FaMoon, FaBars, FaTimes, FaTachometerAlt } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Suspense } from 'react';
 
-export default function Header() {
+export default function Header({ isAuthenticated }: { isAuthenticated: boolean }) {
     const pathname = usePathname();
     const { theme, setTheme } = useTheme();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -79,8 +80,13 @@ export default function Header() {
         contact: {
             name: "Contact",
             icon: <MdEmail />,
-            path: "#contact"
+            path: "/#contact"
         },
+        dashboard: {
+            name: "Dashboard",
+            icon: <FaTachometerAlt />,
+            path: "/dashboard"
+        }
     };
 
     return (
@@ -100,35 +106,40 @@ export default function Header() {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-8">
-                        <ul className="flex items-center gap-8 m-0 p-0 list-none">
-                            {Object.entries(tabs).map(([key, value]) => {
-                                const isActive = pathname === value.path;
-                                return (
-                                    <li key={key}>
-                                        <a
-                                            href={value.path}
-                                            className={`flex items-center gap-2 text-sm font-semibold transition-all duration-200 ${isActive
-                                                ? "text-[#0ea5e9] dark:text-[#38bdf8]"
-                                                : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
-                                                }`}
-                                        >
-                                            <span className="text-lg">{value.icon}</span>
-                                            {value.name}
-                                        </a>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                        <div className="h-6 w-px bg-slate-300 dark:bg-slate-700 mx-2" /> {/* Divider */}
-                        <button
-                            onClick={toggleTheme}
-                            className="text-slate-500 dark:text-slate-400 hover:text-[#0ea5e9] dark:hover:text-[#38bdf8] bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-800 p-2.5 rounded-full transition-colors"
-                            aria-label="Toggle Theme"
-                        >
-                            {mounted && (theme === 'dark' ? <FaSun size={16} /> : <FaMoon size={16} />)}
-                        </button>
-                    </nav>
+                    <Suspense fallback={null}>
+                        <nav className="hidden md:flex items-center gap-8">
+                            <ul className="flex items-center gap-8 m-0 p-0 list-none">
+                                {Object.entries(tabs).map(([key, value]) => {
+                                    const isActive = pathname === value.path;
+                                    if (!isAuthenticated && key === "dashboard") {
+                                        return null;
+                                    }
+                                    return (
+                                        <li key={key}>
+                                            <a
+                                                href={value.path}
+                                                className={`flex items-center gap-2 text-sm font-semibold transition-all duration-200 ${isActive
+                                                    ? "text-[#0ea5e9] dark:text-[#38bdf8]"
+                                                    : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                                                    }`}
+                                            >
+                                                <span className="text-lg">{value.icon}</span>
+                                                {value.name}
+                                            </a>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                            <div className="h-6 w-px bg-slate-300 dark:bg-slate-700 mx-2" /> {/* Divider */}
+                            <button
+                                onClick={toggleTheme}
+                                className="text-slate-500 dark:text-slate-400 hover:text-[#0ea5e9] dark:hover:text-[#38bdf8] bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-800 p-2.5 rounded-full transition-colors"
+                                aria-label="Toggle Theme"
+                            >
+                                {mounted && (theme === 'dark' ? <FaSun size={16} /> : <FaMoon size={16} />)}
+                            </button>
+                        </nav>
+                    </Suspense>
 
                     {/* Mobile Hamburger Button */}
                     <div className="flex md:hidden items-center gap-3 z-50 relative">
@@ -160,31 +171,37 @@ export default function Header() {
                         transition={{ duration: 0.2 }}
                         className="fixed top-24 right-4 z-40 w-64 bg-white/95 dark:bg-[#0b1120]/95 backdrop-blur-xl border border-slate-200 dark:border-slate-700/60 rounded-3xl p-3 shadow-xl dark:shadow-2xl md:hidden"
                     >
-                        <nav className="w-full">
-                            <ul className="flex flex-col gap-2 m-0 p-0 list-none">
-                                {Object.entries(tabs).map(([key, value]) => {
-                                    const isActive = pathname === value.path;
-                                    return (
-                                        <li key={key}>
-                                            <Link
-                                                href={value.path}
-                                                onClick={() => setIsMobileMenuOpen(false)}
-                                                className={`flex items-center gap-4 text-[15px] font-bold px-5 py-4 rounded-2xl transition-all duration-200 ${isActive
-                                                    ? "text-[#0ea5e9] dark:text-[#38bdf8] border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-white/5"
-                                                    : "text-slate-700 dark:text-slate-100 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5 border border-transparent"
-                                                    }`}
-                                            >
-                                                <span className={isActive ? "text-[#0ea5e9] dark:text-[#38bdf8]" : "text-slate-500 dark:text-slate-300"}>{value.icon}</span>
-                                                {value.name}
-                                            </Link>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </nav>
+                        <Suspense fallback={null}>
+                            <nav className="w-full">
+                                <ul className="flex flex-col gap-2 m-0 p-0 list-none">
+                                    {Object.entries(tabs).map(([key, value]) => {
+                                        const isActive = pathname === value.path;
+                                        if (!isAuthenticated && key === "dashboard") {
+                                            return null;
+                                        }
+                                        return (
+                                            <li key={key}>
+                                                <Link
+                                                    href={value.path}
+                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                    className={`flex items-center gap-4 text-[15px] font-bold px-5 py-4 rounded-2xl transition-all duration-200 ${isActive
+                                                        ? "text-[#0ea5e9] dark:text-[#38bdf8] border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-white/5"
+                                                        : "text-slate-700 dark:text-slate-100 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5 border border-transparent"
+                                                        }`}
+                                                >
+                                                    <span className={isActive ? "text-[#0ea5e9] dark:text-[#38bdf8]" : "text-slate-500 dark:text-slate-300"}>{value.icon}</span>
+                                                    {value.name}
+                                                </Link>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </nav>
+                        </Suspense>
                     </motion.div>
                 )}
             </AnimatePresence>
+
         </>
     );
 }
