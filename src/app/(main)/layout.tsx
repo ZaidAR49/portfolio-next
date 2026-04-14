@@ -5,11 +5,6 @@ import Footer from "@/components/layout/footer";
 import { cookies } from "next/headers";
 import { checkAuth } from "@/lib/auth";
 import { Suspense } from "react";
-
-
-
-
-
 export const metadata: Metadata = {
   title: "Zaid Alradaideh",
   description: "Zaid Alradaideh - Portfolio",

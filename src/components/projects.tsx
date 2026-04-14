@@ -77,7 +77,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                                 <div className={`absolute top-6 left-6 z-10 ${statusColor(project.status || 'Completed')} px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.15em] rounded-full backdrop-blur-md shadow-lg`}>
                                     {project.status || 'Completed'}
                                 </div>
-                                <ImageSlider imgeurl={project.images} projectName={project.title} />
+                                {project.images && <ImageSlider imgeurl={project.images} projectName={project.title} />}
                             </div>
                         </div>
                     </div>
