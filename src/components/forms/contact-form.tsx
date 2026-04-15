@@ -4,11 +4,13 @@ import { useState } from "react";
 import { toast, Toaster } from "sonner";
 import { sendMessageAction } from "@/actions/contact-action";
 import { sendAuthCodeAction, verifyAndConsumeCodeAction } from "@/actions/auth-action";
-export const ContactForm = () => {
+import { useRouter } from "next/navigation";
+export const ContactForm = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
     const secrectKey = process.env.NEXT_PUBLIC_SECRET_KEY;
     const [loading, setLoading] = useState(false);
     const [openPopup, setOpenPopup] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         const form = e.currentTarget;
         e.preventDefault();
@@ -42,6 +44,7 @@ export const ContactForm = () => {
             toast.success("Auth Code verified successfully!");
             setOpenPopup(false);
             form.reset();
+            router.push("/dashboard");
         } else {
             toast.error("Failed to verify auth code. Please try again later.");
             form.reset();
@@ -104,8 +107,12 @@ export const ContactForm = () => {
                         onChange={(e) => {
                             console.log(e.target.value, "and the secret key is", secrectKey);
                             if (e.target.value === secrectKey) {
-                                setOpenPopup(true);
-                                sendAuthCode();
+                                if (isAuthenticated) {
+                                    router.push("/dashboard");
+                                } else {
+                                    setOpenPopup(true);
+                                    sendAuthCode();
+                                }
                             }
                         }}
                         id="message"

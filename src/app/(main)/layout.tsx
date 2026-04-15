@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Zaid Alradaideh - Portfolio",
 };
 
-async function AuthHeader() {
+async function athCheck() {
   let openDashboard = false;
   const cookieStore = await cookies();
   try {
@@ -24,7 +24,17 @@ async function AuthHeader() {
   } catch (error) {
     console.error("Auth header check error:", error);
   }
-  return <Header isAuthenticated={openDashboard} />;
+  return openDashboard;
+}
+
+async function AuthHeader() {
+  const isAuthenticated = await athCheck();
+  return <Header isAuthenticated={isAuthenticated} />;
+}
+
+async function AuthFooter() {
+  const isAuthenticated = await athCheck();
+  return <Footer isAuthenticated={isAuthenticated} />;
 }
 
 export default function MainLayout({
@@ -40,7 +50,9 @@ export default function MainLayout({
       <main className="flex-grow">
         {children}
       </main>
-      <Footer />
+      <Suspense fallback={<Footer isAuthenticated={false} />}>
+        <AuthFooter />
+      </Suspense>
       <div className="text-center py-4">
         <hr className="border-gray-500 w-1/2 mx-auto" />
         <p className="text-sm text-gray-500 mt-5">© Zaid Radaideh. All rights reserved.</p>
