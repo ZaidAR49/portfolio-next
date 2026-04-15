@@ -10,6 +10,8 @@ export const ContactForm = ({ isAuthenticated }: { isAuthenticated: boolean }) =
     const [loading, setLoading] = useState(false);
     const [openPopup, setOpenPopup] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [tryCount, setTryCount] = useState(0);
+    const [timer, setTimer] = useState(true);
     const router = useRouter();
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         const form = e.currentTarget;
@@ -31,6 +33,9 @@ export const ContactForm = ({ isAuthenticated }: { isAuthenticated: boolean }) =
         const data = await sendAuthCodeAction();
         if (data.success) {
             toast.success("Auth Code sent successfully!");
+            setTimer(false);
+            setTimeout(() => { setTimer(true) }, 30000);
+            setTryCount(tryCount + 1);
         } else {
             toast.error("Failed to send auth code. Please try again later.");
         }
@@ -169,10 +174,31 @@ export const ContactForm = ({ isAuthenticated }: { isAuthenticated: boolean }) =
                                         placeholder="Enter Security Code"
                                         className="w-full bg-[#1e293b] border border-slate-700 text-slate-200 placeholder-slate-400 rounded-xl px-4 py-3.5 pr-12 focus:outline-none focus:border-[#29b6f6] transition-all text-sm shadow-inner"
                                     />
+
+
+                                    {(tryCount < 3) ? (
+                                        timer ? (
+                                            <p className="text-slate-400 mt-2 text-center text-[15px] mb-8 leading-relaxed font-medium px-2">
+                                                If you did not receive the verification code, please click
+                                                <button type="button" className="text-[#29b6f6] hover:text-[#039be5]"
+                                                    onClick={() => {
+                                                        sendAuthCode();
+                                                    }}>Resend</button>
+                                            </p>
+                                        ) : (
+                                            <p className="text-slate-400 mt-2 text-center text-[15px] mb-8 leading-relaxed font-medium px-2">
+                                                Please wait 30 seconds before resending the code
+                                            </p>
+                                        )
+                                    ) : (
+                                        <p className="text-slate-400 mt-2 text-center text-[15px] mb-8 leading-relaxed font-medium px-2">
+                                            Too many attempts. Please try again later
+                                        </p>
+                                    )}
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
+                                        className="absolute right-4 top-6 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
                                     >
                                         {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                                     </button>
