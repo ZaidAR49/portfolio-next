@@ -1,6 +1,6 @@
 import cloudinary from "../../cloud-connection";
 import fileToBase64 from "../server/to-base64";
-const folderName = process.env.NEXT_PUBLIC_ENV;
+const folderName = process.env.NEXT_PUBLIC_FOLDER_NAME;
 
 export const uploadImage = async (file: File) => {
     const base64 = await fileToBase64(file);
