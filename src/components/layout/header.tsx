@@ -92,14 +92,14 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
     return (
         <>
             <header
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 dark:bg-[#0b1120]/80 backdrop-blur-lg border-b border-black/5 dark:border-white/10 shadow-sm dark:shadow-lg py-4' : 'bg-transparent py-6 md:py-8'
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-surface/80 backdrop-blur-lg border-b border-border shadow-sm py-4' : 'bg-transparent py-6 md:py-8'
                     }`}
             >
                 <div className="max-w-[1600px] mx-auto px-4 md:px-8 xl:px-12 flex justify-between items-center w-full">
                     {/* Logo */}
                     <div className="z-50 relative">
                         <a href="/" className="flex items-center gap-3 group" onClick={() => setIsMobileMenuOpen(false)}>
-                            <span className="text-[#0ea5e9] dark:text-[#38bdf8] font-bold text-xl md:text-2xl tracking-widest uppercase transition-transform group-hover:scale-105">
+                            <span className="text-primary font-bold text-xl md:text-2xl tracking-widest uppercase transition-transform group-hover:scale-105">
                                 Zaid Alradaideh
                             </span>
                         </a>
@@ -119,8 +119,8 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
                                             <a
                                                 href={value.path}
                                                 className={`flex items-center gap-2 text-sm font-semibold transition-all duration-200 ${isActive
-                                                    ? "text-[#0ea5e9] dark:text-[#38bdf8]"
-                                                    : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                                                    ? "text-primary"
+                                                    : "text-muted hover:text-foreground"
                                                     }`}
                                             >
                                                 <span className="text-lg">{value.icon}</span>
@@ -130,10 +130,10 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
                                     );
                                 })}
                             </ul>
-                            <div className="h-6 w-px bg-slate-300 dark:bg-slate-700 mx-2" /> {/* Divider */}
+                            <div className="h-6 w-px bg-border mx-2" /> {/* Divider */}
                             <button
                                 onClick={toggleTheme}
-                                className="text-slate-500 dark:text-slate-400 hover:text-[#0ea5e9] dark:hover:text-[#38bdf8] bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-800 p-2.5 rounded-full transition-colors"
+                                className="text-muted hover:text-primary bg-elevated hover:border p-2.5 rounded-full transition-colors"
                                 aria-label="Toggle Theme"
                             >
                                 {mounted && (theme === 'dark' ? <FaSun size={16} /> : <FaMoon size={16} />)}
@@ -145,14 +145,14 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
                     <div className="flex md:hidden items-center gap-3 z-50 relative">
                         <button
                             onClick={toggleTheme}
-                            className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100/80 dark:bg-[#1e293b]/80 hover:bg-slate-200 dark:hover:bg-[#1e293b] p-2.5 rounded-full backdrop-blur-sm transition-colors border border-slate-200 dark:border-white/5"
+                            className="text-muted hover:text-foreground bg-elevated/80 hover:bg-border/80 p-2.5 rounded-full backdrop-blur-sm transition-colors border border-border"
                             aria-label="Toggle Theme"
                         >
                             {mounted && (theme === 'dark' ? <FaSun size={16} /> : <FaMoon size={16} />)}
                         </button>
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100/80 dark:bg-[#1e293b]/80 hover:bg-slate-200 dark:hover:bg-[#1e293b] p-2.5 rounded-full backdrop-blur-sm transition-colors border border-slate-200 dark:border-white/5 focus:outline-none"
+                            className="text-muted hover:text-foreground bg-elevated/80 hover:bg-border/80 p-2.5 rounded-full backdrop-blur-sm transition-colors border border-border focus:outline-none"
                             aria-label="Toggle Mobile Menu"
                         >
                             {isMobileMenuOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
@@ -169,7 +169,7 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="fixed top-24 right-4 z-40 w-64 bg-white/95 dark:bg-[#0b1120]/95 backdrop-blur-xl border border-slate-200 dark:border-slate-700/60 rounded-3xl p-3 shadow-xl dark:shadow-2xl md:hidden"
+                        className="fixed top-24 right-4 z-40 w-64 bg-surface/95 backdrop-blur-xl border border-border rounded-3xl p-3 shadow-lg md:hidden"
                     >
                         <Suspense fallback={null}>
                             <nav className="w-full">
@@ -185,11 +185,11 @@ export default function Header({ isAuthenticated }: { isAuthenticated: boolean }
                                                     href={value.path}
                                                     onClick={() => setIsMobileMenuOpen(false)}
                                                     className={`flex items-center gap-4 text-[15px] font-bold px-5 py-4 rounded-2xl transition-all duration-200 ${isActive
-                                                        ? "text-[#0ea5e9] dark:text-[#38bdf8] border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-white/5"
-                                                        : "text-slate-700 dark:text-slate-100 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5 border border-transparent"
+                                                        ? "text-primary border border-border bg-elevated"
+                                                        : "text-muted hover:text-foreground hover:bg-elevated border border-transparent"
                                                         }`}
                                                 >
-                                                    <span className={isActive ? "text-[#0ea5e9] dark:text-[#38bdf8]" : "text-slate-500 dark:text-slate-300"}>{value.icon}</span>
+                                                    <span className={isActive ? "text-primary" : "text-muted"}>{value.icon}</span>
                                                     {value.name}
                                                 </Link>
                                             </li>

@@ -56,12 +56,12 @@ export function DashboardPortfolios() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold text-white mb-1">Portfolios</h2>
-                    <p className="text-slate-400">Manage your different portfolio profiles</p>
+                    <h2 className="text-3xl font-bold text-foreground mb-1">Portfolios</h2>
+                    <p className="text-muted">Manage your different portfolio profiles</p>
                 </div>
                 <Link
                     href="?tab=portfolios&action=new"
-                    className="bg-[#38bdf8] hover:bg-[#0ea5e9] text-[#0f172a] font-bold py-2 px-6 rounded-full transition-colors shadow-lg shadow-sky-500/20 inline-block"
+                    className="bg-primary hover:bg-primary-hover text-inverse font-bold py-2 px-6 rounded-full transition-colors shadow-lg inline-block"
                 >
                     Add New
                 </Link>
@@ -71,15 +71,15 @@ export function DashboardPortfolios() {
                     {users?.map((user: User) => (
                         <div
                             key={user.id}
-                            className="bg-[#121929] border border-slate-800 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:border-slate-700 transition-all"
+                            className="bg-surface border border-border rounded-2xl p-4 flex items-center justify-between shadow-sm hover:border-border-hover transition-all duration-normal"
                         >
                             <div className="flex items-center gap-4">
                                 {/* Avatar */}
-                                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-slate-800 border border-slate-700 flex-shrink-0 flex items-center justify-center">
+                                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-elevated border border-border-hover flex-shrink-0 flex items-center justify-center">
                                     {user.picture_url ? (
                                         <img src={user.picture_url} alt={user.name} className="w-full h-full object-cover" />
                                     ) : (
-                                        <span className="text-sm font-bold text-slate-400">
+                                        <span className="text-sm font-bold text-muted">
                                             {user.name?.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U'}
                                         </span>
                                     )}
@@ -88,9 +88,9 @@ export function DashboardPortfolios() {
                                 {/* Info */}
                                 <div className="flex flex-col">
                                     <div className="flex items-center gap-3">
-                                        <h3 className="text-lg font-bold text-white">{user.name}</h3>
+                                        <h3 className="text-lg font-bold text-foreground">{user.name}</h3>
                                         <span
-                                            className="text-xs px-2 py-0.5 rounded-full border bg-transparent text-slate-300 border-slate-600"
+                                            className="text-xs px-2 py-0.5 rounded-full border bg-transparent text-muted border-border-hover"
                                         >
                                             {user.portfolio_name}
                                         </span>
@@ -100,14 +100,14 @@ export function DashboardPortfolios() {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-slate-400 text-sm mt-0.5">{user.job_title}</p>
+                                    <p className="text-muted text-sm mt-0.5">{user.job_title}</p>
                                 </div>
                             </div>
 
                             {/* Actions */}
                             <div className="flex items-center gap-4">
                                 {user.is_active && (
-                                    <a href={`/${user.portfolio_name}`} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" title="View Portfolio">
+                                    <a href={`/${user.portfolio_name}`} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-foreground transition-colors" title="View Portfolio">
                                         <FaExternalLinkAlt />
                                     </a>
                                 )}
@@ -120,7 +120,7 @@ export function DashboardPortfolios() {
                                     </button>
                                 )}
 
-                                <Link href={`?tab=portfolios&action=edit&id=${user.id}`} className="text-blue-400 hover:text-blue-300 transition-colors" title="Edit">
+                                <Link href={`?tab=portfolios&action=edit&id=${user.id}`} className="text-primary hover:text-primary-hover transition-colors" title="Edit">
                                     <FaEdit />
                                 </Link>
 

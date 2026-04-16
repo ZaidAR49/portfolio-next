@@ -6,7 +6,7 @@ export default function Footer({ isAuthenticated }: { isAuthenticated: boolean }
 
 
     return (
-        <footer id="contact" className="bg-slate-50 dark:bg-[#0b1121] py-16 px-6 lg:px-24 border-t border-slate-200 dark:border-slate-800">
+        <footer id="contact" className="bg-background py-16 px-6 lg:px-24 border-t border-border">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
                 <Suspense fallback={<Loading />}>
                     <ContactInfo />

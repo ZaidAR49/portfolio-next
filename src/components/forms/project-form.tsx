@@ -182,30 +182,30 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
                 <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
-                            <h2 className="text-3xl font-bold text-white mb-1">{isEditMode ? 'Edit Project' : 'Add Project'}</h2>
+                            <h2 className="text-3xl font-bold text-foreground mb-1">{isEditMode ? 'Edit Project' : 'Add Project'}</h2>
                         </div>
                     </div>
 
-                    <div className="bg-[#121929] border border-slate-800 rounded-3xl p-6 md:p-10 shadow-lg">
+                    <div className="bg-surface border border-border rounded-3xl p-6 md:p-10 shadow-lg">
                         {error && <div className="mb-6 p-4 bg-red-900/50 border border-red-500 rounded-lg text-red-200">{error}</div>}
 
                         <form onSubmit={handleSubmit(onSubmit, (formErrors) => console.log("Form Validation Errors:", formErrors))} className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Title</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Title</label>
                                     <input
                                         {...register('title')}
                                         placeholder="e.g. E-Commerce Platform"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.title && <p className="text-red-400 text-xs mt-1">{errors.title.message}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Client</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Client</label>
                                     <input
                                         {...register('client')}
                                         placeholder="e.g. John Doe / Personal"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.client && <p className="text-red-400 text-xs mt-1">{errors.client.message}</p>}
                                 </div>
@@ -213,20 +213,20 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Technologies</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Technologies</label>
                                     <input
                                         {...register('technologies')}
                                         placeholder="e.g. React, Node.js, MongoDB (comma separated)"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.technologies && <p className="text-red-400 text-xs mt-1">{errors.technologies.message}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Github Link</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Github Link</label>
                                     <input
                                         {...register('github_url')}
                                         placeholder="https://github.com/username/project"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.github_url && <p className="text-red-400 text-xs mt-1">{errors.github_url.message}</p>}
                                 </div>
@@ -234,23 +234,23 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Year</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Year</label>
                                     <input
                                         min={1900}
                                         max={2099}
                                         type="number"
                                         {...register('year', { valueAsNumber: true })}
                                         placeholder="YYYY"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.year && <p className="text-red-400 text-xs mt-1">{errors.year.message}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Role</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Role</label>
                                     <input
                                         {...register('role')}
                                         placeholder="e.g. Full Stack Developer"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.role && <p className="text-red-400 text-xs mt-1">{errors.role.message}</p>}
                                 </div>
@@ -258,23 +258,23 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Sort Order</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Sort Order</label>
                                     <input
                                         min={1}
                                         max={100}
                                         type="number"
                                         {...register('sort_order', { valueAsNumber: true })}
                                         placeholder="6"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.sort_order && <p className="text-red-400 text-xs mt-1">{errors.sort_order.message}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Status</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Status</label>
                                     <input
                                         {...register('status')}
                                         placeholder="Completed"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.status && <p className="text-red-400 text-xs mt-1">{errors.status.message}</p>}
                                 </div>
@@ -287,7 +287,7 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
 
                                     {/* Add Image Box */}
                                     {totalCurrentImages < MAX_IMAGES && (
-                                        <div className="relative w-32 h-24 border-2 border-dashed border-slate-700 rounded-xl flex flex-col items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-500 transition-colors bg-[#0b1120]">
+                                        <div className="relative w-32 h-24 border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center text-muted hover:text-primary hover:border-primary transition-colors bg-elevated">
                                             <FaPlus className="mb-1" />
                                             <span className="text-xs font-semibold">Add Image</span>
                                             <input
@@ -303,11 +303,11 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
 
                                     {/* Active Existing Images */}
                                     {activeExistingImages.map((img, i) => (
-                                        <div key={`exist-${i}`} className="relative w-32 h-24 rounded-xl border border-slate-700 overflow-hidden group">
+                                        <div key={`exist-${i}`} className="relative w-32 h-24 rounded-xl border border-border overflow-hidden group shadow-sm">
                                             <img src={img} alt="Project" className="w-full h-full object-cover" />
-                                            <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <button type="button" onClick={() => removeExistingImage(img)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg">
-                                                    <FaTimes size={12} />
+                                            <div className="absolute inset-0 bg-surface/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                                <button type="button" onClick={() => removeExistingImage(img)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg shadow-lg transition-transform hover:scale-105">
+                                                    <FaTimes size={14} />
                                                 </button>
                                             </div>
                                         </div>
@@ -315,14 +315,14 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
 
                                     {/* New Image Previews */}
                                     {newImagePreviews.map((preview, i) => (
-                                        <div key={`new-${i}`} className="relative w-32 h-24 rounded-xl border border-slate-700 overflow-hidden group">
+                                        <div key={`new-${i}`} className="relative w-32 h-24 rounded-xl border border-border overflow-hidden group shadow-sm">
                                             <img src={preview} alt="New Upload Preview" className="w-full h-full object-cover" />
-                                            <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <button type="button" onClick={() => removeNewImage(i)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg">
-                                                    <FaTimes size={12} />
+                                            <div className="absolute inset-0 bg-surface/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                                <button type="button" onClick={() => removeNewImage(i)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg shadow-lg transition-transform hover:scale-105">
+                                                    <FaTimes size={14} />
                                                 </button>
                                             </div>
-                                            <div className="absolute top-1 right-1 bg-sky-500 text-[10px] font-bold px-1.5 rounded text-white">NEW</div>
+                                            <div className="absolute top-1 right-1 bg-primary text-[10px] font-bold px-1.5 py-0.5 rounded text-white shadow-sm">NEW</div>
                                         </div>
                                     ))}
 
@@ -330,12 +330,12 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Description</label>
+                                <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Description</label>
                                 <textarea
                                     {...register('description')}
                                     rows={5}
                                     placeholder="Briefly describe the project features and challenges..."
-                                    className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all"
+                                    className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                 />
                                 {errors.description && <p className="text-red-400 text-xs mt-1">{errors.description.message}</p>}
                             </div>
@@ -343,14 +343,14 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
                             <div className="flex justify-end pt-4 gap-4">
                                 <Link
                                     href="?tab=projects"
-                                    className="bg-transparent border border-slate-700 hover:bg-slate-800 text-white font-medium py-3 px-8 rounded-xl transition-colors"
+                                    className="bg-transparent border border-border hover:bg-elevated text-foreground font-medium py-3 px-8 rounded-xl transition-colors"
                                 >
                                     Cancel
                                 </Link>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="bg-[#38bdf8] hover:bg-[#0ea5e9] text-[#0f172a] font-bold py-3 px-8 rounded-xl transition-all shadow-lg shadow-sky-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                    className="bg-primary hover:bg-primary-hover text-inverse font-bold py-3 px-8 rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                 >
                                     {isSubmitting ? 'Submitting...' : (
                                         <>

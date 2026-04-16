@@ -55,12 +55,12 @@ export function DashboardExperience() {
                 <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
-                            <h2 className="text-3xl font-bold text-white mb-1">Experience</h2>
-                            <p className="text-slate-400">Manage your work history</p>
+                            <h2 className="text-3xl font-bold text-foreground mb-1">Experience</h2>
+                            <p className="text-muted">Manage your work history</p>
                         </div>
                         <Link
                             href="?tab=experience&action=new"
-                            className="bg-[#38bdf8] hover:bg-[#0ea5e9] text-[#0f172a] font-bold py-2 px-6 rounded-full transition-colors shadow-lg shadow-sky-500/20 inline-block"
+                            className="bg-primary hover:bg-primary-hover text-inverse font-bold py-2 px-6 rounded-full transition-colors shadow-lg inline-block"
                         >
                             Add New
                         </Link>
@@ -70,20 +70,20 @@ export function DashboardExperience() {
                             {experiences?.map((exp: Experience, index: number) => (
                                 <div
                                     key={exp.id || index}
-                                    className="bg-[#121929] border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-sm hover:border-slate-700 transition-all gap-4"
+                                    className="bg-surface border border-border rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-sm hover:border-border-hover hover:shadow-md transition-all gap-4"
                                 >
                                     <div className="flex items-start sm:items-center gap-4 flex-1">
-                                        <div className="mt-1 sm:mt-0 text-[#38bdf8] bg-sky-950/30 p-2 rounded-full border border-sky-900/50 flex-shrink-0">
-                                            <span className="w-2 h-2 rounded-full bg-[#38bdf8] block"></span>
+                                        <div className="mt-1 sm:mt-0 text-primary bg-primary/10 p-2 rounded-full border border-primary/20 flex-shrink-0">
+                                            <span className="w-2 h-2 rounded-full bg-primary block"></span>
                                         </div>
                                         <div className="flex flex-col">
-                                            <h3 className="text-lg font-bold text-white">{exp.role}</h3>
-                                            <p className="text-slate-400 text-sm mt-0.5">{exp.company} • {exp.period}</p>
-                                            <p className="text-slate-500 text-xs mt-2 line-clamp-2">{exp.description}</p>
+                                            <h3 className="text-lg font-bold text-foreground">{exp.role}</h3>
+                                            <p className="text-muted text-sm mt-0.5">{exp.company} • {exp.period}</p>
+                                            <p className="text-muted text-xs mt-2 line-clamp-2">{exp.description}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 ml-auto sm:ml-0 flex-shrink-0">
-                                        <Link href={`?tab=experience&action=edit&id=${exp.id}`} className="text-blue-400 hover:text-blue-300 transition-colors" title="Edit">
+                                        <Link href={`?tab=experience&action=edit&id=${exp.id}`} className="text-primary hover:text-primary-hover transition-colors" title="Edit">
                                             <FaEdit />
                                         </Link>
                                         <button type="button" onClick={() => { exp.id && handleDeleteClick(exp.id) }} className="text-red-400 hover:text-red-300 transition-colors" title="Delete">
@@ -93,7 +93,7 @@ export function DashboardExperience() {
                                 </div>
                             ))}
                             {experiences.length === 0 && (
-                                <div className="text-slate-400 text-center py-8">
+                                <div className="text-muted text-center py-8">
                                     No experiences found for the active user. Add one to get started!
                                 </div>
                             )}

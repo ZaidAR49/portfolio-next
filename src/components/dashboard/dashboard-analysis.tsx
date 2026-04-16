@@ -13,54 +13,54 @@ export async function DashboardAnalysis() {
             <Suspense fallback={<Loading />}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {/* Card 1 */}
-                    <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between shadow-lg hover:border-slate-700 transition-all">
+                    <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-border-hover transition-all duration-normal">
                         <div className="flex flex-col gap-2 mb-6">
                             <FaUsers className="text-[#10b981] text-xl mb-1" />
-                            <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">Total Portfolios</span>
+                            <span className="text-xs font-bold tracking-wider text-muted uppercase">Total Portfolios</span>
                         </div>
                         <div>
-                            <h3 className="text-4xl font-extrabold text-white mb-4">{analysis.usersCount}</h3>
-                            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                                <div className="bg-slate-300 h-full w-[25%] rounded-full"></div>
+                            <h3 className="text-4xl font-extrabold text-foreground mb-4">{analysis.usersCount}</h3>
+                            <div className="w-full bg-elevated h-1.5 rounded-full overflow-hidden">
+                                <div className="bg-primary h-full w-[25%] rounded-full"></div>
                             </div>
                         </div>
                     </div>
                     {/* Card 2 */}
-                    <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between shadow-lg hover:border-slate-700 transition-all">
+                    <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-border-hover transition-all duration-normal">
                         <div className="flex flex-col gap-2 mb-6">
                             <FaCode className="text-[#3b82f6] text-xl mb-1" />
-                            <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">Total Skills</span>
+                            <span className="text-xs font-bold tracking-wider text-muted uppercase">Total Skills</span>
                         </div>
                         <div>
-                            <h3 className="text-4xl font-extrabold text-white mb-4">{analysis.skillsCount}</h3>
-                            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                                <div className="bg-slate-300 h-full w-[80%] rounded-full"></div>
+                            <h3 className="text-4xl font-extrabold text-foreground mb-4">{analysis.skillsCount}</h3>
+                            <div className="w-full bg-elevated h-1.5 rounded-full overflow-hidden">
+                                <div className="bg-primary h-full w-[80%] rounded-full"></div>
                             </div>
                         </div>
                     </div>
                     {/* Card 3 */}
-                    <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between shadow-lg hover:border-slate-700 transition-all">
+                    <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-border-hover transition-all duration-normal">
                         <div className="flex flex-col gap-2 mb-6">
                             <FaProjectDiagram className="text-[#a855f7] text-xl mb-1" />
-                            <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">Total Projects</span>
+                            <span className="text-xs font-bold tracking-wider text-muted uppercase">Total Projects</span>
                         </div>
                         <div>
-                            <h3 className="text-4xl font-extrabold text-white mb-4">{analysis.projectsCount}</h3>
-                            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                                <div className="bg-slate-300 h-full w-[45%] rounded-full"></div>
+                            <h3 className="text-4xl font-extrabold text-foreground mb-4">{analysis.projectsCount}</h3>
+                            <div className="w-full bg-elevated h-1.5 rounded-full overflow-hidden">
+                                <div className="bg-primary h-full w-[45%] rounded-full"></div>
                             </div>
                         </div>
                     </div>
                     {/* Card 4 */}
-                    <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between shadow-lg hover:border-slate-700 transition-all">
+                    <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-border-hover transition-all duration-normal">
                         <div className="flex flex-col gap-2 mb-6">
                             <FaBriefcase className="text-[#ec4899] text-xl mb-1" />
-                            <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">Total Experiences</span>
+                            <span className="text-xs font-bold tracking-wider text-muted uppercase">Total Experiences</span>
                         </div>
                         <div>
-                            <h3 className="text-4xl font-extrabold text-white mb-4">{analysis.experiencesCount}</h3>
-                            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                                <div className="bg-slate-300 h-full w-[35%] rounded-full"></div>
+                            <h3 className="text-4xl font-extrabold text-foreground mb-4">{analysis.experiencesCount}</h3>
+                            <div className="w-full bg-elevated h-1.5 rounded-full overflow-hidden">
+                                <div className="bg-primary h-full w-[35%] rounded-full"></div>
                             </div>
                         </div>
                     </div>

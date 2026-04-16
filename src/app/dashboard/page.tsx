@@ -42,8 +42,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                         href={`?tab=${item.id}`}
                         className={`flex items-center gap-4 px-4 py-3 rounded-xl relative group transition-all w-full text-left
                             ${isActive
-                                ? `text-[${item.color}] bg-[${item.color}]/10`
-                                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                ? 'bg-opacity-10'
+                                : 'text-muted hover:text-foreground hover:bg-sidebar-hover'
                             }
                         `}
                         style={isActive ? { color: item.color, backgroundColor: `${item.color}1a` } : {}}
@@ -63,13 +63,13 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     );
 
     return (
-        <div className="min-h-screen pt-[104px] flex relative bg-[#0b1120]">
+        <div className="min-h-screen pt-[104px] flex relative bg-background transition-colors duration-300">
 
             {/* Sidebar */}
-            <aside className="w-64 border-r border-[#1e293b] hidden lg:block bg-[#0b1120]/50 sticky top-[104px] h-[calc(100vh-104px)] overflow-y-auto">
+            <aside className="w-64 border-r border-border hidden lg:block bg-sidebar-bg sticky top-[104px] h-[calc(100vh-104px)] overflow-y-auto transition-colors duration-300">
                 <div className="p-6">
-                    <h2 className="text-xl font-bold text-white mb-1">Admin Panel</h2>
-                    <p className="text-sm text-slate-400">Manage your portfolio</p>
+                    <h2 className="text-xl font-bold text-foreground mb-1">Admin Panel</h2>
+                    <p className="text-sm text-muted">Manage your portfolio</p>
                 </div>
                 {navBar()}
             </aside>

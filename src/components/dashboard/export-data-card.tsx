@@ -35,18 +35,18 @@ export function ExportDataCard() {
     };
 
     return (
-        <div className="bg-[#121929] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center text-center shadow-lg hover:shadow-xl transition-all">
+        <div className="bg-surface border border-border rounded-2xl p-8 flex flex-col items-center text-center shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-border-hover transition-all duration-normal">
             <div className="mb-6">
-                <FaFileExport className="text-[#0ea5e9] text-3xl" />
+                <FaFileExport className="text-primary text-3xl" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-3">Export User Data</h3>
-            <p className="text-slate-400 text-sm mb-8 leading-relaxed max-w-sm flex-1">
+            <h3 className="text-xl font-bold text-foreground mb-3">Export User Data</h3>
+            <p className="text-muted text-sm mb-8 leading-relaxed max-w-sm flex-1">
                 Download all your active portfolio data including skills, projects, and experiences in JSON format.
             </p>
             <button
                 onClick={handleExport}
                 disabled={isExporting}
-                className="bg-[#0ea5e9] hover:bg-[#0284c7] disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg w-full max-w-[200px] transition-colors shadow-lg shadow-sky-500/20"
+                className="bg-primary hover:bg-primary-hover disabled:bg-muted disabled:cursor-not-allowed text-inverse font-bold py-3 px-8 rounded-lg w-full max-w-[200px] transition-colors shadow-lg"
             >
                 {isExporting ? "Exporting..." : "Download Data"}
             </button>

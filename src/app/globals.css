@@ -6,55 +6,133 @@ html {
   scroll-behavior: smooth;
 }
 :root {
-  --bg: #ffffff;
-  --text: #0f172a;
+  /* =========================================
+     PHASE 1: DESIGN TOKENS & FOUNDATIONS
+     ========================================= */
+  
+  /* ---- Colors: Base & Surface ---- */
+  --bg: #f8fafc;           /* slate-50 */
+  --bg-surface: #ffffff;   /* Pure white cards/panels */
+  --bg-elevated: #f1f5f9;  /* slate-100 */
+  
+  /* ---- Colors: Text & Typography ---- */
+  --text: #0f172a;         /* slate-900 */
+  --text-muted: #64748b;   /* slate-500 */
+  --text-inverse: #f8fafc;
+  
+  /* ---- Colors: Borders & Dividers ---- */
+  --border: #e2e8f0;       /* slate-200 */
+  --border-hover: #cbd5e1; /* slate-300 */
+  
+  /* ---- Colors: Primary Brand ---- */
+  --primary: #0ea5e9;      /* sky-500 */
+  --primary-hover: #0284c7;/* sky-600 */
+  --primary-glow: rgba(14, 165, 233, 0.15);
+  
+  /* ---- Layout & Sidebar (Dashboard) ---- */
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: #f1f5f9;
+  --sidebar-border: var(--border);
+
+  /* ---- Header & Legacy Variables ---- */
   --header-bg: transparent;
-  --link-color: #64748b;
-  --link-hover: #38bdf8;
-  --link-active: #0ea5e9;
-  --logo-text: #0f172a;
+  --link-color: var(--text-muted);
+  --link-hover: var(--primary);
+  --link-active: var(--primary-hover);
+  --logo-text: var(--text);
   --heading-grad-start: #0f172a;
   --heading-grad-end: #0ea5e9;
 
-  /* Hero */
-  --hero-accent: #38bdf8;
-  --hero-accent-glow: rgba(56, 189, 248, 0.25);
-  --hero-badge-bg: rgba(56, 189, 248, 0.1);
-  --hero-badge-border: rgba(56, 189, 248, 0.3);
-  --hero-bio-color: #64748b;
-  --hero-btn-secondary-border: rgba(15, 23, 42, 0.4);
-  --hero-btn-secondary-text: #0f172a;
-  --hero-card-bg: rgba(15, 23, 42, 0.06);
-  --hero-card-border: rgba(56, 189, 248, 0.2);
-  --hero-corner-color: #38bdf8;
-  --hero-label-bg: rgba(15, 23, 42, 0.75);
-  --hero-label-text: #f8fafc;
+  /* ---- Hero Component Variables ---- */
+  --hero-accent: var(--primary);
+  --hero-accent-glow: var(--primary-glow);
+  --hero-badge-bg: rgba(14, 165, 233, 0.1);
+  --hero-badge-border: rgba(14, 165, 233, 0.2);
+  --hero-bio-color: var(--text-muted);
+  --hero-btn-secondary-border: var(--border-hover);
+  --hero-btn-secondary-text: var(--text);
+  --hero-card-bg: rgba(255, 255, 255, 0.8);
+  --hero-card-border: var(--border);
+  --hero-corner-color: var(--primary);
+  --hero-label-bg: rgba(255, 255, 255, 0.95);
+  --hero-label-text: var(--text);
+
+  /* ---- Spacing Scale (Base Setup) ---- */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem;  /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem;    /* 16px */
+  --space-6: 1.5rem;  /* 24px */
+  --space-8: 2rem;    /* 32px */
+  
+  /* ---- Radii & Shadows ---- */
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem;   /* 8px */
+  --radius-lg: 0.75rem;  /* 12px */
+  --radius-xl: 1rem;     /* 16px */
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  /* ---- Transitions ---- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark {
-  --bg: #0b1120;
-  --text: #f8fafc;
-  --header-bg: transparent;
-  --link-color: #94a3b8;
-  --link-hover: #38bdf8;
-  --link-active: #38bdf8;
-  --logo-text: #f8fafc;
-  --heading-grad-start: #ffffff;
-  --heading-grad-end: #38bdf8;
+  /* ---- Colors: Base & Surface ---- */
+  --bg: #0b1120;           /* Deep dark blue (existing) */
+  --bg-surface: #1e293b;   /* slate-800 for cards */
+  --bg-elevated: #334155;  /* slate-700 for hovers/modals */
+  
+  /* ---- Colors: Text & Typography ---- */
+  --text: #f8fafc;         /* slate-50 */
+  --text-muted: #94a3b8;   /* slate-400 */
+  --text-inverse: #0f172a; /* slate-900 */
+  
+  /* ---- Colors: Borders & Dividers ---- */
+  --border: #1e293b;       /* slate-800 */
+  --border-hover: #334155; /* slate-700 */
+  
+  /* ---- Colors: Primary Brand ---- */
+  --primary: #38bdf8;      /* sky-400 */
+  --primary-hover: #7dd3fc;/* sky-300 */
+  --primary-glow: rgba(56, 189, 248, 0.2);
 
-  /* Hero dark */
-  --hero-accent: #38bdf8;
-  --hero-accent-glow: rgba(56, 189, 248, 0.2);
+  /* ---- Layout & Sidebar (Dashboard) ---- */
+  --sidebar-bg: rgba(11, 17, 32, 0.5); /* semi-transparent to match existing feel */
+  --sidebar-hover: rgba(255, 255, 255, 0.05);
+  --sidebar-border: var(--border);
+
+  /* ---- Header & Legacy Variables ---- */
+  --header-bg: transparent;
+  --link-color: var(--text-muted);
+  --link-hover: var(--primary);
+  --link-active: var(--primary);
+  --logo-text: var(--text);
+  --heading-grad-start: #ffffff;
+  --heading-grad-end: var(--primary);
+
+  /* ---- Hero Component Variables ---- */
+  --hero-accent: var(--primary);
+  --hero-accent-glow: var(--primary-glow);
   --hero-badge-bg: rgba(56, 189, 248, 0.08);
   --hero-badge-border: rgba(56, 189, 248, 0.25);
-  --hero-bio-color: #94a3b8;
+  --hero-bio-color: var(--text-muted);
   --hero-btn-secondary-border: rgba(248, 250, 252, 0.25);
-  --hero-btn-secondary-text: #f8fafc;
+  --hero-btn-secondary-text: var(--text);
   --hero-card-bg: rgba(255, 255, 255, 0.04);
   --hero-card-border: rgba(56, 189, 248, 0.2);
-  --hero-corner-color: #38bdf8;
+  --hero-corner-color: var(--primary);
   --hero-label-bg: rgba(11, 17, 32, 0.8);
-  --hero-label-text: #f8fafc;
+  --hero-label-text: var(--text);
+
+  /* Shadows for Dark Mode */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
 /* ─── Base ─────────────────────────────────── */

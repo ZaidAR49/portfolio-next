@@ -100,30 +100,30 @@ export function DashboardExperienceForm({ experienceId }: { experienceId?: numbe
                 <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
-                            <h2 className="text-3xl font-bold text-white mb-1">{isEditMode ? 'Edit Experience' : 'Add Experience'}</h2>
+                            <h2 className="text-3xl font-bold text-foreground mb-1">{isEditMode ? 'Edit Experience' : 'Add Experience'}</h2>
                         </div>
                     </div>
 
-                    <div className="bg-[#121929] border border-slate-800 rounded-3xl p-6 md:p-10 shadow-lg">
+                    <div className="bg-surface border border-border rounded-3xl p-6 md:p-10 shadow-lg">
                         {error && <div className="mb-6 p-4 bg-red-900/50 border border-red-500 rounded-lg text-red-200">{error}</div>}
 
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Role</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Role</label>
                                     <input
                                         {...register('role')}
                                         placeholder="e.g. Senior Software Engineer"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                                     />
                                     {errors.role && <p className="text-red-400 text-xs mt-1">{errors.role.message}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Company</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Company</label>
                                     <input
                                         {...register('company')}
                                         placeholder="e.g. Google"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                                     />
                                     {errors.company && <p className="text-red-400 text-xs mt-1">{errors.company.message}</p>}
                                 </div>
@@ -131,11 +131,11 @@ export function DashboardExperienceForm({ experienceId }: { experienceId?: numbe
 
                             <div className="grid grid-cols-1 gap-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Period</label>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Period</label>
                                     <input
                                         {...register('period')}
                                         placeholder="e.g. Sep 2025 - Present"
-                                        className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+                                        className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                                     />
                                     {errors.period && <p className="text-red-400 text-xs mt-1">{errors.period.message}</p>}
                                 </div>
@@ -147,7 +147,7 @@ export function DashboardExperienceForm({ experienceId }: { experienceId?: numbe
                                     {...register('description')}
                                     rows={4}
                                     placeholder="Describe your role, responsibilities, and key achievements..."
-                                    className="w-full bg-[#0b1120] border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+                                    className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                                 />
                                 {errors.description && <p className="text-red-400 text-xs mt-1">{errors.description.message}</p>}
                             </div>
@@ -155,14 +155,14 @@ export function DashboardExperienceForm({ experienceId }: { experienceId?: numbe
                             <div className="flex justify-end pt-4 gap-4">
                                 <Link
                                     href="?tab=experience"
-                                    className="bg-transparent border border-slate-700 hover:bg-slate-800 text-white font-medium py-3 px-8 rounded-xl transition-colors"
+                                    className="bg-transparent border border-border hover:bg-elevated text-foreground font-medium py-3 px-8 rounded-xl transition-colors"
                                 >
                                     Cancel
                                 </Link>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="bg-[#38bdf8] hover:bg-[#0ea5e9] text-[#0f172a] font-bold py-3 px-8 rounded-xl transition-all shadow-lg shadow-sky-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                    className="bg-primary hover:bg-primary-hover text-inverse font-bold py-3 px-8 rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                 >
                                     {isSubmitting ? 'Submitting...' : (
                                         <>
