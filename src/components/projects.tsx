@@ -58,22 +58,22 @@ export default function Projects({ projects }: { projects: Project[] }) {
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7, ease: "easeOut" }}
+                transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
                 key={project.id}
                 className={`flex flex-col ${isReversed ? 'xl:flex-row-reverse' : 'xl:flex-row'} gap-12 xl:gap-20 mb-32 lg:mb-40 items-center justify-between w-full`}
             >
                 {/* Left side: Animated Border Image Slider Container */}
                 <div className="w-full xl:w-[58%] relative group">
-                    <div className="absolute -inset-4 bg-gradient-to-tr from-[#38bdf8]/10 to-indigo-500/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-700 pointer-events-none" />
+                    <div className="absolute -inset-4 bg-gradient-to-tr from-primary/10 to-indigo-500/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-[700ms] ease-smooth pointer-events-none" />
 
                     {/* Animated Light Border Wrapper */}
                     <div className="relative rounded-[2rem] overflow-hidden p-[2px] shadow-2xl group">
                         {/* Spinning beam */}
-                        <div className="absolute top-1/2 left-1/2 h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_75%,#38bdf8_100%)] opacity-80" />
+                        <div className="absolute top-1/2 left-1/2 h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_75%,var(--primary)_100%)] opacity-80" />
 
                         {/* Inner Container */}
-                        <div className="relative w-full h-full bg-white dark:bg-[#0b1120] rounded-[calc(2rem-2px)] p-2 z-10 overflow-hidden">
-                            <div className="rounded-[1.5rem] overflow-hidden relative border border-slate-200 dark:border-white/5">
+                        <div className="relative w-full h-full bg-surface rounded-[calc(2rem-2px)] p-2 z-10 overflow-hidden">
+                            <div className="rounded-[1.5rem] overflow-hidden relative border border-border">
                                 <div className={`absolute top-6 left-6 z-10 ${statusColor(project.status || 'Completed')} px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.15em] rounded-full backdrop-blur-md shadow-lg`}>
                                     {project.status || 'Completed'}
                                 </div>
@@ -89,33 +89,34 @@ export default function Projects({ projects }: { projects: Project[] }) {
                         initial={{ opacity: 0, x: isReversed ? -20 : 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
+                        transition={{ duration: 0.6, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
                     >
-                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-4">
+                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">
                             {project.title}
                         </h3>
 
-                        <p className="text-slate-600 dark:text-slate-400 text-base md:text-lg mb-10 leading-relaxed font-light">
+                        <p className="text-muted text-base md:text-lg mb-10 leading-relaxed font-light">
                             {project.description}
                         </p>
 
                         {/* Metadata Bento Box */}
-                        <div className="bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 backdrop-blur-md rounded-[2rem] p-6 md:p-8 grid grid-cols-2 gap-y-8 gap-x-4 mb-10 shadow-xl dark:shadow-2xl hover:bg-slate-100 dark:hover:bg-white/[0.04] transition-colors">
-                            <div className="flex flex-col gap-2">
-                                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Year</span>
-                                <span className="text-sm md:text-base font-bold text-slate-700 dark:text-slate-200">{project.year}</span>
+                        <div className="relative overflow-hidden bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 backdrop-blur-md rounded-[2rem] p-6 md:p-8 grid grid-cols-2 gap-y-8 gap-x-4 mb-10 shadow-xl lg:shadow-2xl hover:border-primary/30 transition-all duration-normal ease-smooth group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-normal ease-smooth pointer-events-none" />
+                            <div className="flex flex-col gap-2 relative z-10">
+                                <span className="text-[10px] text-muted font-bold uppercase tracking-widest leading-none">Year</span>
+                                <span className="text-sm md:text-base font-bold text-foreground leading-none">{project.year}</span>
                             </div>
-                            <div className="flex flex-col gap-2">
-                                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Role</span>
-                                <span className="text-sm md:text-base font-bold text-slate-700 dark:text-slate-200">{project.role}</span>
+                            <div className="flex flex-col gap-2 relative z-10">
+                                <span className="text-[10px] text-muted font-bold uppercase tracking-widest leading-none">Role</span>
+                                <span className="text-sm md:text-base font-bold text-foreground leading-none">{project.role}</span>
                             </div>
-                            <div className="flex flex-col gap-2">
-                                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Technologies</span>
-                                <span className="text-sm md:text-base font-bold text-[#0ea5e9] dark:text-[#38bdf8] drop-shadow-[0_0_8px_rgba(56,189,248,0.3)]">{project.technologies}</span>
+                            <div className="flex flex-col gap-2 relative z-10">
+                                <span className="text-[10px] text-muted font-bold uppercase tracking-widest leading-none">Technologies</span>
+                                <span className="text-sm md:text-base font-bold text-primary drop-shadow-[0_0_8px_var(--primary-glow)] leading-snug">{project.technologies}</span>
                             </div>
-                            <div className="flex flex-col gap-2">
-                                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Client</span>
-                                <span className="text-sm md:text-base font-bold text-slate-700 dark:text-slate-200">{project.client}</span>
+                            <div className="flex flex-col gap-2 relative z-10">
+                                <span className="text-[10px] text-muted font-bold uppercase tracking-widest leading-none">Client</span>
+                                <span className="text-sm md:text-base font-bold text-foreground leading-none">{project.client}</span>
                             </div>
                         </div>
 
@@ -125,7 +126,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                                 href={project.github_url}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#0ea5e9] to-[#0284c7] dark:from-[#38bdf8] dark:to-[#0ea5e9] text-white dark:text-slate-950 font-bold px-6 py-2.5 rounded-full text-sm transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(14,165,233,0.4)] dark:hover:shadow-[0_8px_30px_rgba(56,189,248,0.4)] w-max"
+                                className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-inverse font-bold px-6 py-2.5 rounded-full text-sm transition-all duration-normal ease-smooth transform hover:-translate-y-1 hover:shadow-[0_8px_30px_var(--primary-glow)] w-max"
                             >
                                 <FaGithub className="w-4 h-4" />
                                 View Code
@@ -143,15 +144,15 @@ export default function Projects({ projects }: { projects: Project[] }) {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
                 className="flex flex-col items-center mb-24 lg:mb-32 text-center"
             >
-                <div className="inline-flex items-center justify-center space-x-2 px-4 py-1.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-6 backdrop-blur-sm">
-                    <span className="w-2 h-2 rounded-full bg-[#0ea5e9] dark:bg-[#38bdf8]" />
-                    <span className='text-xs text-[#0ea5e9] dark:text-[#38bdf8] font-bold tracking-[0.2em] uppercase'>My Work</span>
+                <div className="inline-flex items-center justify-center space-x-2 px-4 py-1.5 rounded-full bg-surface/50 border border-border mb-6 backdrop-blur-sm shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-primary" />
+                    <span className='text-xs text-primary font-bold tracking-[0.2em] uppercase'>My Work</span>
                 </div>
-                <h2 className='text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-800 dark:text-slate-100 mb-6 tracking-tight'>Featured Projects</h2>
-                <p className='text-slate-600 dark:text-slate-400 max-w-2xl text-lg font-light leading-relaxed'>A collection of carefully crafted projects that showcase my passion for building beautiful and robust web applications.</p>
+                <h2 className='text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground mb-6 tracking-tight'>Featured Projects</h2>
+                <p className='text-muted max-w-2xl text-lg font-light leading-relaxed'>A collection of carefully crafted projects that showcase my passion for building beautiful and robust web applications.</p>
             </motion.div>
 
             <div className="flex flex-col">

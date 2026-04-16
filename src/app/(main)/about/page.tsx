@@ -4,9 +4,10 @@ import { Skill } from '@/lib/models/skill'
 import { getActiveExperiences } from '@/lib/services/experience-service'
 import { Suspense } from 'react'
 import { Loading } from '@/components/loading'
-import { FaGithub, FaLinkedin, FaBriefcase, FaGraduationCap } from 'react-icons/fa'
+import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { getIconForTechnology } from '@/lib/utils/client/icon-mapper'
 import { Experience } from '@/lib/models/experience'
+import ExperienceTimeline from '@/components/experience-timeline'
 
 const page = async () => {
     const user = await getActiveUserAction();
@@ -118,45 +119,10 @@ const page = async () => {
 
                     <div className="relative w-full max-w-5xl mx-auto">
                         {/* Vertical line faintly visible on desktop */}
-                        <div className="absolute left-6 md:left-1/2 transform md:-translate-x-1/2 h-full w-px bg-slate-200 dark:bg-slate-800/50 hidden md:block z-0"></div>
+                        <div className="absolute left-2.5 top-8 bottom-8 w-1 bg-gradient-to-b from-primary/5 via-primary/20 to-primary/5 hidden md:block z-0 rounded-full blur-[1px]"></div>
+                        <div className="absolute left-3 top-0 bottom-0 w-px bg-border hidden md:block z-0"></div>
 
-                        <div className="space-y-12 md:space-y-24 relative z-10">
-                            {experiences.map((exp: Experience, index: number) => {
-                                // Default layout is empty space left, content right. 
-                                // To alternate, every odd index we reverse the row.
-                                const isLeft = index % 2 !== 0;
-
-                                return (
-                                    <div key={exp.id} className={`relative flex flex-col md:flex-row items-center justify-between w-full ${isLeft ? 'md:flex-row-reverse' : ''}`}>
-
-                                        {/* Empty space for alternating layout */}
-                                        <div className="hidden md:block w-[45%]"></div>
-
-                                        {/* Timeline Dot */}
-                                        <div className="absolute top-10 left-0 md:top-1/2 md:left-1/2 transform md:-translate-x-1/2 md:-translate-y-1/2 w-4 h-4 rounded-full bg-[#0ea5e9] dark:bg-[#38bdf8] shadow-[0_0_15px_rgba(14,165,233,0.5)] dark:shadow-[0_0_20px_rgba(56,189,248,0.8)] z-20 border-2 border-white dark:border-[#0b1120]"></div>
-
-                                        {/* Content Card */}
-                                        <div className="w-full pl-10 md:pl-0 md:w-[45%]">
-                                            <div className="bg-white/80 dark:bg-[#0b1120]/60 backdrop-blur-md border border-slate-200 dark:border-slate-800/80 rounded-2xl p-8 hover:border-[#0ea5e9]/50 dark:hover:border-[#38bdf8]/50 hover:bg-slate-50 dark:hover:bg-[#0b1120]/80 transition-all duration-300 group shadow-md dark:shadow-lg">
-                                                <div className="flex items-center gap-3 mb-4">
-                                                    <span className="text-[#0ea5e9] dark:text-[#38bdf8]">
-                                                        {exp.role.toLowerCase().includes('student') || exp.role.toLowerCase().includes('education') || exp.role.toLowerCase().includes('degree') || exp.role.toLowerCase().includes('university') ? (
-                                                            <FaGraduationCap size={18} />
-                                                        ) : (
-                                                            <FaBriefcase size={18} />
-                                                        )}
-                                                    </span>
-                                                    <span className="text-[#0ea5e9] dark:text-[#38bdf8] text-xs font-bold tracking-widest uppercase">{exp.period}</span>
-                                                </div>
-                                                <h3 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2 group-hover:text-[#0ea5e9] dark:group-hover:text-[#38bdf8] transition-colors">{exp.role}</h3>
-                                                <div className="text-slate-600 dark:text-slate-400 text-sm mb-5 font-medium">{exp.company}</div>
-                                                <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed font-light whitespace-pre-wrap">{exp.description}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <ExperienceTimeline experiences={experiences} />
                     </div>
                 </section>
             </Suspense>

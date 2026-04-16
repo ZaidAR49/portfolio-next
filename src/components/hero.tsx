@@ -6,6 +6,7 @@ import { Skill } from '@/lib/models/skill';
 import Marquee from "react-fast-marquee";
 import { getIconForTechnology } from '@/lib/utils/client/icon-mapper';
 import { motion, Variants } from 'framer-motion';
+import { FaLinkedin } from 'react-icons/fa';
 
 export default function HeroSection({ user, skills }: { user: User, skills: Skill[] }) {
     const fadeIn: Variants = {
@@ -13,7 +14,7 @@ export default function HeroSection({ user, skills }: { user: User, skills: Skil
         visible: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.5, ease: "easeOut" }, // ✅ now properly typed
+            transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
         },
     };
 
@@ -39,10 +40,10 @@ export default function HeroSection({ user, skills }: { user: User, skills: Skil
             <Marquee gradient={false} speed={40}>
                 {skills.map((skill, index) => (
                     <div key={index} className="flex flex-col items-center gap-3 px-12 group cursor-pointer">
-                        <span className="text-3xl text-slate-400 group-hover:text-[#0ea5e9] dark:group-hover:text-[#38bdf8] transition-all duration-300">
+                        <span className="text-3xl text-muted group-hover:text-primary transition-all duration-normal ease-smooth">
                             {getIconForTechnology(skill.name)}
                         </span>
-                        <span className="text-[11px] font-semibold tracking-wider text-slate-500 group-hover:text-slate-800 dark:group-hover:text-slate-300 transition-colors duration-300 hidden md:block">
+                        <span className="text-[11px] font-semibold tracking-wider text-muted group-hover:text-foreground transition-colors duration-normal ease-smooth hidden md:block">
                             {skill.name}
                         </span>
                     </div>
@@ -90,57 +91,93 @@ export default function HeroSection({ user, skills }: { user: User, skills: Skil
                     </motion.div>
 
                     <motion.div variants={fadeIn} className="mb-6 space-y-2">
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight leading-[1.1]">
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tight leading-[1.1]">
                             Hi, I'm <br className="hidden lg:block" />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-600 to-[#0ea5e9] dark:from-white dark:to-[#38bdf8] drop-shadow-sm">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-primary drop-shadow-sm">
                                 {user.name}
                             </span>
                         </h1>
                     </motion.div>
 
-                    <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-600 dark:text-slate-400 font-light leading-relaxed max-w-xl mb-10">
+                    <motion.p variants={fadeIn} className="text-lg md:text-xl text-muted font-light leading-relaxed max-w-xl mb-10">
                         {user.hero_description}
                     </motion.p>
 
                     <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                        <Link href={user.resume_url} className="w-full sm:w-auto px-8 py-4 bg-[#0ea5e9] dark:bg-[#38bdf8] hover:bg-[#0284c7] dark:hover:bg-sky-400 text-white dark:text-slate-950 font-bold rounded-full transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(14,165,233,0.3)] dark:hover:shadow-[0_8px_30px_rgba(56,189,248,0.3)] text-center flex items-center justify-center gap-2">
+                        <Link href={user.resume_url} className="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary-hover text-inverse font-bold rounded-full transition-all duration-normal ease-smooth transform hover:-translate-y-1 hover:shadow-[0_8px_30px_var(--primary-glow)] text-center flex items-center justify-center gap-2">
                             Download CV
                         </Link>
-                        <Link href={'/#contact'} className="w-full sm:w-auto px-8 py-4 bg-transparent border border-slate-300 dark:border-slate-700 hover:border-[#0ea5e9] dark:hover:border-[#38bdf8] text-slate-700 dark:text-slate-300 hover:text-[#0ea5e9] dark:hover:text-[#38bdf8] font-bold rounded-full transition-all duration-300 transform hover:-translate-y-1 text-center">
+                        <Link href={'/#contact'} className="w-full sm:w-auto px-8 py-4 bg-transparent border border-border hover:border-primary text-foreground hover:text-primary font-bold rounded-full transition-all duration-normal ease-smooth transform hover:-translate-y-1 text-center">
                             Let's Connect
                         </Link>
                     </motion.div>
                 </motion.div>
 
-                {/* Right profile card */}
+                {/* Cinematic Right Profile Card */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-                    className="flex-shrink-0 relative group z-10"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                    className="flex-shrink-0 relative group z-10 w-[280px] md:w-[380px] mt-16 md:mt-24 lg:mt-0 lg:ml-12"
                 >
-                    <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-tr from-[#0ea5e9] dark:from-[#38bdf8] to-indigo-500 opacity-20 group-hover:opacity-40 blur-2xl transition duration-500" />
-                    <div className="relative w-[280px] h-[360px] md:w-[320px] md:h-[420px] rounded-[2rem] bg-white/80 dark:bg-[#0b1120]/80 border border-slate-200 dark:border-white/10 backdrop-blur-xl overflow-hidden shadow-2xl p-2 transform group-hover:-translate-y-2 transition duration-500">
-                        <div className="w-full h-full rounded-[1.5rem] overflow-hidden relative bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5">
-                            {user.picture_url && (
-                                <Image
-                                    src={user.picture_url}
-                                    alt={user.name}
-                                    fill
-                                    sizes="(max-width: 768px) 280px, 320px"
-                                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                                    priority
-                                    unoptimized
+                    {/* The Main Container */}
+                    <div className="relative w-full aspect-[4/4.5] rounded-[3rem] bg-[#293247] p-[8px] shadow-2xl group overflow-visible z-10">
+                        
+                        {/* Decorative Top-Right Corner Bracket */}
+                        <div className="absolute -top-[12px] -right-[12px] w-24 h-24 border-t-[5px] border-r-[5px] border-white rounded-tr-[3.5rem] z-20 pointer-events-none" />
+                        
+                        {/* Decorative Bottom-Left Corner Bracket */}
+                        <div className="absolute -bottom-[12px] -left-[12px] w-24 h-24 border-b-[5px] border-l-[5px] border-white rounded-bl-[3.5rem] z-20 pointer-events-none" />
+
+                        <div className="w-full h-full relative z-10 overflow-hidden rounded-[2.5rem] bg-[#2e3748]">
+                            
+                            {/* Animated Internal Border Layer */}
+                            <div className="absolute inset-0 z-0">
+                                <motion.div 
+                                    animate={{ rotate: 360 }}
+                                    transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+                                    className="absolute -top-[50%] -left-[50%] w-[200%] h-[200%] opacity-90"
+                                    style={{
+                                        background: 'conic-gradient(from 0deg, transparent 0 280deg, var(--primary) 360deg)'
+                                    }}
                                 />
-                            )}
-                            {/* Glass overlay text */}
-                            <div className="absolute bottom-4 inset-x-4 hidden md:flex items-center justify-center">
-                                <div className="w-full bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl py-3 flex items-center justify-center shadow-lg">
-                                    <p className="text-white text-xs font-bold tracking-[0.2em] uppercase">{user.job_title}</p>
-                                </div>
+                            </div>
+
+                            {/* Image Container with Inner Gap */}
+                            <div className="absolute inset-[3px] z-10 overflow-hidden rounded-[2.4rem] bg-[#0b1221]">
+                                {user.picture_url && (
+                                    <Image
+                                        src={user.picture_url}
+                                        alt={user.name}
+                                        fill
+                                        sizes="(max-width: 768px) 340px, 400px"
+                                        className="object-cover object-[center_top] scale-[1.25] group-hover:scale-[1.3] transition-all duration-1000 ease-smooth drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                                        priority
+                                        unoptimized
+                                    />
+                                )}
                             </div>
                         </div>
+
+                        {/* Centered Floating Glass Pill Badge */}
+                        <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                            className="absolute bottom-8 inset-x-0 flex justify-center z-30 pointer-events-none"
+                        >
+                            <div className="px-6 py-2 bg-[#6b7280]/80 backdrop-blur-md border border-white/20 rounded-[1.2rem] shadow-xl">
+                                <p className="text-white text-[14px] md:text-[15px] font-semibold tracking-wide text-center">{user.job_title || 'Software Engineer'}</p>
+                            </div>
+                        </motion.div>
                     </div>
+
+                    {/* Small Decorative Floating Icon */}
+                    {user.linkedin_url && (
+                        <Link href={user.linkedin_url} target="_blank" className="absolute top-1/2 -left-5 w-10 h-10 bg-surface/80 backdrop-blur-md border border-border rounded-xl flex items-center justify-center shadow-lg transform -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-[#0a66c2] text-muted transition-all duration-500 ease-smooth z-20 hover:scale-110">
+                            <FaLinkedin className="w-5 h-5" />
+                        </Link>
+                    )}
                 </motion.div>
             </div>
 
