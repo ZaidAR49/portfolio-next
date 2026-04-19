@@ -42,7 +42,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
         switch (status.toLowerCase()) {
             case 'completed':
                 return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
-            case 'in progress':
+            case "in_progress" :
                 return 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
             case 'suspended':
                 return 'bg-red-500/10 text-red-400 border border-red-500/20';
