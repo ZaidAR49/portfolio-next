@@ -1,5 +1,6 @@
 import { FaUsers, FaCode, FaProjectDiagram, FaBriefcase } from 'react-icons/fa';
 import { getAnalysisAction } from '@/actions/analysis-action';
+import { PostHogAnalytics } from '@/components/dashboard/posthog-analytics';
 import { Suspense } from 'react';
 import { Loading } from '@/components/loading';
 import { ExportDataCard } from '@/components/dashboard/export-data-card';
@@ -9,6 +10,9 @@ export async function DashboardAnalysis() {
     const analysis = await getAnalysisAction();
     return (
         <div className="space-y-8">
+            {/* PostHog Live Analytics */}
+            <PostHogAnalytics />
+
             {/* Top Stats Cards */}
             <Suspense fallback={<Loading />}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
