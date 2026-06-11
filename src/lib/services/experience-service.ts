@@ -42,7 +42,7 @@ export const addExperience = async (experience: Experience) => {
         if (error) {
             throw error;
         }
-        revalidateTag("experiences");
+        revalidateTag("experiences", "max");
         return data;
     }
     catch (error) {
@@ -57,7 +57,7 @@ export const updateExperience = async (experience: Experience) => {
         if (error) {
             throw error;
         }
-        revalidateTag("experiences");
+        revalidateTag("experiences", "max");
         return data;
     }
     catch (error) {
@@ -72,7 +72,7 @@ export const deleteExperience = async (id: number) => {
         if (error) {
             throw error;
         }
-        revalidateTag("experiences");
+        revalidateTag("experiences", "max");
         return data;
     }
     catch (error) {
