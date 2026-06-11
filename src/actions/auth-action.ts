@@ -3,7 +3,7 @@ import { addAuthCode, verifyAndConsumeCode } from "../lib/services/auth-service"
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { sendAuthCode } from "./contact-action";
-import { createHash } from 'crypto';
+import { createHash, randomInt } from 'crypto';
 import { SignJWT } from 'jose';
 import z from "zod";
 const OtpSchema = z.object({
@@ -11,7 +11,7 @@ const OtpSchema = z.object({
 });
 export async function sendAuthCodeAction() {
     try {
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        const code = randomInt(100000, 1000000).toString();
         const hashedCode = createHash('sha256').update(code).digest('hex');
 
         await addAuthCode(hashedCode);
