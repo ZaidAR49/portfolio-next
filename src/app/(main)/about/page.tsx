@@ -71,7 +71,7 @@ const page = async () => {
                 </section>
 
 
-                <section className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-32 md:mt-48">
+                <section id="skills" className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-32 md:mt-48">
                     {/* Capabilities Title */}
                     <div className="flex flex-col items-center text-center max-w-3xl mb-24">
                         <span className="text-[#0ea5e9] dark:text-[#38bdf8] text-xs font-bold tracking-[0.2em] uppercase mb-4">My Skills</span>
@@ -117,7 +117,7 @@ const page = async () => {
                 </section>
                 {/* Experience Section */}
                 {experiences && experiences.length > 0 && (
-                    <section className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-32 md:mt-48 pb-32">
+                    <section id="experience" className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-32 md:mt-48 pb-32">
                         {/* Experience Title */}
                         <div className="flex flex-col items-center text-center max-w-3xl mb-24">
                             <span className="text-[#0ea5e9] dark:text-[#38bdf8] text-xs font-bold tracking-[0.2em] uppercase mb-4">My Journey</span>
@@ -136,7 +136,7 @@ const page = async () => {
 
                 {/* Education Section */}
                 {education && education.length > 0 && (
-                    <section className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-16 md:mt-32 pb-32">
+                    <section id="education" className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-16 md:mt-32 pb-32">
                         <div className="flex flex-col items-center text-center max-w-3xl mb-24">
                             <span className="text-[#0ea5e9] dark:text-[#38bdf8] text-xs font-bold tracking-[0.2em] uppercase mb-4">Academic Background</span>
                             <h2 className="text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-100 mb-8">Education</h2>
@@ -153,7 +153,7 @@ const page = async () => {
 
                 {/* Courses Section */}
                 {courses && courses.length > 0 && (
-                    <section className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-16 md:mt-32 pb-32">
+                    <section id="courses" className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-16 md:mt-32 pb-32">
                         <div className="flex flex-col items-center text-center max-w-3xl mb-24">
                             <span className="text-[#0ea5e9] dark:text-[#38bdf8] text-xs font-bold tracking-[0.2em] uppercase mb-4">Continuous Learning</span>
                             <h2 className="text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-100 mb-8">Courses & Certifications</h2>

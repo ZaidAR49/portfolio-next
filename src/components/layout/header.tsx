@@ -61,7 +61,14 @@ export default function Header({ isAuthenticated, activePortfolio }: { isAuthent
         }
     };
 
-    const tabs = {
+    type TabType = {
+        name: string;
+        icon: React.ReactNode;
+        path: string;
+        subItems?: { name: string; path: string }[];
+    };
+
+    const tabs: Record<string, TabType> = {
         home: {
             name: "Home",
             icon: <FaHome />,
@@ -75,7 +82,14 @@ export default function Header({ isAuthenticated, activePortfolio }: { isAuthent
         about: {
             name: "About",
             icon: <FaUser />,
-            path: `${pathname === "/about" ? "#aboutfirst" : "/about"}`
+            path: `${pathname === "/about" ? "/about#aboutfirst" : "/about"}`,
+            subItems: [
+                { name: "Overview", path: "/about#aboutfirst" },
+                { name: "Skills", path: "/about#skills" },
+                { name: "Experience", path: "/about#experience" },
+                { name: "Education", path: "/about#education" },
+                { name: "Courses", path: "/about#courses" }
+            ]
         },
         contact: {
             name: "Contact",
@@ -116,15 +130,15 @@ export default function Header({ isAuthenticated, activePortfolio }: { isAuthent
                         <nav className="hidden md:flex items-center gap-8">
                             <ul className="flex items-center gap-8 m-0 p-0 list-none">
                                 {Object.entries(tabs).map(([key, value]) => {
-                                    const isActive = pathname === value.path;
+                                    const isActive = pathname === value.path || (value.path.startsWith("/about") && pathname.startsWith("/about"));
                                     if (!isAuthenticated && key === "dashboard") {
                                         return null;
                                     }
                                     return (
-                                        <li key={key}>
+                                        <li key={key} className="relative group">
                                             <a
                                                 href={value.path}
-                                                className={`flex items-center gap-2 text-sm font-semibold transition-all duration-200 ${isActive
+                                                className={`flex items-center gap-2 text-sm font-semibold transition-all duration-200 py-2 ${isActive
                                                     ? "text-primary"
                                                     : "text-muted hover:text-foreground"
                                                     }`}
@@ -132,6 +146,21 @@ export default function Header({ isAuthenticated, activePortfolio }: { isAuthent
                                                 <span className="text-lg">{value.icon}</span>
                                                 {value.name}
                                             </a>
+                                            {value.subItems && (
+                                                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                                    <div className="bg-surface/95 backdrop-blur-xl border border-border rounded-2xl p-2 shadow-lg min-w-[160px] flex flex-col gap-1">
+                                                        {value.subItems.map((subItem, idx) => (
+                                                            <a
+                                                                key={idx}
+                                                                href={subItem.path}
+                                                                className="px-4 py-2 text-sm font-medium text-muted hover:text-primary hover:bg-elevated rounded-xl transition-colors whitespace-nowrap"
+                                                            >
+                                                                {subItem.name}
+                                                            </a>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </li>
                                     );
                                 })}
@@ -181,15 +210,15 @@ export default function Header({ isAuthenticated, activePortfolio }: { isAuthent
                             <nav className="w-full">
                                 <ul className="flex flex-col gap-2 m-0 p-0 list-none">
                                     {Object.entries(tabs).map(([key, value]) => {
-                                        const isActive = pathname === value.path;
+                                        const isActive = pathname === value.path || (value.path.startsWith("/about") && pathname.startsWith("/about"));
                                         if (!isAuthenticated && key === "dashboard") {
                                             return null;
                                         }
                                         return (
-                                            <li key={key}>
+                                            <li key={key} className="flex flex-col gap-1">
                                                 <Link
                                                     href={value.path}
-                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                    onClick={() => !value.subItems && setIsMobileMenuOpen(false)}
                                                     className={`flex items-center gap-4 text-[15px] font-bold px-5 py-4 rounded-2xl transition-all duration-200 ${isActive
                                                         ? "text-primary border border-border bg-elevated"
                                                         : "text-muted hover:text-foreground hover:bg-elevated border border-transparent"
@@ -198,6 +227,20 @@ export default function Header({ isAuthenticated, activePortfolio }: { isAuthent
                                                     <span className={isActive ? "text-primary" : "text-muted"}>{value.icon}</span>
                                                     {value.name}
                                                 </Link>
+                                                {value.subItems && (
+                                                    <div className="flex flex-col ml-12 gap-1 border-l-2 border-border/50 pl-4 py-2">
+                                                        {value.subItems.map((subItem, idx) => (
+                                                            <Link
+                                                                key={idx}
+                                                                href={subItem.path}
+                                                                onClick={() => setIsMobileMenuOpen(false)}
+                                                                className="text-sm font-medium text-muted hover:text-primary py-2 transition-colors"
+                                                            >
+                                                                {subItem.name}
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </li>
                                         );
                                     })}
