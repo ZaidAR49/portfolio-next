@@ -1,14 +1,17 @@
 "use client";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaTag } from "react-icons/fa";
 import { MdDragIndicator } from "react-icons/md";
 import { getActiveProjectsAction, deleteProjectAction, bulkUpdateProjectOrdersAction } from "@/actions/project-action";
+import { getActiveUserAction } from "@/actions/user-action";
 import { Project } from "@/lib/models/project";
+import { Category } from "@/lib/models/category";
 import { Suspense, useState, useEffect } from "react";
 import { Loading } from "@/components/loading";
 import Link from 'next/link';
 import { toast, Toaster } from "sonner";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { ImportModal } from "@/components/dashboard/import-modal";
+import { CategoryManager } from "@/components/dashboard/category-manager";
 import {
   DndContext,
   closestCenter,
@@ -27,7 +30,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-function SortableProjectCard({ proj, handleDeleteClick }: { proj: Project, handleDeleteClick: (id: number) => void }) {
+function SortableProjectCard({ proj, handleDeleteClick, categories }: { proj: Project, handleDeleteClick: (id: number) => void, categories: Category[] }) {
     const {
         attributes,
         listeners,
@@ -75,7 +78,7 @@ function SortableProjectCard({ proj, handleDeleteClick }: { proj: Project, handl
             {/* Card Content Layer */}
             <div className="relative z-10 p-6 flex flex-col justify-between h-full gap-4">
                 <div>
-                    <div className="flex items-center gap-3 mb-4 pr-10">
+                    <div className="flex items-center gap-3 mb-4 pr-10 flex-wrap">
                         <span className="text-xs font-mono bg-elevated text-foreground border border-border px-2 py-1 rounded shadow-sm font-semibold">#{proj.sort_order}</span>
                         <span className={`text-xs px-2 py-1 rounded border font-bold ${
                             (() => {
@@ -94,6 +97,16 @@ function SortableProjectCard({ proj, handleDeleteClick }: { proj: Project, handl
                         }`}>
                             {proj.status.replace(/_/g, ' ').toLowerCase()}
                         </span>
+                        {/* Category badge */}
+                        {(() => {
+                            const cat = categories.find((c) => c.id === proj.category_id);
+                            return cat ? (
+                                <span className="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs px-2 py-1 rounded font-bold">
+                                    <FaTag size={9} />
+                                    {cat.name}
+                                </span>
+                            ) : null;
+                        })()}
                     </div>
                     <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors pr-10">{proj.title}</h3>
                     <p className="text-foreground/80 dark:text-muted-foreground text-sm line-clamp-3 mb-6 font-medium leading-relaxed">{proj.description}</p>
@@ -123,6 +136,12 @@ export function DashboardProjects() {
     const [isLoading, setIsLoading] = useState(false);
     const [projToDelete, setProjToDelete] = useState<number | null>(null);
     const [isImportOpen, setIsImportOpen] = useState(false);
+    const [userId, setUserId] = useState<number | null>(null);
+    const [categories, setCategories] = useState<Category[]>([]);
+
+    useEffect(() => {
+        getActiveUserAction().then((u) => { if (u?.id) setUserId(u.id); });
+    }, []);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -203,6 +222,15 @@ export function DashboardProjects() {
         <>
             {isLoading ? <Loading /> :
                 <div className="space-y-6">
+                    {/* Category manager — collapsed by default */}
+                    {userId && (
+                        <CategoryManager
+                            userId={userId}
+                            projects={projects}
+                            onCategoriesChange={setCategories}
+                        />
+                    )}
+
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                             <h2 className="text-3xl font-bold text-foreground mb-1">Projects</h2>
@@ -236,10 +264,11 @@ export function DashboardProjects() {
                             >
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                                     {projects?.map((proj: Project) => (
-                                        <SortableProjectCard 
-                                            key={proj.id} 
-                                            proj={proj} 
-                                            handleDeleteClick={handleDeleteClick} 
+                                        <SortableProjectCard
+                                            key={proj.id}
+                                            proj={proj}
+                                            handleDeleteClick={handleDeleteClick}
+                                            categories={categories}
                                         />
                                     ))}
                                     {projects.length === 0 && (

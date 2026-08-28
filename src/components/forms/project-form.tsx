@@ -5,12 +5,15 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { addProjectWithFilesAction, updateProjectWithFilesAction, getProjectByIdAction, updateProjectImagesOnlyAction, updateProjectAction } from '@/actions/project-action';
 import { getActiveUserAction } from '@/actions/user-action';
+import { getActiveCategoriesAction } from '@/actions/category-action';
 import { RequestProject, RequestProjectSchema, Project } from "@/lib/models/project";
+import { Category } from '@/lib/models/category';
 import { toast, Toaster } from 'sonner';
 import { Loading } from '@/components/loading';
 import Link from 'next/link';
 import { FaSave, FaPlus, FaTimes } from "react-icons/fa";
 import { compressImage } from '@/lib/utils/client/image-compression';
+import { CategorySelectField } from '@/components/forms/category-select-field';
 
 export function DashboardProjectForm({ projectId }: { projectId?: number }) {
     const router = useRouter();
@@ -25,6 +28,8 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
     const [newImageFiles, setNewImageFiles] = useState<File[]>([]);
     const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
     const [statusOptions, setStatusOptions] = useState<string[]>(["Completed", "In Progress", "Suspended"]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
     const MAX_IMAGES = 10;
 
@@ -48,6 +53,8 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
             if (!isEditMode) setIsLoading(false);
         });
 
+        // Load categories for the selector
+        getActiveCategoriesAction().then(setCategories).catch(() => {});
         if (projectId) {
             getProjectByIdAction(projectId).then((proj) => {
                 const projData = Array.isArray(proj) ? proj[0] : proj;
@@ -77,7 +84,9 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
                         live_url: projData.live_url || "",
                         technologies: projData.technologies,
                         images: projData.images || [],
+                        category_id: projData.category_id ?? null,
                     });
+                    setSelectedCategoryId(projData.category_id ?? null);
                     setExistingImages(projData.images || []);
                 }
                 setIsLoading(false);
@@ -142,7 +151,7 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
 
         try {
             if (isEditMode && projectId) {
-                const hasTextChanges = Object.keys(dirtyFields).length > 0;
+                const hasTextChanges = Object.keys(dirtyFields).length > 0 || selectedCategoryId !== (watch('category_id') ?? null);
                 const hasImageChanges = newImageFiles.length > 0 || imagesToDelete.length > 0;
 
                 data.id = projectId;
@@ -159,7 +168,7 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
                 if (hasTextChanges && hasImageChanges) {
                     data.images = existingImages;
                     data.new_images = newImageFiles;
-                    await updateProjectWithFilesAction(data, imagesToDelete);
+                    await updateProjectWithFilesAction({ ...data, category_id: selectedCategoryId }, imagesToDelete);
                 }
                 // If ONLY Text changed
                 else if (hasTextChanges && !hasImageChanges) {
@@ -175,7 +184,8 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
                         description: data.description,
                         github_url: data.github_url,
                         live_url: data.live_url,
-                        technologies: data.technologies
+                        technologies: data.technologies,
+                        category_id: selectedCategoryId,
                     };
                     projectToUpdate.technologies = data.technologies
                     projectToUpdate.images = existingImages;
@@ -192,6 +202,7 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
                 data.images = existingImages;
                 data.new_images = newImageFiles;
                 data.user_id = activeUserId as number;
+                data.category_id = selectedCategoryId;
                 await addProjectWithFilesAction(data);
                 toast.success("Project added successfully");
             }
@@ -275,6 +286,16 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
                                         className="w-full bg-elevated border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                     />
                                     {errors.live_url && <p className="text-red-400 text-xs mt-1">{errors.live_url.message}</p>}
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Category</label>
+                                    <CategorySelectField
+                                        categories={categories}
+                                        value={selectedCategoryId}
+                                        userId={activeUserId ?? 0}
+                                        onChange={setSelectedCategoryId}
+                                        onCategoryCreated={(cat) => setCategories((prev) => [...prev, cat])}
+                                    />
                                 </div>
                             </div>
 

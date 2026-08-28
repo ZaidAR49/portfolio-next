@@ -43,7 +43,7 @@ export function ProjectsClient({ projects, categories }: ProjectsClientProps) {
                 >
                     {filtered.length > 0 ? (
                         filtered.map((project, index) => (
-                            <ProjectCard key={project.id} project={project} index={index} />
+                            <ProjectCard key={project.id} project={project} index={index} categories={categories} />
                         ))
                     ) : (
                         <div className="flex flex-col items-center justify-center py-32 text-center">

@@ -1,5 +1,6 @@
 "use client";
 import { Project } from "@/lib/models/project";
+import { Category } from "@/lib/models/category";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
@@ -7,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaTag } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { checkLiveUrlAction } from "@/actions/project-action";
@@ -95,8 +96,9 @@ function statusColor(status: string): string {
 // ---------------------------------------------------------------------------
 // ProjectCard — exported for reuse on home & /projects page
 // ---------------------------------------------------------------------------
-export function ProjectCard({ project, index }: { project: Project; index: number }) {
+export function ProjectCard({ project, index, categories }: { project: Project; index: number; categories?: Category[] }) {
     const isReversed = index % 2 !== 0;
+    const categoryName = categories?.find((c) => c.id === project.category_id)?.name;
 
     return (
         <motion.div
@@ -122,6 +124,12 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
                             <div className={`absolute top-6 left-6 z-10 ${statusColor(project.status || "Completed")} px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.15em] rounded-full backdrop-blur-md shadow-lg`}>
                                 {(project.status || "Completed").replace(/_/g, " ")}
                             </div>
+                            {categoryName && (
+                                <div className="absolute top-6 right-6 z-10 inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-300 border border-indigo-500/25 px-3 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.15em] rounded-full backdrop-blur-md shadow-lg">
+                                    <FaTag className="w-2.5 h-2.5" />
+                                    {categoryName}
+                                </div>
+                            )}
                             {project.images && <ImageSlider imgeurl={project.images} projectName={project.title} />}
                         </div>
                     </div>

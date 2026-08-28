@@ -1,11 +1,12 @@
 "use client";
 import { Project } from "@/lib/models/project";
+import { Category } from "@/lib/models/category";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
 import { ProjectCard } from "@/components/project-card";
 
-export default function Projects({ projects }: { projects: Project[] }) {
+export default function Projects({ projects, categories }: { projects: Project[]; categories?: Category[] }) {
     const sorted = [...projects].sort((a, b) => a.sort_order - b.sort_order);
     const featured = sorted.slice(0, 3);
 
@@ -32,7 +33,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
             {/* Top 3 project cards */}
             <div className="flex flex-col">
                 {featured.map((project, index) => (
-                    <ProjectCard key={project.id} project={project} index={index} />
+                    <ProjectCard key={project.id} project={project} index={index} categories={categories} />
                 ))}
             </div>
 

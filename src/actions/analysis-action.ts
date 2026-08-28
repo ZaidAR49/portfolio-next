@@ -3,6 +3,7 @@ import { getUsersCount } from "@/lib/services/user-service";
 import { getExperiencesCount } from "@/lib/services/experience-service";
 import { getProjectsCount } from "@/lib/services/project-service";
 import { getSkillsCount } from "@/lib/services/skills-service";
+import { getCategoriesCount } from "@/lib/services/category-service";
 import { checkAuth } from "@/lib/auth";
 import { cookies } from "next/headers";
 
@@ -21,11 +22,13 @@ export const getAnalysisAction = async () => {
         const experiencesCount = await getExperiencesCount();
         const projectsCount = await getProjectsCount();
         const skillsCount = await getSkillsCount();
+        const categoriesCount = await getCategoriesCount();
         return {
             usersCount,
             experiencesCount,
             projectsCount,
-            skillsCount
+            skillsCount,
+            categoriesCount,
         };
     } catch (error) {
         console.error("Error getting analysis:", error);

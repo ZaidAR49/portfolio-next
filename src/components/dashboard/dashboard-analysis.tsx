@@ -1,4 +1,4 @@
-import { FaUsers, FaCode, FaProjectDiagram, FaBriefcase } from 'react-icons/fa';
+import { FaUsers, FaCode, FaProjectDiagram, FaBriefcase, FaTag } from 'react-icons/fa';
 import { getAnalysisAction } from '@/actions/analysis-action';
 import { PostHogAnalytics } from '@/components/dashboard/posthog-analytics';
 import { Suspense } from 'react';
@@ -15,7 +15,7 @@ export async function DashboardAnalysis() {
 
             {/* Top Stats Cards */}
             <Suspense fallback={<Loading />}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                     {/* Card 1 */}
                     <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-border-hover transition-all duration-normal">
                         <div className="flex flex-col gap-2 mb-6">
@@ -65,6 +65,19 @@ export async function DashboardAnalysis() {
                             <h3 className="text-4xl font-extrabold text-foreground mb-4">{analysis.experiencesCount}</h3>
                             <div className="w-full bg-elevated h-1.5 rounded-full overflow-hidden">
                                 <div className="bg-primary h-full w-[35%] rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Card 5 — Categories */}
+                    <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col justify-between shadow-md hover:shadow-lg hover:-translate-y-1 hover:border-border-hover transition-all duration-normal">
+                        <div className="flex flex-col gap-2 mb-6">
+                            <FaTag className="text-indigo-400 text-xl mb-1" />
+                            <span className="text-xs font-bold tracking-wider text-muted uppercase">Total Categories</span>
+                        </div>
+                        <div>
+                            <h3 className="text-4xl font-extrabold text-foreground mb-4">{analysis.categoriesCount}</h3>
+                            <div className="w-full bg-elevated h-1.5 rounded-full overflow-hidden">
+                                <div className="bg-indigo-500 h-full w-[60%] rounded-full"></div>
                             </div>
                         </div>
                     </div>
