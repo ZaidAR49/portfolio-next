@@ -77,7 +77,7 @@ export default function Header({ isAuthenticated, activePortfolio }: { isAuthent
         projects: {
             name: "Projects",
             icon: <FaProjectDiagram />,
-            path: "/#projects"
+            path: "/projects"
         },
         about: {
             name: "About",

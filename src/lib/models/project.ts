@@ -13,7 +13,9 @@ export const ProjectSchema = z.object({
     github_url: z.union([z.literal(""), z.string().url("Invalid URL")]).optional().nullable(),
     live_url: z.union([z.literal(""), z.string().url("Invalid URL")]).optional().nullable(),
     technologies: z.string().min(2, "Please provide at least one technology"),
-    images: z.array(z.string().url()).max(10, "Maximum 10 images allowed").optional().nullable()
+    images: z.array(z.string().url()).max(10, "Maximum 10 images allowed").optional().nullable(),
+    category_id: z.number().optional().nullable(),
+
 });
 export type Project = z.infer<typeof ProjectSchema>;
 
