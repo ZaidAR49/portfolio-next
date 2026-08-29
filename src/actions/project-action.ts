@@ -4,7 +4,7 @@ import {
     updateProject, deleteProject, updateProjectImages, reorderProjects, bulkUpdateProjectOrders
 } from "@/lib/services/project-service";
 import { Project, ProjectSchema, RequestProject, RequestProjectSchema } from "@/lib/models/project";
-import { uploadImage, deleteImage } from "@/lib/utils/server/could-upload";
+import { uploadImage, deleteImage, deleteMultiple } from "@/lib/utils/server/could-upload";
 import { revalidatePath } from "next/cache";
 import { checkAuth } from "@/lib/auth";
 import { cookies } from "next/headers";
@@ -117,6 +117,11 @@ export async function deleteProjectAction(id: number) {
         const project = Array.isArray(projectOrArray) ? projectOrArray[0] : projectOrArray;
         const userId = project?.user_id;
 
+        // Delete all associated project images from Cloudinary
+        if (project?.images && Array.isArray(project.images) && project.images.length > 0) {
+            await deleteMultiple(project.images);
+        }
+
         const res = await deleteProject(id);
         if (userId) {
             await reorderProjects(userId);
@@ -204,9 +209,9 @@ export async function updateProjectWithFilesAction(projectData: RequestProject, 
     }
 
     try {
-        // Handle deletions of old images
-        for (const imgUrl of imagesToDelete) {
-            await deleteImage(imgUrl);
+        // Handle deletions of old images from Cloudinary
+        if (imagesToDelete && imagesToDelete.length > 0) {
+            await deleteMultiple(imagesToDelete);
         }
 
         const uploadedImages: string[] = [];
@@ -245,8 +250,8 @@ export async function updateProjectImagesOnlyAction(id: number, existingImages: 
         return { success: false, message: "Unauthorized", status: 401 };
     }
     try {
-        for (const imgUrl of imagesToDelete) {
-            await deleteImage(imgUrl);
+        if (imagesToDelete && imagesToDelete.length > 0) {
+            await deleteMultiple(imagesToDelete);
         }
 
         const uploadedImages: string[] = [];

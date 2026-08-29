@@ -4,7 +4,8 @@ import {
     getUsers, getUserById, addUser, updateUser, deleteUser, getActiveUser, activateUser,
     deactivateUser, getPortfolioNames, getActivePortfolioName
 } from "@/lib/services/user-service";
-import { uploadImage, deleteImage } from "@/lib/utils/server/could-upload";
+import { getProjectsByUserId } from "@/lib/services/project-service";
+import { uploadImage, deleteImage, deleteMultiple } from "@/lib/utils/server/could-upload";
 import { revalidatePath, updateTag } from "next/cache";
 import { checkAuth } from "@/lib/auth";
 import { cookies } from "next/headers";
@@ -107,10 +108,9 @@ export async function updateUserAction(user: RequestUser) {
     }
 
     try {
-
         if (user.picture && user.id) {
-            //delete old picture
-            const oldUserResult = await getUserByIdAction(user.id);
+            // Delete old picture from Cloudinary
+            const oldUserResult = await getUserById(user.id);
             const oldUser = Array.isArray(oldUserResult) ? oldUserResult[0] : oldUserResult;
             if (oldUser && oldUser.picture_url) {
                 await deleteImage(oldUser.picture_url);
@@ -171,6 +171,27 @@ export async function deleteUserAction(id: number) {
         return { success: false, message: "Unauthorized", status: 401 };
     }
     try {
+        // 1. Delete user profile picture from Cloudinary
+        const userOrArray = await getUserById(id);
+        const user = Array.isArray(userOrArray) ? userOrArray[0] : userOrArray;
+        if (user && user.picture_url) {
+            await deleteImage(user.picture_url);
+        }
+
+        // 2. Delete all project images belonging to this user from Cloudinary
+        try {
+            const userProjects = await getProjectsByUserId(id);
+            if (userProjects && Array.isArray(userProjects)) {
+                for (const proj of userProjects) {
+                    if (proj.images && Array.isArray(proj.images) && proj.images.length > 0) {
+                        await deleteMultiple(proj.images);
+                    }
+                }
+            }
+        } catch (projErr) {
+            console.error("Error cleaning up user project images during portfolio deletion:", projErr);
+        }
+
         const result = await deleteUser(id);
         revalidatePath("/");
         return result;
