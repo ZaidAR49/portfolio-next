@@ -6,7 +6,6 @@ const ContactInfo = async () => {
     try {
         const res = await getActiveUser();
         user = res;
-        console.log(user);
     } catch (error) {
         console.error(error);
     }

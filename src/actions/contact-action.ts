@@ -32,7 +32,7 @@ export async function sendMessageAction(data: FormData) {
       to: email,
       subject: `Portfolio Contact: ${subject}`,
       text: `Name: ${fullName}\nEmail: ${email}\n\nMessage:\n${message}`,
-      html: emailBodyTouser(fullName, "http://localhost:3000"),
+      html: emailBodyTouser(fullName, process.env.NEXT_PUBLIC_DOMAIN || "http://localhost:3000"),
     });
 
     return { success: true, message: "Message sent successfully!" };

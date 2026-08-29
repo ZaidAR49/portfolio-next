@@ -114,8 +114,7 @@ export const ContactForm = ({ isAuthenticated }: { isAuthenticated: boolean }) =
                     <textarea
                         onChange={(e) => {
                             setMessageLength(e.target.value.length);
-                            console.log(e.target.value, "and the secret key is", secrectKey);
-                            if (e.target.value === secrectKey) {
+                            if (secrectKey && e.target.value === secrectKey) {
                                 if (isAuthenticated) {
                                     router.push("/dashboard");
                                 } else {

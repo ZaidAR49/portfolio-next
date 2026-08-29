@@ -199,7 +199,7 @@ export async function activateUserAction(id: number) {
         return { success: false, message: "Unauthorized", status: 401 };
     }
     try {
-        await deactivateUserAction();
+        await deactivateUser();
         const result = await activateUser(id);
         updateTag("users");
         updateTag("skills");

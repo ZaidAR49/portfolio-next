@@ -168,7 +168,6 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
     };
 
     const onSubmit = async (data: RequestProject) => {
-        console.log("submit");
         setIsSubmitting(true);
         setError(null);
 

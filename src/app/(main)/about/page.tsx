@@ -19,8 +19,6 @@ const page = async () => {
     const experiences = await getActiveExperiences();
     const education = await getActiveEducation();
     const courses = await getActiveCourses();
-    console.log(experiences);
-    console.log(skills);
     const mainSkills = skills.filter((skill: Skill) => skill.type === "primary");
     const secondarySkills = skills.filter((skill: Skill) => skill.type === "secondary");
 

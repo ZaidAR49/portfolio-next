@@ -12,7 +12,6 @@ export function ImportDataCard() {
     useEffect(() => {
         getPortfolioNamesAction().then((res) => {
             const names = res.map((item: { portfolio_name: string }) => item.portfolio_name);
-            console.log("Portfolio Names -->: ", names);
             setPortfolioNames(names);
         });
     }, []);
@@ -28,7 +27,6 @@ export function ImportDataCard() {
             try {
                 const text = e.target?.result as string;
                 const data = JSON.parse(text);
-                console.log("Portfolio Name -->: ", data.user.portfolio_name);
                 if (portfolioNames.includes(data.user.portfolio_name)) {
                     data.user.portfolio_name = data.user.portfolio_name + "_imported";
                 }
