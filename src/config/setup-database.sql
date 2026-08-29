@@ -277,6 +277,7 @@ $function$;
 --   ALTER TABLE public.project_categories ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE public.users            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.project_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.experiences      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.skills           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.projects         ENABLE ROW LEVEL SECURITY;
@@ -290,6 +291,14 @@ CREATE POLICY "Enable insert for everyone" ON public.users FOR INSERT TO public 
 CREATE POLICY "Enable select for everyone" ON public.users FOR SELECT TO public USING (true);
 CREATE POLICY "Enable update for everyone" ON public.users FOR UPDATE TO public USING (true);
 CREATE POLICY "Public View Users"          ON public.users FOR SELECT TO public USING (true);
+
+-- ----- project_categories -----
+CREATE POLICY "Allow public delete"                 ON public.project_categories FOR DELETE TO public USING (true);
+CREATE POLICY "Enable delete for project_categories" ON public.project_categories FOR DELETE TO public USING (true);
+CREATE POLICY "Enable insert for project_categories" ON public.project_categories FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "Enable select for project_categories" ON public.project_categories FOR SELECT TO public USING (true);
+CREATE POLICY "Enable update for project_categories" ON public.project_categories FOR UPDATE TO public USING (true);
+CREATE POLICY "Public View Categories"               ON public.project_categories FOR SELECT TO public USING (true);
 
 -- ----- experiences -----
 CREATE POLICY "Allow public delete"            ON public.experiences FOR DELETE TO public USING (true);

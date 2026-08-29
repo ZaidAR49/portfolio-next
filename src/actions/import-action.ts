@@ -1,13 +1,41 @@
 "use server";
 import { checkAuth } from "@/lib/auth";
 import { cookies } from "next/headers";
-import { addUser } from "@/lib/services/user-service";
-import { addProject } from "@/lib/services/project-service";
+import { addUser, getActiveUser } from "@/lib/services/user-service";
+import {
+    addProject,
+    getProjectsByUserId,
+    getActiveProjects,
+    getProjectById,
+    reorderProjects,
+} from "@/lib/services/project-service";
+import {
+    addCategory,
+    getCategoriesByUserId,
+    getCategoryById,
+} from "@/lib/services/category-service";
 import { addSkill } from "@/lib/services/skills-service";
-import { addExperience } from "@/lib/services/experience-service";
-import { addCourse } from "@/lib/services/course-service";
-import { addEducation } from "@/lib/services/education-service";
-import { revalidatePath } from "next/cache";
+import {
+    addExperience,
+    getExperiencesByUserId,
+    getActiveExperiences,
+    getExperienceById,
+} from "@/lib/services/experience-service";
+import {
+    addCourse,
+    getCoursesByUserId,
+    getActiveCourses,
+    getCourseById,
+    reorderCourses,
+} from "@/lib/services/course-service";
+import {
+    addEducation,
+    getEducationByUserId,
+    getActiveEducation,
+    getEducationById,
+    reorderEducation,
+} from "@/lib/services/education-service";
+import { revalidatePath, updateTag } from "next/cache";
 
 export async function importDataAction(data: any) {
     try {
@@ -47,9 +75,39 @@ export async function importDataAction(data: any) {
             throw new Error("Failed to add user.");
         }
 
-        // 3. Prepare and add projects
+        // 2. Prepare and add categories (if present in export)
+        const categoryIdMap = new Map<number, number>();
+        const categoryNameMap = new Map<string, number>();
+
+        if (Array.isArray(data.categories)) {
+            for (const cat of data.categories) {
+                if (cat && typeof cat.name === 'string' && cat.name.trim()) {
+                    try {
+                        const created = await addCategory(cat.name.trim(), newUserId, cat.sort_order ?? 0);
+                        if (cat.id !== undefined && cat.id !== null) {
+                            categoryIdMap.set(cat.id, created.id);
+                        }
+                        categoryNameMap.set(cat.name.trim().toLowerCase(), created.id);
+                    } catch (catErr) {
+                        console.error("Error adding category during import:", catErr);
+                    }
+                }
+            }
+        }
+
+        // 3. Prepare and add projects (mapping old category IDs to new category IDs)
         if (Array.isArray(data.projects)) {
             for (const proj of data.projects) {
+                let targetCategoryId: number | null = null;
+                if (proj.category_id !== undefined && proj.category_id !== null) {
+                    if (categoryIdMap.has(proj.category_id)) {
+                        targetCategoryId = categoryIdMap.get(proj.category_id)!;
+                    }
+                }
+                if (!targetCategoryId && proj.category_name && categoryNameMap.has(proj.category_name.toLowerCase())) {
+                    targetCategoryId = categoryNameMap.get(proj.category_name.toLowerCase())!;
+                }
+
                 const newProj = {
                     user_id: newUserId,
                     title: proj.title,
@@ -60,8 +118,10 @@ export async function importDataAction(data: any) {
                     sort_order: proj.sort_order,
                     description: proj.description,
                     github_url: proj.github_url,
+                    live_url: proj.live_url || null,
                     technologies: proj.technologies,
                     images: proj.images,
+                    category_id: targetCategoryId,
                 };
                 try {
                     await addProject(newProj);
@@ -70,7 +130,6 @@ export async function importDataAction(data: any) {
                     throw new Error("Failed to add project.");
                 }
             }
-            const { reorderProjects } = await import("@/lib/services/project-service");
             await reorderProjects(newUserId);
         }
 
@@ -156,7 +215,17 @@ export async function importDataAction(data: any) {
             }
         }
 
+        updateTag("users");
+        updateTag("categories");
+        updateTag("projects");
+        updateTag("skills");
+        updateTag("experiences");
+        updateTag("courses");
+        updateTag("education");
+
         revalidatePath("/");
+        revalidatePath("/projects");
+        revalidatePath("/dashboard");
 
         return { success: true, message: "Data imported successfully!" };
     } catch (error) {
@@ -164,12 +233,6 @@ export async function importDataAction(data: any) {
         throw new Error("Failed to import user data.");
     }
 }
-
-import { getActiveUser } from "@/lib/services/user-service";
-import { getProjectsByUserId, getActiveProjects, getProjectById, reorderProjects } from "@/lib/services/project-service";
-import { getExperiencesByUserId, getActiveExperiences, getExperienceById } from "@/lib/services/experience-service";
-import { getCoursesByUserId, getActiveCourses, getCourseById, reorderCourses } from "@/lib/services/course-service";
-import { getEducationByUserId, getActiveEducation, getEducationById, reorderEducation } from "@/lib/services/education-service";
 
 export async function getItemsFromPortfolioAction(sourceUserId: number, entityType: 'courses' | 'projects' | 'education' | 'experience') {
     const cookieStore = await cookies();
@@ -225,7 +288,39 @@ export async function importEntityFromPortfolioAction(recordId: number, entityTy
             const activeProjects = await getActiveProjects();
             const exists = activeProjects.some((ap: any) => ap.title === proj.title);
             if (exists) return { success: false, message: `Project "${proj.title}" already exists.` };
-            const newProj = { ...proj, user_id: activeUserId };
+
+            // Reconcile category for imported project
+            let reconciledCategoryId: number | null = null;
+            if (proj.category_id) {
+                try {
+                    const sourceCategory = await getCategoryById(proj.category_id);
+                    if (sourceCategory && sourceCategory.name) {
+                        const activeCategories = await getCategoriesByUserId(activeUserId);
+                        const existingCategory = activeCategories.find(
+                            (c: any) => c.name.toLowerCase().trim() === sourceCategory.name.toLowerCase().trim()
+                        );
+                        if (existingCategory) {
+                            reconciledCategoryId = existingCategory.id;
+                        } else {
+                            const created = await addCategory(
+                                sourceCategory.name.trim(),
+                                activeUserId,
+                                sourceCategory.sort_order ?? 0
+                            );
+                            reconciledCategoryId = created.id;
+                        }
+                    }
+                } catch (catErr) {
+                    console.error("Error reconciling category for imported project:", catErr);
+                    reconciledCategoryId = null;
+                }
+            }
+
+            const newProj = {
+                ...proj,
+                user_id: activeUserId,
+                category_id: reconciledCategoryId,
+            };
             delete newProj.id;
             delete newProj.users;
             await addProject(newProj);
@@ -257,10 +352,19 @@ export async function importEntityFromPortfolioAction(recordId: number, entityTy
             return { success: false, message: "Invalid entity type for import." };
         }
 
+        updateTag("categories");
+        updateTag("projects");
+        updateTag("courses");
+        updateTag("education");
+        updateTag("experiences");
+
         revalidatePath("/");
+        revalidatePath("/projects");
+        revalidatePath("/dashboard");
         return { success: true, message: `${entityType} imported successfully!` };
     } catch (error: any) {
         console.error("Error importing entity:", error);
         return { success: false, message: error.message || "Failed to import." };
     }
 }
+

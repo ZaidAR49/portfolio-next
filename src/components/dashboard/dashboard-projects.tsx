@@ -1,5 +1,5 @@
 "use client";
-import { FaEdit, FaTrash, FaTag } from "react-icons/fa";
+import { FaEdit, FaTrash, FaTag, FaGithub } from "react-icons/fa";
 import { MdDragIndicator } from "react-icons/md";
 import { getActiveProjectsAction, deleteProjectAction, bulkUpdateProjectOrdersAction } from "@/actions/project-action";
 import { getActiveUserAction } from "@/actions/user-action";
@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { toast, Toaster } from "sonner";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { ImportModal } from "@/components/dashboard/import-modal";
+import { GitHubImportModal } from "@/components/dashboard/github-import-modal";
 import { CategoryManager } from "@/components/dashboard/category-manager";
 import {
   DndContext,
@@ -136,6 +137,7 @@ export function DashboardProjects() {
     const [isLoading, setIsLoading] = useState(false);
     const [projToDelete, setProjToDelete] = useState<number | null>(null);
     const [isImportOpen, setIsImportOpen] = useState(false);
+    const [isGitHubImportOpen, setIsGitHubImportOpen] = useState(false);
     const [userId, setUserId] = useState<number | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
 
@@ -236,12 +238,20 @@ export function DashboardProjects() {
                             <h2 className="text-3xl font-bold text-foreground mb-1">Projects</h2>
                             <p className="text-muted">Showcase your best work</p>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap items-center">
+                            <button
+                                onClick={() => setIsGitHubImportOpen(true)}
+                                className="inline-flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/25 font-bold py-2 px-5 rounded-full transition-all shadow-sm"
+                                title="Import project from GitHub repository"
+                            >
+                                <FaGithub className="w-4 h-4" />
+                                Import from GitHub
+                            </button>
                             <button
                                 onClick={() => setIsImportOpen(true)}
-                                className="bg-surface hover:bg-border text-foreground border border-border font-bold py-2 px-6 rounded-full transition-colors shadow-sm inline-block"
+                                className="bg-surface hover:bg-border text-foreground border border-border font-bold py-2 px-5 rounded-full transition-colors shadow-sm inline-block"
                             >
-                                Import
+                                Import from other Portfolio
                             </button>
                             <Link
                                 href="?tab=projects&action=new"
@@ -298,6 +308,11 @@ export function DashboardProjects() {
                         isOpen={isImportOpen}
                         onClose={() => { setIsImportOpen(false); fetchProjects(); }}
                         entityType="projects"
+                    />
+
+                    <GitHubImportModal
+                        isOpen={isGitHubImportOpen}
+                        onClose={() => { setIsGitHubImportOpen(false); }}
                     />
                 </div>
             }

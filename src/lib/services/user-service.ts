@@ -83,7 +83,10 @@ export async function activateUser(id: number) {
     updateTag("users");
     updateTag("skills");
     updateTag("projects");
+    updateTag("categories");
     updateTag("experiences");
+    updateTag("courses");
+    updateTag("education");
     return data;
 }
 export async function deactivateUser() {
@@ -94,7 +97,10 @@ export async function deactivateUser() {
     updateTag("users");
     updateTag("skills");
     updateTag("projects");
+    updateTag("categories");
     updateTag("experiences");
+    updateTag("courses");
+    updateTag("education");
     return data;
 }
 export async function updateUserPicture(id: number, picture_url: string) {

@@ -204,7 +204,10 @@ export async function activateUserAction(id: number) {
         updateTag("users");
         updateTag("skills");
         updateTag("projects");
+        updateTag("categories");
         updateTag("experiences");
+        updateTag("courses");
+        updateTag("education");
         revalidatePath("/", "layout");
         return result;
     } catch (error) {
@@ -227,7 +230,10 @@ export async function deactivateUserAction() {
         updateTag("users");
         updateTag("skills");
         updateTag("projects");
+        updateTag("categories");
         updateTag("experiences");
+        updateTag("courses");
+        updateTag("education");
         revalidatePath("/", "layout");
         return result;
     } catch (error) {

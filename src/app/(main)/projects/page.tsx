@@ -1,6 +1,8 @@
 import { getActiveProjectsAction } from "@/actions/project-action";
 import { getActiveCategoriesAction } from "@/actions/category-action";
+import { getGitHubStatsAction } from "@/actions/github-action";
 import { ProjectsClient } from "@/components/projects-client";
+import { GitHubStatsSection } from "@/components/github-stats";
 import { Project } from "@/lib/models/project";
 import { Category } from "@/lib/models/category";
 import type { Metadata } from "next";
@@ -11,9 +13,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-    const [rawProjects, categories] = await Promise.all([
+    const [rawProjects, categories, githubStats] = await Promise.all([
         getActiveProjectsAction(),
         getActiveCategoriesAction(),
+        getGitHubStatsAction(),
     ]);
 
     const projects: Project[] = [...rawProjects].sort((a, b) => a.sort_order - b.sort_order);
@@ -36,6 +39,9 @@ export default async function ProjectsPage() {
                     Every project I&apos;ve built — from personal experiments to production-grade applications.
                 </p>
             </div>
+
+            {/* GitHub Ecosystem Stats & Language Distribution Bento Box */}
+            <GitHubStatsSection stats={githubStats} />
 
             {/* Client: category filter + animated project list */}
             <ProjectsClient projects={projects} categories={sortedCategories} />

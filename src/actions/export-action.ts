@@ -3,6 +3,7 @@ import { checkAuth } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { getActiveUserAction } from "./user-action";
 import { getActiveProjectsAction } from "./project-action";
+import { getActiveCategoriesAction } from "./category-action";
 import { getActiveSkillsAction } from "./skill-action";
 import { getActiveExperiencesAction } from "./experience-action";
 import { getActiveCoursesAction } from "./course-action";
@@ -19,18 +20,27 @@ export async function getExportDataAction() {
         if (!auth) {
             return { success: false, message: "Unauthorized", status: 401 };
         }
-        const [activeUser, activeProjects, activeSkills, activeExperiences, activeCourses, activeEducation] = await Promise.all([
+        const [
+            activeUser,
+            activeProjects,
+            activeCategories,
+            activeSkills,
+            activeExperiences,
+            activeCourses,
+            activeEducation,
+        ] = await Promise.all([
             getActiveUserAction(),
             getActiveProjectsAction(),
+            getActiveCategoriesAction(),
             getActiveSkillsAction(),
             getActiveExperiencesAction(),
             getActiveCoursesAction(),
             getActiveEducationAction(),
         ]);
 
-
         return {
             user: activeUser,
+            categories: activeCategories,
             projects: activeProjects,
             skills: activeSkills,
             experiences: activeExperiences,

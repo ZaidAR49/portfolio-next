@@ -31,10 +31,25 @@ export async function getCategoriesByUserId(userId: number) {
     return data as { id: number; user_id: number; name: string; sort_order: number }[];
 }
 
-export async function addCategory(name: string, userId: number) {
+export async function getCategoryById(id: number) {
+    "use cache";
+    cacheTag("categories");
+    cacheLife("hours");
+
     const { data, error } = await sql
         .from("project_categories")
-        .insert({ name: name.trim(), user_id: userId })
+        .select("*")
+        .eq("id", id)
+        .single();
+
+    if (error) throw error;
+    return data as { id: number; user_id: number; name: string; sort_order: number };
+}
+
+export async function addCategory(name: string, userId: number, sortOrder: number = 0) {
+    const { data, error } = await sql
+        .from("project_categories")
+        .insert({ name: name.trim(), user_id: userId, sort_order: sortOrder })
         .select()
         .single();
 
@@ -66,7 +81,6 @@ export async function getCategoriesCount() {
     return count ?? 0;
 }
 
-
 export async function updateCategory(id: number, name: string) {
     const { data, error } = await sql
         .from("project_categories")
@@ -77,5 +91,7 @@ export async function updateCategory(id: number, name: string) {
 
     if (error) throw error;
     updateTag("categories");
+    updateTag("projects");
     return data as { id: number; user_id: number; name: string; sort_order: number };
 }
+

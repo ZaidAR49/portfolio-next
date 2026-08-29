@@ -50,7 +50,36 @@ export function DashboardProjectForm({ projectId }: { projectId?: number }) {
             if (res) {
                 setActiveUserId(res.id);
             }
-            if (!isEditMode) setIsLoading(false);
+            if (!isEditMode) {
+                setIsLoading(false);
+                // Check if project data was imported from GitHub
+                if (typeof window !== "undefined") {
+                    const importedJson = sessionStorage.getItem("github_imported_project");
+                    if (importedJson) {
+                        try {
+                            const imported = JSON.parse(importedJson);
+                            sessionStorage.removeItem("github_imported_project");
+                            reset({
+                                title: imported.title || "",
+                                client: imported.client || "Personal Project",
+                                role: imported.role || "Full-Stack Developer",
+                                year: imported.year || new Date().getFullYear(),
+                                status: imported.status || "Completed",
+                                sort_order: 1,
+                                description: imported.description || "",
+                                github_url: imported.github_url || "",
+                                live_url: "",
+                                technologies: imported.technologies || "",
+                                images: [],
+                                category_id: null,
+                            });
+                            toast.success(`Imported data for "${imported.title}" from GitHub!`);
+                        } catch (e) {
+                            console.error("Error parsing imported GitHub data:", e);
+                        }
+                    }
+                }
+            }
         });
 
         // Load categories for the selector
