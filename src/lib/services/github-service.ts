@@ -61,12 +61,11 @@ interface RawGitHubUser {
   following: number;
 }
 
-const DEFAULT_USERNAME = "ZaidAR49";
-const DEFAULT_TOKEN = "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";
+
 
 function getCredentials() {
-  const username = process.env.GITHUB_USERNAME || process.env.NEXT_PUBLIC_GITHUB_USERNAME || DEFAULT_USERNAME;
-  const token = process.env.GITHUB_API_TOKEN || DEFAULT_TOKEN;
+  const username = process.env.NEXT_PUBLIC_GITHUB_USERNAME || "";
+  const token = process.env.GITHUB_API_TOKEN || "";
 
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
@@ -199,7 +198,7 @@ export async function fetchGitHubRepoDetails(repoName: string): Promise<GitHubIm
     // Build rich list of technologies
     const langNames = Object.keys(languagesData);
     const topics: string[] = repo.topics || [];
-    
+
     // Combine languages and topics, avoiding duplicates
     const techSet = new Set<string>();
     langNames.forEach((l) => techSet.add(l));
