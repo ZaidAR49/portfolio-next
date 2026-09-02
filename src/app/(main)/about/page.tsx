@@ -12,6 +12,8 @@ import EducationTimeline from '@/components/education-timeline'
 import CoursesTimeline from '@/components/courses-timeline'
 import SkillsSection from '@/components/skills-section'
 
+import GlowButton from '@/components/ui/glow-button'
+
 const page = async () => {
     const user = await getActiveUserAction();
     const skills = await getActiveSkillsAction();
@@ -36,14 +38,15 @@ const page = async () => {
                         <p className='text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-light whitespace-pre-wrap'>{user.about_description}</p>
 
                         <div className="flex items-center gap-6 mt-6">
-                            <a
+                            <GlowButton
                                 href={user.resume_url}
-                                className="bg-[#0ea5e9] hover:bg-[#0284c7] dark:bg-[#38bdf8] dark:hover:bg-sky-400 text-white dark:text-[#0b1120] font-bold px-6 py-2.5 rounded-full text-sm transition-colors shadow-md dark:shadow-lg"
+                                variant="primary"
+                                size="sm"
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                download My resume
-                            </a>
+                                Download My Resume
+                            </GlowButton>
                             <a
                                 href={user.github_url}
                                 className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"

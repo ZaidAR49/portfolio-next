@@ -3,7 +3,7 @@ import { Project } from "@/lib/models/project";
 import { Category } from "@/lib/models/category";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FaArrowRight } from "react-icons/fa";
+import GlowButton from "@/components/ui/glow-button";
 import { ProjectCard } from "@/components/project-card";
 
 export default function Projects({ projects, categories }: { projects: Project[]; categories?: Category[] }) {
@@ -43,20 +43,11 @@ export default function Projects({ projects, categories }: { projects: Project[]
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
-                className="flex justify-center mt-4"
+                className="flex justify-center mt-6"
             >
-                <Link
-                    href="/projects"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full font-bold text-base overflow-hidden
-                        bg-gradient-to-r from-primary to-indigo-500 text-inverse shadow-[0_4px_30px_var(--primary-glow)]
-                        hover:shadow-[0_8px_40px_var(--primary-glow)] hover:-translate-y-1
-                        transition-all duration-300 ease-smooth"
-                >
-                    {/* Shimmer overlay */}
-                    <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
-                    <span className="relative z-10">Show All Projects</span>
-                    <FaArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-                </Link>
+                <GlowButton href="/projects" variant="primary" size="lg">
+                    Show All Projects
+                </GlowButton>
             </motion.div>
         </section>
     );

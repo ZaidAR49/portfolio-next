@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import GlowButton from "@/components/ui/glow-button";
 
 const About = ({ title, description }: { title?: string, description?: string }) => {
     return (
@@ -46,13 +47,13 @@ const About = ({ title, description }: { title?: string, description?: string })
                     </p>
 
                     <div className="mt-4">
-                        <Link
+                        <GlowButton
                             href="/about"
-                            className="inline-flex items-center justify-center gap-2 bg-elevated hover:bg-surface border border-border text-foreground font-semibold px-8 py-4 rounded-full text-sm transition-all duration-normal ease-smooth hover:border-primary/50 hover:text-primary group backdrop-blur-md shadow-sm"
+                            variant="primary"
+                            size="md"
                         >
                             More about me
-                            <span className="transform transition-transform duration-normal ease-smooth group-hover:translate-x-1">→</span>
-                        </Link>
+                        </GlowButton>
                     </div>
                 </motion.div>
             </div>
