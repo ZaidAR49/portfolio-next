@@ -125,6 +125,10 @@ function SpotlightCard({ skill }: { skill: Skill }) {
     return (
         <motion.div
             onMouseMove={handleMouseMove}
+            onMouseLeave={() => {
+                mouseX.set(-1000);
+                mouseY.set(-1000);
+            }}
             whileHover={{ y: -3 }}
             transition={{ duration: 0.2 }}
             className="group relative flex items-center gap-4 px-6 py-5 rounded-2xl bg-surface/70 dark:bg-surface/40 backdrop-blur-md border border-border hover:border-primary/50 dark:hover:border-primary/50 shadow-sm hover:shadow-[0_4px_25px_var(--primary-glow)] transition-all duration-300 cursor-default overflow-hidden"

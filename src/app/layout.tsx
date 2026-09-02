@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import ParticlesBackground from "@/components/particles-background";
+import CursorSpotlight from "@/components/ui/cursor-spotlight";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="dark">
+          <CursorSpotlight />
           <ParticlesBackground />
           {children}
         </ThemeProvider>

@@ -22,8 +22,8 @@ const page = async () => {
       <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-[#38bdf8]/10 via-transparent to-transparent pointer-events-none -z-10 blur-3xl opacity-60" />
 
       <HeroSection user={user} skills={skills} />
-      <SkillsSection skills={skills} categories={skillCategories} />
       <Projects projects={projects} categories={projectCategories} />
+      <SkillsSection skills={skills} categories={skillCategories} />
       <About title={user.about_title} description={user.about_description} />
     </div>
   );

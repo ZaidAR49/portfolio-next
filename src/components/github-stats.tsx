@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { FiFolder, FiStar, FiGitBranch, FiCode } from "react-icons/fi";
 import { GitHubStatsData } from "@/lib/services/github-service";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 interface GitHubStatsProps {
   stats: GitHubStatsData | null;
@@ -40,7 +41,7 @@ export function GitHubStatsSection({ stats }: GitHubStatsProps) {
       className="w-full max-w-4xl mx-auto mb-16"
     >
       {/* Bento box container matching the portfolio metadata style */}
-      <div className="relative bg-surface/50 border border-border backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-sm hover:border-primary/30 transition-all duration-300">
+      <SpotlightCard className="p-6 md:p-8 shadow-sm">
         {/* Top: 3 Key Metrics */}
         <div className="grid grid-cols-3 divide-x divide-border/60 pb-6 border-b border-border/60 text-center">
           <div className="flex flex-col items-center gap-1.5 px-2">
@@ -117,7 +118,7 @@ export function GitHubStatsSection({ stats }: GitHubStatsProps) {
             </div>
           </div>
         )}
-      </div>
+      </SpotlightCard>
     </motion.div>
   );
 }
