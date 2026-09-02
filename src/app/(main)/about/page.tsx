@@ -1,26 +1,24 @@
 import { getActiveUserAction } from '@/actions/user-action'
 import { getActiveSkillsAction } from '@/actions/skill-action'
-import { Skill } from '@/lib/models/skill'
+import { getActiveCategoriesAction } from '@/actions/category-action'
 import { getActiveExperiences } from '@/lib/services/experience-service'
 import { getActiveEducation } from '@/lib/services/education-service'
 import { getActiveCourses } from '@/lib/services/course-service'
 import { Suspense } from 'react'
 import { Loading } from '@/components/loading'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
-import { getIconForTechnology } from '@/lib/utils/client/icon-mapper'
-import { Experience } from '@/lib/models/experience'
 import ExperienceTimeline from '@/components/experience-timeline'
 import EducationTimeline from '@/components/education-timeline'
 import CoursesTimeline from '@/components/courses-timeline'
+import SkillsSection from '@/components/skills-section'
 
 const page = async () => {
     const user = await getActiveUserAction();
     const skills = await getActiveSkillsAction();
+    const skillCategories = await getActiveCategoriesAction("skill");
     const experiences = await getActiveExperiences();
     const education = await getActiveEducation();
     const courses = await getActiveCourses();
-    const mainSkills = skills.filter((skill: Skill) => skill.type === "primary");
-    const secondarySkills = skills.filter((skill: Skill) => skill.type === "secondary");
 
     return (
         <main className="min-h-screen pt-32 pb-24 relative z-10 w-full mt-32">
@@ -69,50 +67,20 @@ const page = async () => {
                 </section>
 
 
-                <section id="skills" className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-32 md:mt-48">
+                <section id="skills" className="flex flex-col items-center max-w-[1600px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-32 md:mt-48">
                     {/* Capabilities Title */}
-                    <div className="flex flex-col items-center text-center max-w-3xl mb-24">
+                    <div className="flex flex-col items-center text-center max-w-3xl mb-12">
                         <span className="text-[#0ea5e9] dark:text-[#38bdf8] text-xs font-bold tracking-[0.2em] uppercase mb-4">My Skills</span>
                         <h2 className="text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-100 mb-8">Capabilities</h2>
                         <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed font-light">{user.capabilities_description}</p>
                     </div>
 
-                    {/* Tech Stack Header */}
-                    <div className="w-full justify-start mb-8">
-                        <div className="border-l-2 border-[#0ea5e9] dark:border-[#38bdf8] pl-4">
-                            <h3 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100">Tech Stack</h3>
-                        </div>
-                    </div>
-
-                    {/* Tech Stack Grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 w-full">
-                        {mainSkills.map((skill: Skill, index: number) => (
-                            <div key={index} className="flex flex-col items-center justify-center gap-4 bg-white/60 dark:bg-[#0b1120]/40 backdrop-blur-md border border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700/80 hover:bg-slate-50 dark:hover:bg-[#0b1120]/80 rounded-2xl p-8 transition-all duration-300 shadow-sm dark:shadow-none group">
-                                <span className="text-4xl text-slate-400 group-hover:text-[#0ea5e9] dark:group-hover:text-[#38bdf8] transition-colors">
-                                    {getIconForTechnology(skill.name)}
-                                </span>
-                                <span className="text-xs font-bold text-slate-700 dark:text-slate-100 tracking-wide">{skill.name}</span>
-                            </div>
-
-                        ))}
-                    </div>
-                    <div className="w-full justify-start mb-8 mt-12">
-                        <div className="border-l-2 border-[#0ea5e9] dark:border-[#38bdf8] pl-4">
-                            <h3 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100">Tools & Others</h3>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5 w-full">
-                        {secondarySkills.map((skill: Skill, index: number) => (
-                            <div key={index} className="flex flex-col items-center justify-center gap-4 bg-white/60 dark:bg-[#0b1120]/40 backdrop-blur-md border border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700/80 hover:bg-slate-50 dark:hover:bg-[#0b1120]/80 rounded-2xl p-8 transition-all duration-300 shadow-sm dark:shadow-none group">
-                                <span className="text-4xl text-slate-400 group-hover:text-[#0ea5e9] dark:group-hover:text-[#38bdf8] transition-colors">
-                                    {getIconForTechnology(skill.name)}
-                                </span>
-                                <span className="text-xs font-bold text-slate-700 dark:text-slate-100 tracking-wide">{skill.name}</span>
-                            </div>
-
-                        ))}
+                    {/* Categorized Skills Section */}
+                    <div className="w-full">
+                        <SkillsSection skills={skills} categories={skillCategories} showHeader={false} />
                     </div>
                 </section>
+
                 {/* Experience Section */}
                 {experiences && experiences.length > 0 && (
                     <section id="experience" className="flex flex-col items-center max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 w-full mt-32 md:mt-48 pb-32">

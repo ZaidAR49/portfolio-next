@@ -1,5 +1,8 @@
 import z from "zod";
 
+export const CategoryTypeSchema = z.enum(["project", "skill"]);
+export type CategoryType = z.infer<typeof CategoryTypeSchema>;
+
 export const CategorySchema = z.object({
     id: z.number().int().positive().optional().nullable(),
     user_id: z.number().int().positive().optional().nullable(),
@@ -9,6 +12,7 @@ export const CategorySchema = z.object({
         .min(1, "Category name must be at least 1 character")
         .max(100, "Category name must be at most 100 characters"),
     sort_order: z.number().int().optional().nullable(),
+    type: CategoryTypeSchema.default("project"),
 });
 
 export type Category = z.infer<typeof CategorySchema>;
@@ -20,6 +24,7 @@ export const CreateCategoryInputSchema = z.object({
         .min(1, "Category name must be at least 1 character")
         .max(100, "Category name must be at most 100 characters"),
     user_id: z.number().int().positive("Invalid user ID"),
+    type: CategoryTypeSchema.default("project"),
 });
 
 export const UpdateCategoryInputSchema = z.object({
@@ -30,4 +35,5 @@ export const UpdateCategoryInputSchema = z.object({
         .min(1, "Category name must be at least 1 character")
         .max(100, "Category name must be at most 100 characters"),
 });
+
 

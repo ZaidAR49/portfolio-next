@@ -14,7 +14,12 @@ import {
     getCategoriesByUserId,
     getCategoryById,
 } from "@/lib/services/category-service";
-import { addSkill } from "@/lib/services/skills-service";
+import {
+    addSkill,
+    getSkillsByUserId,
+    getActiveSkills,
+    getSkillById,
+} from "@/lib/services/skills-service";
 import {
     addExperience,
     getExperiencesByUserId,
@@ -83,11 +88,20 @@ export async function importDataAction(data: any) {
             for (const cat of data.categories) {
                 if (cat && typeof cat.name === 'string' && cat.name.trim()) {
                     try {
-                        const created = await addCategory(cat.name.trim(), newUserId, cat.sort_order ?? 0);
-                        if (cat.id !== undefined && cat.id !== null) {
+                        const catType = cat.type ?? "project";
+                        const created = await addCategory(
+                            cat.name.trim(),
+                            newUserId,
+                            catType,
+                            cat.sort_order ?? 0
+                        );
+                        if (cat.id !== undefined && cat.id !== null && created.id) {
                             categoryIdMap.set(cat.id, created.id);
                         }
-                        categoryNameMap.set(cat.name.trim().toLowerCase(), created.id);
+                        if (created.id) {
+                            categoryNameMap.set(`${catType}:${cat.name.trim().toLowerCase()}`, created.id);
+                            categoryNameMap.set(cat.name.trim().toLowerCase(), created.id);
+                        }
                     } catch (catErr) {
                         console.error("Error adding category during import:", catErr);
                     }
@@ -104,8 +118,13 @@ export async function importDataAction(data: any) {
                         targetCategoryId = categoryIdMap.get(proj.category_id)!;
                     }
                 }
-                if (!targetCategoryId && proj.category_name && categoryNameMap.has(proj.category_name.toLowerCase())) {
-                    targetCategoryId = categoryNameMap.get(proj.category_name.toLowerCase())!;
+                if (!targetCategoryId && proj.category_name) {
+                    const lookupKey = `project:${proj.category_name.toLowerCase().trim()}`;
+                    if (categoryNameMap.has(lookupKey)) {
+                        targetCategoryId = categoryNameMap.get(lookupKey)!;
+                    } else if (categoryNameMap.has(proj.category_name.toLowerCase().trim())) {
+                        targetCategoryId = categoryNameMap.get(proj.category_name.toLowerCase().trim())!;
+                    }
                 }
 
                 const newProj = {
@@ -133,12 +152,28 @@ export async function importDataAction(data: any) {
             await reorderProjects(newUserId);
         }
 
-        // 4. Prepare and add skills
+        // 4. Prepare and add skills (mapping old category IDs to new category IDs)
         if (Array.isArray(data.skills)) {
             for (const skill of data.skills) {
+                let targetCategoryId: number | null = null;
+                if (skill.category_id !== undefined && skill.category_id !== null) {
+                    if (categoryIdMap.has(skill.category_id)) {
+                        targetCategoryId = categoryIdMap.get(skill.category_id)!;
+                    }
+                }
+                if (!targetCategoryId && skill.category_name) {
+                    const lookupKey = `skill:${skill.category_name.toLowerCase().trim()}`;
+                    if (categoryNameMap.has(lookupKey)) {
+                        targetCategoryId = categoryNameMap.get(lookupKey)!;
+                    } else if (categoryNameMap.has(skill.category_name.toLowerCase().trim())) {
+                        targetCategoryId = categoryNameMap.get(skill.category_name.toLowerCase().trim())!;
+                    }
+                }
+
                 const newSkill = {
                     user_id: newUserId,
                     name: skill.name,
+                    category_id: targetCategoryId,
                     type: skill.type,
                 };
                 try {
@@ -234,7 +269,7 @@ export async function importDataAction(data: any) {
     }
 }
 
-export async function getItemsFromPortfolioAction(sourceUserId: number, entityType: 'courses' | 'projects' | 'education' | 'experience') {
+export async function getItemsFromPortfolioAction(sourceUserId: number, entityType: 'courses' | 'projects' | 'education' | 'experience' | 'skills') {
     const cookieStore = await cookies();
     const token = cookieStore.get('auth_code')?.value;
     if (!token) return [];
@@ -245,6 +280,7 @@ export async function getItemsFromPortfolioAction(sourceUserId: number, entityTy
     try {
         if (entityType === 'courses') return await getCoursesByUserId(sourceUserId);
         if (entityType === 'projects') return await getProjectsByUserId(sourceUserId);
+        if (entityType === 'skills') return await getSkillsByUserId(sourceUserId);
         if (entityType === 'education') return await getEducationByUserId(sourceUserId);
         if (entityType === 'experience') return await getExperiencesByUserId(sourceUserId);
         return [];
@@ -254,7 +290,7 @@ export async function getItemsFromPortfolioAction(sourceUserId: number, entityTy
     }
 }
 
-export async function importEntityFromPortfolioAction(recordId: number, entityType: 'courses' | 'projects' | 'education' | 'experience') {
+export async function importEntityFromPortfolioAction(recordId: number, entityType: 'courses' | 'projects' | 'education' | 'experience' | 'skills') {
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get('auth_code')?.value;
@@ -295,19 +331,20 @@ export async function importEntityFromPortfolioAction(recordId: number, entityTy
                 try {
                     const sourceCategory = await getCategoryById(proj.category_id);
                     if (sourceCategory && sourceCategory.name) {
-                        const activeCategories = await getCategoriesByUserId(activeUserId);
+                        const activeCategories = await getCategoriesByUserId(activeUserId, "project");
                         const existingCategory = activeCategories.find(
                             (c: any) => c.name.toLowerCase().trim() === sourceCategory.name.toLowerCase().trim()
                         );
                         if (existingCategory) {
-                            reconciledCategoryId = existingCategory.id;
+                            reconciledCategoryId = existingCategory.id ?? null;
                         } else {
                             const created = await addCategory(
                                 sourceCategory.name.trim(),
                                 activeUserId,
+                                sourceCategory.type ?? "project",
                                 sourceCategory.sort_order ?? 0
                             );
-                            reconciledCategoryId = created.id;
+                            reconciledCategoryId = created.id ?? null;
                         }
                     }
                 } catch (catErr) {
@@ -325,6 +362,49 @@ export async function importEntityFromPortfolioAction(recordId: number, entityTy
             delete newProj.users;
             await addProject(newProj);
             await reorderProjects(activeUserId);
+        } else if (entityType === 'skills') {
+            const skill = await getSkillById(recordId);
+            if (!skill) return { success: false, message: "Skill not found." };
+            const activeSkills = await getActiveSkills();
+            const exists = activeSkills.some((as: any) => as.name.toLowerCase().trim() === skill.name.toLowerCase().trim());
+            if (exists) return { success: false, message: `Skill "${skill.name}" already exists.` };
+
+            // Reconcile category for imported skill
+            let reconciledCategoryId: number | null = null;
+            if (skill.category_id) {
+                try {
+                    const sourceCategory = await getCategoryById(skill.category_id);
+                    if (sourceCategory && sourceCategory.name) {
+                        const activeCategories = await getCategoriesByUserId(activeUserId, "skill");
+                        const existingCategory = activeCategories.find(
+                            (c: any) => c.name.toLowerCase().trim() === sourceCategory.name.toLowerCase().trim()
+                        );
+                        if (existingCategory) {
+                            reconciledCategoryId = existingCategory.id ?? null;
+                        } else {
+                            const created = await addCategory(
+                                sourceCategory.name.trim(),
+                                activeUserId,
+                                sourceCategory.type ?? "skill",
+                                sourceCategory.sort_order ?? 0
+                            );
+                            reconciledCategoryId = created.id ?? null;
+                        }
+                    }
+                } catch (catErr) {
+                    console.error("Error reconciling category for imported skill:", catErr);
+                    reconciledCategoryId = null;
+                }
+            }
+
+            const newSkill = {
+                ...skill,
+                user_id: activeUserId,
+                category_id: reconciledCategoryId,
+            };
+            delete newSkill.id;
+            delete (newSkill as any).users;
+            await addSkill(newSkill);
         } else if (entityType === 'education') {
             const res = await getEducationById(recordId);
             const edu = res?.[0];
@@ -354,11 +434,13 @@ export async function importEntityFromPortfolioAction(recordId: number, entityTy
 
         updateTag("categories");
         updateTag("projects");
+        updateTag("skills");
         updateTag("courses");
         updateTag("education");
         updateTag("experiences");
 
         revalidatePath("/");
+        revalidatePath("/about");
         revalidatePath("/projects");
         revalidatePath("/dashboard");
         return { success: true, message: `${entityType} imported successfully!` };

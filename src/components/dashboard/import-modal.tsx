@@ -8,7 +8,7 @@ import { importEntityFromPortfolioAction, getItemsFromPortfolioAction } from "@/
 interface ImportModalProps {
     isOpen: boolean;
     onClose: () => void;
-    entityType: 'courses' | 'projects' | 'education' | 'experience';
+    entityType: 'courses' | 'projects' | 'education' | 'experience' | 'skills';
 }
 
 export function ImportModal({ isOpen, onClose, entityType }: ImportModalProps) {
@@ -91,6 +91,7 @@ export function ImportModal({ isOpen, onClose, entityType }: ImportModalProps) {
     const getItemLabel = (item: any) => {
         if (entityType === 'courses') return item.title;
         if (entityType === 'projects') return item.title;
+        if (entityType === 'skills') return item.name;
         if (entityType === 'education') return `${item.degree} at ${item.institution}`;
         if (entityType === 'experience') return `${item.role} at ${item.company}`;
         return 'Unknown item';

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { FaPlus, FaCheck, FaTimes, FaTag } from "react-icons/fa";
-import { Category } from "@/lib/models/category";
+import { Category, CategoryType } from "@/lib/models/category";
 import { addCategoryAction } from "@/actions/category-action";
 import { toast } from "sonner";
 
@@ -9,12 +9,13 @@ interface CategorySelectFieldProps {
     categories: Category[];
     value: number | null | undefined;
     userId: number;
+    type?: CategoryType;
     onChange: (id: number | null) => void;
     onCategoryCreated: (cat: Category) => void;
 }
 
 export function CategorySelectField({
-    categories, value, userId, onChange, onCategoryCreated
+    categories, value, userId, type = "project", onChange, onCategoryCreated
 }: CategorySelectFieldProps) {
     const [showCreate, setShowCreate] = useState(false);
     const [newName, setNewName] = useState("");
@@ -30,7 +31,7 @@ export function CategorySelectField({
         if (!trimmed) return;
         setIsCreating(true);
         try {
-            const created = await addCategoryAction(trimmed, userId);
+            const created = await addCategoryAction(trimmed, userId, type);
             onCategoryCreated(created);
             onChange(created.id ?? null);
             toast.success(`Category "${created.name}" created`);
@@ -42,6 +43,7 @@ export function CategorySelectField({
             setIsCreating(false);
         }
     };
+
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") { e.preventDefault(); handleCreate(); }

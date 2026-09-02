@@ -6,9 +6,11 @@ import {
     addCategory,
     deleteCategory,
     updateCategory,
+    bulkUpdateCategoryOrders,
 } from "@/lib/services/category-service";
 import {
     Category,
+    CategoryType,
     CreateCategoryInputSchema,
     UpdateCategoryInputSchema,
 } from "@/lib/models/category";
@@ -27,23 +29,23 @@ async function getAuthOrThrow() {
     if (!auth) throw new Error("Unauthorized");
 }
 
-export async function getActiveCategoriesAction(): Promise<Category[]> {
+export async function getActiveCategoriesAction(type?: CategoryType): Promise<Category[]> {
     try {
-        return await getActiveCategories();
+        return await getActiveCategories(type);
     } catch (error) {
         console.error("Error getting active categories:", error);
         throw error;
     }
 }
 
-export async function getCategoriesByUserIdAction(userId: number): Promise<Category[]> {
+export async function getCategoriesByUserIdAction(userId: number, type?: CategoryType): Promise<Category[]> {
     await getAuthOrThrow();
     const parsedUserId = IdSchema.safeParse(userId);
     if (!parsedUserId.success) {
         throw new Error(parsedUserId.error.message);
     }
     try {
-        return await getCategoriesByUserId(parsedUserId.data);
+        return await getCategoriesByUserId(parsedUserId.data, type);
     } catch (error) {
         console.error("Error getting categories by userId:", error);
         throw error;
@@ -64,16 +66,22 @@ export async function getCategoryByIdAction(id: number): Promise<Category | null
     }
 }
 
-export async function addCategoryAction(name: string, userId: number, sortOrder: number = 0): Promise<Category> {
+export async function addCategoryAction(
+    name: string,
+    userId: number,
+    type: CategoryType = "project",
+    sortOrder: number = 0
+): Promise<Category> {
     await getAuthOrThrow();
-    const validated = CreateCategoryInputSchema.safeParse({ name, user_id: userId });
+    const validated = CreateCategoryInputSchema.safeParse({ name, user_id: userId, type });
     if (!validated.success) {
         throw new Error(validated.error.issues[0]?.message || "Invalid category data");
     }
     try {
-        const result = await addCategory(validated.data.name, validated.data.user_id, sortOrder);
+        const result = await addCategory(validated.data.name, validated.data.user_id, validated.data.type, sortOrder);
         revalidatePath("/");
         revalidatePath("/projects");
+        revalidatePath("/about");
         revalidatePath("/dashboard");
         return result;
     } catch (error) {
@@ -92,6 +100,7 @@ export async function deleteCategoryAction(id: number): Promise<void> {
         await deleteCategory(parsedId.data);
         revalidatePath("/");
         revalidatePath("/projects");
+        revalidatePath("/about");
         revalidatePath("/dashboard");
     } catch (error) {
         console.error("Error deleting category:", error);
@@ -109,6 +118,7 @@ export async function updateCategoryAction(id: number, name: string): Promise<Ca
         const result = await updateCategory(validated.data.id, validated.data.name);
         revalidatePath("/");
         revalidatePath("/projects");
+        revalidatePath("/about");
         revalidatePath("/dashboard");
         return result;
     } catch (error) {
@@ -116,4 +126,20 @@ export async function updateCategoryAction(id: number, name: string): Promise<Ca
         throw error;
     }
 }
+
+export async function bulkUpdateCategoryOrdersAction(updates: { id: number; sort_order: number }[]) {
+    await getAuthOrThrow();
+    try {
+        await bulkUpdateCategoryOrders(updates);
+        revalidatePath("/");
+        revalidatePath("/projects");
+        revalidatePath("/about");
+        revalidatePath("/dashboard");
+        return { success: true };
+    } catch (error) {
+        console.error("Error bulk updating category orders:", error);
+        throw error;
+    }
+}
+
 

@@ -38,11 +38,29 @@ export async function getExportDataAction() {
             getActiveEducationAction(),
         ]);
 
+        const categoriesList = activeCategories || [];
+
+        const enrichedProjects = (activeProjects || []).map((p: any) => {
+            const cat = categoriesList.find((c: any) => c.id === p.category_id);
+            return {
+                ...p,
+                category_name: cat?.name || null,
+            };
+        });
+
+        const enrichedSkills = (activeSkills || []).map((s: any) => {
+            const cat = categoriesList.find((c: any) => c.id === s.category_id);
+            return {
+                ...s,
+                category_name: cat?.name || null,
+            };
+        });
+
         return {
             user: activeUser,
-            categories: activeCategories,
-            projects: activeProjects,
-            skills: activeSkills,
+            categories: categoriesList,
+            projects: enrichedProjects,
+            skills: enrichedSkills,
             experiences: activeExperiences,
             courses: activeCourses,
             education: activeEducation,

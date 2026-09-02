@@ -1,10 +1,18 @@
 import React from 'react';
 import {
     SiPython, SiJavascript, SiCplusplus, SiTypescript, SiPhp, SiRuby, SiGo, SiSwift, SiKotlin, SiRust, SiDart, SiScala, SiR, SiMysql, SiHtml5, SiReact, SiAngular, SiVuedotjs, SiNextdotjs, SiSvelte, SiJquery, SiBootstrap, SiTailwindcss, SiNodedotjs, SiDjango, SiFlask, SiSpringboot, SiDotnet, SiLaravel, SiExpress, SiRubyonrails, SiFastapi, SiGraphql, SiPostgresql, SiMongodb, SiRedis, SiSqlite, SiApachecassandra, SiElasticsearch, SiFirebase, SiMariadb, SiGooglecloud, SiDocker, SiKubernetes, SiJenkins, SiTerraform, SiAnsible, SiGitlab, SiCircleci, SiNginx, SiApache, SiLinux, SiUbuntu, SiGnubash, SiGit, SiGithub, SiTensorflow, SiPytorch, SiScikitlearn, SiPandas, SiNumpy, SiApachespark, SiApachehadoop, SiFlutter, SiIonic, SiAndroid, SiIos, SiUnity, SiUnrealengine, SiFigma, SiPostman, SiJira, SiSelenium, SiCypress, SiWireshark, SiMetasploit, SiOwasp, SiSplunk, SiDatadog, SiPrometheus, SiGrafana, SiBlockchaindotcom, SiEthereum, SiSolidity, SiWebassembly, SiOpenai, SiAppium, SiSwagger,
-    SiReplit, SiAnthropic, SiGithubcopilot, SiSupabase, SiCloudinary, SiVercel
+    SiReplit, SiAnthropic, SiGithubcopilot, SiSupabase, SiCloudinary, SiVercel,
+    SiN8N, SiZapier, SiLangchain, SiHuggingface, SiOllama, SiPuppeteer, SiScrapy, SiApacheairflow, SiReplicate, SiPosthog
 } from "react-icons/si";
-import { FaDatabase, FaServer, FaCode, FaJava, FaMicrosoft, FaChartLine, FaRobot, FaMousePointer, FaRocket, FaMagic, FaAws } from "react-icons/fa";
+import { FaDatabase, FaServer, FaCode, FaJava, FaMicrosoft, FaChartLine, FaRobot, FaMousePointer, FaRocket, FaMagic, FaAws, FaBrain, FaCogs, FaNetworkWired, FaSpider, FaBolt, FaProjectDiagram } from "react-icons/fa";
 import { BiLogoAws } from "react-icons/bi";
+
+// Custom Apify SVG icon
+const ApifyIcon = () => (
+    <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" className="inline-block">
+        <path d="M12 1.5 2.5 6.75v10.5L12 22.5l9.5-5.25V6.75L12 1.5zm0 2.54 7.2 3.98-3.08 1.71-7.2-3.98L12 4.04zm-7.5 4.3 6.3 3.48v7.08l-6.3-3.48V8.34zm8.7 10.56v-7.08l6.3-3.48v7.08l-6.3 3.48z" />
+    </svg>
+);
 
 // Map specifically requested technologies
 const iconMap: { [key: string]: React.ReactNode } = {
@@ -115,7 +123,28 @@ const iconMap: { [key: string]: React.ReactNode } = {
     "AWS Cloud": <FaAws />,
     "Supabase": <SiSupabase />,
     "Cloudinary": <SiCloudinary />,
-    "Vercel": <SiVercel />
+    "Vercel": <SiVercel />,
+    "N8N": <SiN8N />,
+    "Apify": <ApifyIcon />,
+    "Zapier": <SiZapier />,
+    "Make.com": <FaProjectDiagram />,
+    "LangChain": <SiLangchain />,
+    "LlamaIndex": <FaBrain />,
+    "CrewAI": <FaRobot />,
+    "AutoGen": <FaCogs />,
+    "AI Agents": <FaRobot />,
+    "Hugging Face": <SiHuggingface />,
+    "Ollama": <SiOllama />,
+    "Replicate": <SiReplicate />,
+    "DeepSeek": <FaBrain />,
+    "Groq": <FaBolt />,
+    "Flowise AI": <FaNetworkWired />,
+    "Puppeteer": <SiPuppeteer />,
+    "Scrapy": <SiScrapy />,
+    "Apache Airflow": <SiApacheairflow />,
+    "Web Scraping": <FaSpider />,
+    "Browser Automation": <FaMousePointer />,
+    "PostHog": <SiPosthog />
 };
 
 export const getIconForTechnology = (name: string): React.ReactNode => {
@@ -140,9 +169,11 @@ export const technologyCategories: { [key: string]: string } = {
     "Python": "Backend", "Java": "Backend", "C#": "Backend", "C++": "Backend", "PHP": "Backend", "Ruby": "Backend", "Go": "Backend", "Scala": "Backend", "Rust": "Backend", "Node.js": "Backend", "Django": "Backend", "Flask": "Backend", "Spring Boot": "Backend", "ASP.NET Core": "Backend", "Laravel": "Backend", "Express.js": "Backend", "Ruby on Rails": "Backend", "FastAPI": "Backend", "GraphQL": "Backend", "REST API": "Backend",
     "SQL": "Database", "PostgreSQL": "Database", "MySQL": "Database", "MongoDB": "Database", "Redis": "Database", "Microsoft SQL Server": "Database", "SQLite": "Database", "Cassandra": "Database", "Elasticsearch": "Database", "Firebase": "Database", "MariaDB": "Database", "DynamoDB": "Database", "Supabase": "Database",
     "Microsoft Azure": "Cloud & DevOps", "Google Cloud Platform": "Cloud & DevOps", "Docker": "Cloud & DevOps", "Kubernetes": "Cloud & DevOps", "Jenkins": "Cloud & DevOps", "Terraform": "Cloud & DevOps", "Ansible": "Cloud & DevOps", "GitLab CI": "Cloud & DevOps", "CircleCI": "Cloud & DevOps", "Nginx": "Cloud & DevOps", "Apache HTTP Server": "Cloud & DevOps", "Linux": "Cloud & DevOps", "Ubuntu": "Cloud & DevOps", "Bash/Shell": "Cloud & DevOps", "AWS Cloud": "Cloud & DevOps", "Cloudinary": "Cloud & DevOps", "Vercel": "Cloud & DevOps",
-    "TensorFlow": "AI & Vibe Coding", "PyTorch": "AI & Vibe Coding", "Scikit-learn": "AI & Vibe Coding", "Pandas": "AI & Vibe Coding", "NumPy": "AI & Vibe Coding", "Apache Spark": "AI & Vibe Coding", "Hadoop": "AI & Vibe Coding", "OpenAI API": "AI & Vibe Coding", "Cursor IDE": "AI & Vibe Coding", "Claude Code": "AI & Vibe Coding", "GitHub Copilot": "AI & Vibe Coding", "Vibe Coding": "AI & Vibe Coding",
+    "N8N": "Automation", "Apify": "Automation", "Zapier": "Automation", "Make.com": "Automation", "Puppeteer": "Automation", "Playwright": "Automation", "Scrapy": "Automation", "Selenium": "Automation", "Apache Airflow": "Automation", "Web Scraping": "Automation", "Browser Automation": "Automation",
+    "LangChain": "AI & Agents", "LlamaIndex": "AI & Agents", "CrewAI": "AI & Agents", "AutoGen": "AI & Agents", "AI Agents": "AI & Agents", "Flowise AI": "AI & Agents", "Hugging Face": "AI & Agents", "Ollama": "AI & Agents", "DeepSeek": "AI & Agents", "Groq": "AI & Agents", "Replicate": "AI & Agents", "OpenAI API": "AI & Agents", "Cursor IDE": "AI & Agents", "Claude Code": "AI & Agents", "GitHub Copilot": "AI & Agents", "Vibe Coding": "AI & Agents", "TensorFlow": "AI & Agents", "PyTorch": "AI & Agents", "Scikit-learn": "AI & Agents", "Pandas": "AI & Agents", "NumPy": "AI & Agents", "Apache Spark": "AI & Agents", "Hadoop": "AI & Agents",
     "Swift": "Mobile", "Kotlin": "Mobile", "Dart": "Mobile", "Flutter": "Mobile", "React Native": "Mobile", "Ionic": "Mobile", "Android": "Mobile", "iOS": "Mobile",
-    "R": "Tools & Testing", "Git": "Tools & Testing", "GitHub": "Tools & Testing", "Power BI": "Tools & Testing", "Unity": "Tools & Testing", "Unreal Engine": "Tools & Testing", "Figma": "Tools & Testing", "Postman": "Tools & Testing", "Jira": "Tools & Testing", "Selenium": "Tools & Testing", "Appium": "Tools & Testing", "Playwright": "Tools & Testing", "Cypress": "Tools & Testing", "Wireshark": "Tools & Testing", "Metasploit": "Tools & Testing", "OWASP ZAP": "Tools & Testing", "Splunk": "Tools & Testing", "Datadog": "Tools & Testing", "Prometheus": "Tools & Testing", "Grafana": "Tools & Testing", "Blockchain": "Tools & Testing", "Ethereum": "Tools & Testing", "Solidity": "Tools & Testing", "Swagger": "Tools & Testing", "Replit": "Tools & Testing", "Antigravity IDE": "Tools & Testing"
+    "R": "Tools & Testing", "Git": "Tools & Testing", "GitHub": "Tools & Testing", "Power BI": "Tools & Testing", "Unity": "Tools & Testing", "Unreal Engine": "Tools & Testing", "Figma": "Tools & Testing", "Postman": "Tools & Testing", "Jira": "Tools & Testing", "Appium": "Tools & Testing", "Cypress": "Tools & Testing", "Wireshark": "Tools & Testing", "Metasploit": "Tools & Testing", "OWASP ZAP": "Tools & Testing", "Splunk": "Tools & Testing", "Datadog": "Tools & Testing", "Prometheus": "Tools & Testing", "Grafana": "Tools & Testing", "Blockchain": "Tools & Testing", "Ethereum": "Tools & Testing", "Solidity": "Tools & Testing", "Swagger": "Tools & Testing", "Replit": "Tools & Testing", "Antigravity IDE": "Tools & Testing", "PostHog": "Tools & Testing"
 };
 
 export const availableTechnologies = Object.keys(iconMap);
+

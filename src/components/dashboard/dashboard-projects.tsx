@@ -9,6 +9,7 @@ import { Category } from "@/lib/models/category";
 import { Suspense, useState, useEffect, useMemo } from "react";
 import { Loading } from "@/components/loading";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { toast, Toaster } from "sonner";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { ImportModal } from "@/components/dashboard/import-modal";
@@ -147,6 +148,7 @@ function SortableProjectCard({
 }
 
 export function DashboardProjects() {
+    const router = useRouter();
     const [projects, setProjects] = useState<Project[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [projToDelete, setProjToDelete] = useState<number | null>(null);
@@ -159,7 +161,7 @@ export function DashboardProjects() {
 
     useEffect(() => {
         getActiveUserAction().then((u) => { if (u?.id) setUserId(u.id); });
-        getActiveCategoriesAction().then((cats) => { if (cats) setCategories(cats); }).catch(() => {});
+        getActiveCategoriesAction("project").then((cats) => { if (cats) setCategories(cats); }).catch(() => {});
     }, []);
 
     const sensors = useSensors(
@@ -192,52 +194,70 @@ export function DashboardProjects() {
 
     const handleDeleteClick = (id: number) => {
         setProjToDelete(id);
-    }
+    };
 
     const handleConfirmDelete = async () => {
         if (projToDelete === null) return;
         try {
             await deleteProjectAction(projToDelete);
+            setProjects(projects.filter((p) => p.id !== projToDelete));
             toast.success("Project deleted successfully");
-            fetchProjects();
         } catch (error) {
-            toast.error("Failed to delete project");
             console.error(error);
+            toast.error("Failed to delete project");
         } finally {
             setProjToDelete(null);
         }
-    }
-
-    const isFiltered = selectedCategory !== 'all' || searchQuery.trim() !== "";
+    };
 
     const handleDragEnd = async (event: DragEndEvent) => {
         const { active, over } = event;
-        
-        if (over && active.id !== over.id) {
-            const oldIndex = projects.findIndex(item => item.id === active.id);
-            const newIndex = projects.findIndex(item => item.id === over.id);
-            
-            if (oldIndex === -1 || newIndex === -1) return;
 
-            const newItems = arrayMove(projects, oldIndex, newIndex);
-            
-            // Optimistically update sort_order 
-            const updatedItems = newItems.map((item, index) => ({
-                ...item,
-                sort_order: index + 1
-            }));
-            
-            setProjects(updatedItems);
-            
-            // Fire off the background update
-            const updates = updatedItems.map(item => ({ id: item.id!, sort_order: item.sort_order }));
-            
-            toast.promise(bulkUpdateProjectOrdersAction(updates), {
-                loading: 'Saving new order...',
-                success: 'Order updated successfully',
-                error: 'Failed to update order'
-            });
+        if (over && active.id !== over.id) {
+            const oldIndex = projects.findIndex((p) => p.id === active.id);
+            const newIndex = projects.findIndex((p) => p.id === over.id);
+
+            const newProjects = arrayMove(projects, oldIndex, newIndex);
+            setProjects(newProjects);
+
+            try {
+                // Update sort_order for all projects based on their new index
+                const updates = newProjects
+                    .filter((p): p is Project & { id: number } => typeof p.id === 'number')
+                    .map((p, index) => ({
+                        id: p.id,
+                        sort_order: index + 1,
+                    }));
+                await bulkUpdateProjectOrdersAction(updates);
+                toast.success("Project order updated");
+            } catch (error) {
+                console.error("Failed to reorder projects", error);
+                toast.error("Failed to save new order");
+                // Revert on error
+                fetchProjects();
+            }
         }
+    };
+
+    const handleImportSuccess = () => {
+        fetchProjects();
+        // also refresh categories in case new ones were added
+        getActiveCategoriesAction("project").then((cats) => { if (cats) setCategories(cats); }).catch(() => {});
+    };
+
+    const handleGitHubImportSuccess = (importedProject: any) => {
+        // Save to sessionStorage and navigate to project create form
+        if (typeof window !== "undefined") {
+            sessionStorage.setItem("github_imported_project", JSON.stringify(importedProject));
+            router.push("/dashboard/projects/create");
+        }
+    };
+
+    const isFiltered = selectedCategory !== 'all' || searchQuery.trim() !== "";
+
+    const clearFilters = () => {
+        setSelectedCategory('all');
+        setSearchQuery("");
     };
 
     // Category pills data with counts
@@ -246,25 +266,17 @@ export function DashboardProjects() {
     }, [projects]);
 
     const categoryPills = useMemo(() => {
-        const pills: Array<{ key: 'all' | 'uncategorized' | number; label: string; count: number }> = [
-            { key: 'all', label: 'All', count: projects.length }
+        const pills: { key: 'all' | 'uncategorized' | number; label: string; count: number }[] = [
+            { key: 'all', label: 'All Projects', count: projects.length },
         ];
 
-        categories.forEach(cat => {
-            const count = projects.filter(p => p.category_id === cat.id).length;
-            pills.push({
-                key: cat.id!,
-                label: cat.name,
-                count
-            });
-        });
-
         if (uncategorizedCount > 0) {
-            pills.push({
-                key: 'uncategorized',
-                label: 'Uncategorized',
-                count: uncategorizedCount
-            });
+            pills.push({ key: 'uncategorized', label: 'Uncategorized', count: uncategorizedCount });
+        }
+
+        for (const cat of categories) {
+            const count = projects.filter(p => p.category_id === cat.id).length;
+            pills.push({ key: cat.id!, label: cat.name, count });
         }
 
         return pills;
@@ -272,20 +284,22 @@ export function DashboardProjects() {
 
     // Filter projects by category and search
     const filteredProjects = useMemo(() => {
-        let list = projects;
+        let list = [...projects];
 
+        // 1. Category filter
         if (selectedCategory === 'uncategorized') {
             list = list.filter(p => !p.category_id);
         } else if (selectedCategory !== 'all') {
             list = list.filter(p => p.category_id === selectedCategory);
         }
 
+        // 2. Search filter
         if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase().trim();
+            const q = searchQuery.toLowerCase();
             list = list.filter(p =>
-                p.title.toLowerCase().includes(query) ||
-                p.description.toLowerCase().includes(query) ||
-                (p.technologies && p.technologies.toLowerCase().includes(query))
+                p.title.toLowerCase().includes(q) ||
+                (p.description && p.description.toLowerCase().includes(q)) ||
+                (p.technologies && p.technologies.toLowerCase().includes(q))
             );
         }
 
@@ -309,7 +323,10 @@ export function DashboardProjects() {
                     {userId && (
                         <CategoryManager
                             userId={userId}
-                            projects={projects}
+                            type="project"
+                            title="Manage Project Categories"
+                            items={projects}
+                            itemLabel="projects"
                             onCategoriesChange={handleCategoriesChange}
                         />
                     )}

@@ -4,6 +4,7 @@ import { addSkill, deleteSkill, getSkills, updateSkill, getActiveSkills } from "
 import { revalidatePath } from "next/cache";
 import { checkAuth } from "@/lib/auth";
 import { cookies } from "next/headers";
+
 export async function addSkillAction(skill: Skill) {
     const cookieStore = await cookies();
     const token = cookieStore.get('auth_code')?.value;
@@ -21,12 +22,15 @@ export async function addSkillAction(skill: Skill) {
     try {
         const result = await addSkill(validatedSkill.data);
         revalidatePath("/");
+        revalidatePath("/about");
+        revalidatePath("/dashboard");
         return result;
     } catch (error) {
         console.error("Error adding skill:", error);
         throw error;
     }
 }
+
 export async function getActiveSkillsAction() {
     try {
         return await getActiveSkills();
@@ -35,6 +39,7 @@ export async function getActiveSkillsAction() {
         throw error;
     }
 }
+
 export async function updateSkillAction(skill: Skill) {
     const cookieStore = await cookies();
     const token = cookieStore.get('auth_code')?.value;
@@ -52,12 +57,15 @@ export async function updateSkillAction(skill: Skill) {
     try {
         const result = await updateSkill(validatedSkill.data);
         revalidatePath("/");
+        revalidatePath("/about");
+        revalidatePath("/dashboard");
         return result;
     } catch (error) {
         console.error("Error updating skill:", error);
         throw error;
     }
 }
+
 export async function deleteSkillAction(id: number) {
     const cookieStore = await cookies();
     const token = cookieStore.get('auth_code')?.value;
@@ -71,12 +79,15 @@ export async function deleteSkillAction(id: number) {
     try {
         const result = await deleteSkill(id);
         revalidatePath("/");
+        revalidatePath("/about");
+        revalidatePath("/dashboard");
         return result;
     } catch (error) {
         console.error("Error deleting skill:", error);
         throw error;
     }
 }
+
 export async function getSkillsAction() {
     const cookieStore = await cookies();
     const token = cookieStore.get('auth_code')?.value;
@@ -93,4 +104,4 @@ export async function getSkillsAction() {
         console.error("Error getting skills:", error);
         throw error;
     }
-}
+}

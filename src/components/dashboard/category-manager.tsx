@@ -1,19 +1,45 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { FaChevronDown, FaChevronUp, FaPlus, FaTag, FaTimes, FaExclamationTriangle, FaCheck, FaPencilAlt } from "react-icons/fa";
-import { Category } from "@/lib/models/category";
-import { Project } from "@/lib/models/project";
-import { getCategoriesByUserIdAction, addCategoryAction, deleteCategoryAction, updateCategoryAction } from "@/actions/category-action";
+import { MdDragIndicator } from "react-icons/md";
+import { Category, CategoryType } from "@/lib/models/category";
+import {
+    getCategoriesByUserIdAction,
+    addCategoryAction,
+    deleteCategoryAction,
+    updateCategoryAction,
+    bulkUpdateCategoryOrdersAction,
+} from "@/actions/category-action";
 import { toast } from "sonner";
+import {
+    DndContext,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragEndEvent,
+} from "@dnd-kit/core";
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    horizontalListSortingStrategy,
+    useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface CategoryManagerProps {
     userId: number;
-    projects: Project[];
+    type?: CategoryType;
+    title?: string;
+    items?: { category_id?: number | null }[];
+    itemLabel?: string;
     onCategoriesChange: (cats: Category[]) => void;
 }
 
-// ─── Inline editable chip ────────────────────────────────────────────────────
-function CategoryChip({
+// ─── Sortable Inline editable chip ───────────────────────────────────────────
+function SortableCategoryChip({
     cat,
     onDelete,
     onRename,
@@ -27,13 +53,36 @@ function CategoryChip({
     const [isSaving, setIsSaving] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({
+        id: cat.id!,
+        disabled: editing,
+    });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.4 : 1,
+        zIndex: isDragging ? 50 : undefined,
+    };
+
     useEffect(() => {
         if (editing) inputRef.current?.select();
     }, [editing]);
 
     const save = async () => {
         const trimmed = draft.trim();
-        if (!trimmed || trimmed === cat.name) { setEditing(false); setDraft(cat.name); return; }
+        if (!trimmed || trimmed === cat.name) {
+            setEditing(false);
+            setDraft(cat.name);
+            return;
+        }
         setIsSaving(true);
         try {
             await onRename(cat.id!, trimmed);
@@ -47,13 +96,23 @@ function CategoryChip({
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") { e.preventDefault(); save(); }
-        if (e.key === "Escape") { setEditing(false); setDraft(cat.name); }
+        if (e.key === "Enter") {
+            e.preventDefault();
+            save();
+        }
+        if (e.key === "Escape") {
+            setEditing(false);
+            setDraft(cat.name);
+        }
     };
 
     if (editing) {
         return (
-            <span className="inline-flex items-center gap-1.5 bg-elevated border border-primary/50 rounded-full px-3 py-1.5">
+            <span
+                ref={setNodeRef}
+                style={style}
+                className="inline-flex items-center gap-1.5 bg-elevated border border-primary/50 rounded-full px-3 py-1.5 shadow-sm"
+            >
                 <input
                     ref={inputRef}
                     value={draft}
@@ -66,7 +125,10 @@ function CategoryChip({
                 />
                 <button
                     type="button"
-                    onMouseDown={(e) => { e.preventDefault(); save(); }}
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        save();
+                    }}
                     disabled={isSaving}
                     className="text-primary hover:text-primary-hover disabled:opacity-40 transition-colors"
                     title="Save"
@@ -75,7 +137,11 @@ function CategoryChip({
                 </button>
                 <button
                     type="button"
-                    onMouseDown={(e) => { e.preventDefault(); setEditing(false); setDraft(cat.name); }}
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        setEditing(false);
+                        setDraft(cat.name);
+                    }}
                     className="text-muted hover:text-foreground transition-colors"
                     title="Cancel"
                 >
@@ -86,13 +152,32 @@ function CategoryChip({
     }
 
     return (
-        <span className="group inline-flex items-center gap-2 bg-elevated border border-border rounded-full px-3 py-1.5 text-sm font-semibold text-foreground">
-            {cat.name}
+        <span
+            ref={setNodeRef}
+            style={style}
+            className={`group inline-flex items-center gap-1.5 bg-elevated border rounded-full px-3 py-1.5 text-sm font-semibold text-foreground transition-all select-none ${
+                isDragging
+                    ? "border-primary shadow-lg ring-2 ring-primary/30"
+                    : "border-border hover:border-border-hover"
+            }`}
+        >
+            {/* Drag Handle */}
+            <span
+                {...attributes}
+                {...listeners}
+                className="cursor-grab active:cursor-grabbing text-muted/60 group-hover:text-muted hover:!text-primary transition-colors pr-0.5"
+                title="Drag to reorder category"
+            >
+                <MdDragIndicator size={15} />
+            </span>
+
+            <span>{cat.name}</span>
+
             {/* Edit button */}
             <button
                 type="button"
                 onClick={() => setEditing(true)}
-                className="text-muted hover:text-primary transition-colors"
+                className="text-muted hover:text-primary transition-colors ml-0.5"
                 title={`Rename "${cat.name}"`}
             >
                 <FaPencilAlt size={9} />
@@ -111,7 +196,14 @@ function CategoryChip({
 }
 
 // ─── CategoryManager ─────────────────────────────────────────────────────────
-export function CategoryManager({ userId, projects, onCategoriesChange }: CategoryManagerProps) {
+export function CategoryManager({
+    userId,
+    type = "project",
+    title = "Manage Categories",
+    items = [],
+    itemLabel = "items",
+    onCategoriesChange,
+}: CategoryManagerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const [newName, setNewName] = useState("");
@@ -119,11 +211,26 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
     const [pendingDelete, setPendingDelete] = useState<Category | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 4,
+            },
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
     useEffect(() => {
-        getCategoriesByUserIdAction(userId)
-            .then((cats) => { setCategories(cats); onCategoriesChange(cats); })
+        if (!userId) return;
+        getCategoriesByUserIdAction(userId, type)
+            .then((cats) => {
+                setCategories(cats);
+                onCategoriesChange(cats);
+            })
             .catch(() => toast.error("Failed to load categories"));
-    }, [userId]);
+    }, [userId, type]);
 
     useEffect(() => {
         if (isOpen) inputRef.current?.focus();
@@ -139,7 +246,8 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
         if (!trimmed) return;
         setIsAdding(true);
         try {
-            const created = await addCategoryAction(trimmed, userId);
+            const nextSortOrder = categories.length;
+            const created = await addCategoryAction(trimmed, userId, type, nextSortOrder);
             syncCategories([...categories, created]);
             setNewName("");
             toast.success(`Category "${created.name}" added`);
@@ -166,7 +274,7 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
         try {
             await deleteCategoryAction(pendingDelete.id);
             syncCategories(categories.filter((c) => c.id !== pendingDelete.id));
-            toast.success(`"${pendingDelete.name}" deleted — affected projects are now uncategorized`);
+            toast.success(`"${pendingDelete.name}" deleted — affected ${itemLabel} are now uncategorized`);
         } catch {
             toast.error("Failed to delete category");
         } finally {
@@ -174,7 +282,37 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
         }
     };
 
-    const affectedCount = (cat: Category) => projects.filter((p) => p.category_id === cat.id).length;
+    const handleDragEnd = async (event: DragEndEvent) => {
+        const { active, over } = event;
+        if (over && active.id !== over.id) {
+            const oldIndex = categories.findIndex((c) => c.id === active.id);
+            const newIndex = categories.findIndex((c) => c.id === over.id);
+
+            const newCategories = arrayMove(categories, oldIndex, newIndex);
+            syncCategories(newCategories);
+
+            try {
+                const updates = newCategories
+                    .filter((c): c is Category & { id: number } => typeof c.id === "number")
+                    .map((c, index) => ({
+                        id: c.id,
+                        sort_order: index + 1,
+                    }));
+                await bulkUpdateCategoryOrdersAction(updates);
+                toast.success("Category order updated");
+            } catch (error) {
+                console.error("Failed to reorder categories", error);
+                toast.error("Failed to save category order");
+                if (userId) {
+                    getCategoriesByUserIdAction(userId, type)
+                        .then(syncCategories)
+                        .catch(() => {});
+                }
+            }
+        }
+    };
+
+    const affectedCount = (cat: Category) => items.filter((p) => p.category_id === cat.id).length;
 
     return (
         <div className="bg-surface border border-border rounded-2xl overflow-hidden transition-all duration-300">
@@ -186,7 +324,7 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
             >
                 <div className="flex items-center gap-3">
                     <FaTag className="text-primary text-sm" />
-                    <span className="font-bold text-foreground text-sm">Manage Categories</span>
+                    <span className="font-bold text-foreground text-sm">{title}</span>
                     {categories.length > 0 && (
                         <span className="inline-flex items-center justify-center min-w-[1.4rem] h-5 px-1.5 rounded-full text-[10px] font-extrabold bg-primary/10 text-primary">
                             {categories.length}
@@ -199,20 +337,32 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
             {/* Expanded body */}
             {isOpen && (
                 <div className="px-5 pb-5 border-t border-border space-y-4 pt-4">
-                    {/* Chip list */}
-                    <div className="flex flex-wrap gap-2 min-h-[2rem]">
-                        {categories.length === 0 && (
-                            <span className="text-sm text-muted italic">No categories yet — add one below.</span>
-                        )}
-                        {categories.map((cat) => (
-                            <CategoryChip
-                                key={cat.id}
-                                cat={cat}
-                                onDelete={setPendingDelete}
-                                onRename={handleRename}
-                            />
-                        ))}
-                    </div>
+                    {/* Chip list with drag & drop */}
+                    {categories.length === 0 ? (
+                        <span className="text-sm text-muted italic">No categories yet — add one below.</span>
+                    ) : (
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <SortableContext
+                                items={categories.map((c) => c.id!)}
+                                strategy={horizontalListSortingStrategy}
+                            >
+                                <div className="flex flex-wrap gap-2 min-h-[2rem]">
+                                    {categories.map((cat) => (
+                                        <SortableCategoryChip
+                                            key={cat.id}
+                                            cat={cat}
+                                            onDelete={setPendingDelete}
+                                            onRename={handleRename}
+                                        />
+                                    ))}
+                                </div>
+                            </SortableContext>
+                        </DndContext>
+                    )}
 
                     {/* Inline delete confirm */}
                     {pendingDelete && (
@@ -222,15 +372,27 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
                                 <p className="font-bold text-foreground">Delete &ldquo;{pendingDelete.name}&rdquo;?</p>
                                 {affectedCount(pendingDelete) > 0 ? (
                                     <p className="text-muted mt-0.5">
-                                        <span className="text-amber-400 font-semibold">{affectedCount(pendingDelete)} project{affectedCount(pendingDelete) > 1 ? "s" : ""}</span> will become uncategorized. Projects will not be deleted.
+                                        <span className="text-amber-400 font-semibold">{affectedCount(pendingDelete)} {itemLabel}</span> will become uncategorized. {itemLabel} will not be deleted.
                                     </p>
                                 ) : (
-                                    <p className="text-muted mt-0.5">No projects are assigned to this category.</p>
+                                    <p className="text-muted mt-0.5">No {itemLabel} are assigned to this category.</p>
                                 )}
                             </div>
                             <div className="flex gap-2 flex-shrink-0">
-                                <button type="button" onClick={() => setPendingDelete(null)} className="px-4 py-1.5 text-sm font-semibold border border-border rounded-lg hover:bg-elevated transition-colors">Cancel</button>
-                                <button type="button" onClick={handleDeleteConfirm} className="px-4 py-1.5 text-sm font-bold bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors shadow-sm">Delete</button>
+                                <button
+                                    type="button"
+                                    onClick={() => setPendingDelete(null)}
+                                    className="px-4 py-1.5 text-sm font-semibold border border-border rounded-lg hover:bg-elevated transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleDeleteConfirm}
+                                    className="px-4 py-1.5 text-sm font-bold bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors shadow-sm"
+                                >
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     )}
@@ -241,7 +403,12 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
                             ref={inputRef}
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
-                            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault();
+                                    handleAdd();
+                                }
+                            }}
                             placeholder="New category name…"
                             maxLength={100}
                             className="flex-1 bg-elevated border border-border rounded-xl px-4 py-2.5 text-foreground placeholder-muted focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm"
@@ -261,3 +428,5 @@ export function CategoryManager({ userId, projects, onCategoriesChange }: Catego
         </div>
     );
 }
+
+
