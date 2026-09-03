@@ -8,10 +8,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-import { FaGithub, FaExternalLinkAlt, FaTag } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaTag, FaSearchPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { checkLiveUrlAction } from "@/actions/project-action";
+import { ImageLightbox } from "@/components/ui/image-lightbox";
 
 // ---------------------------------------------------------------------------
 // LiveUrlButton
@@ -45,34 +46,83 @@ function LiveUrlButton({ url }: { url: string | null | undefined }) {
 // ImageSlider
 // ---------------------------------------------------------------------------
 function ImageSlider({ imgeurl, projectName }: { imgeurl: string[]; projectName: string }) {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [swiperInstance, setSwiperInstance] = useState<any>(null);
+
+    // Pause autoplay when lightbox zoom is open, resume when closed
+    useEffect(() => {
+        if (!swiperInstance) return;
+        if (isLightboxOpen) {
+            swiperInstance.autoplay?.stop();
+        } else {
+            swiperInstance.autoplay?.start();
+        }
+    }, [isLightboxOpen, swiperInstance]);
+
     return (
-        <Swiper
-            modules={[Navigation, Pagination, Autoplay, EffectFade]}
-            effect="fade"
-            fadeEffect={{ crossFade: true }}
-            spaceBetween={0}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
-            loop={true}
-            className="w-full aspect-video bg-transparent rounded-[2rem] overflow-hidden"
-        >
-            {imgeurl.map((slide, index) => (
-                <SwiperSlide key={index}>
-                    <div className="relative w-full h-full">
-                        <Image
-                            src={slide}
-                            alt={`${projectName} preview ${index + 1}`}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            priority={index === 0}
-                            className="object-cover object-center transform transition-transform duration-[10s] hover:scale-105"
-                        />
-                    </div>
-                </SwiperSlide>
-            ))}
-        </Swiper>
+        <div className="relative w-full aspect-video group/slider overflow-hidden rounded-[2rem]">
+            <Swiper
+                modules={[Navigation, Pagination, Autoplay, EffectFade]}
+                effect="fade"
+                fadeEffect={{ crossFade: true }}
+                spaceBetween={0}
+                slidesPerView={1}
+                navigation
+                pagination={{ clickable: true }}
+                autoplay={{ delay: 5000, disableOnInteraction: false }}
+                loop={imgeurl.length > 1}
+                onSwiper={(swiper) => setSwiperInstance(swiper)}
+                onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                className="w-full h-full bg-transparent rounded-[2rem] overflow-hidden"
+            >
+                {imgeurl.map((slide, index) => (
+                    <SwiperSlide key={index}>
+                        <div
+                            className="relative w-full h-full cursor-zoom-in group/slide"
+                            onClick={() => {
+                                setActiveIndex(index);
+                                setIsLightboxOpen(true);
+                            }}
+                            title="Click to view full image & zoom"
+                        >
+                            <Image
+                                src={slide}
+                                alt={`${projectName} preview ${index + 1}`}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                priority={index === 0}
+                                className="object-cover object-center transform transition-transform duration-[10s] hover:scale-105"
+                            />
+                        </div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+
+            {/* Floating Zoom Button Overlay */}
+            <button
+                type="button"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setIsLightboxOpen(true);
+                }}
+                className="absolute bottom-4 right-4 z-20 flex items-center gap-2 px-3 py-2 rounded-xl bg-black/60 hover:bg-black/85 text-white/90 hover:text-white border border-white/20 backdrop-blur-md shadow-xl transition-all duration-300 transform hover:scale-105 opacity-90 md:opacity-0 md:group-hover/slider:opacity-100 cursor-pointer"
+                title="View full image & zoom"
+                aria-label="View full image & zoom"
+            >
+                <FaSearchPlus className="w-3.5 h-3.5 text-primary" />
+                <span className="text-xs font-semibold tracking-wide hidden sm:inline">Zoom</span>
+            </button>
+
+            {/* Fullscreen Lightbox Modal */}
+            <ImageLightbox
+                images={imgeurl}
+                initialIndex={activeIndex}
+                projectName={projectName}
+                isOpen={isLightboxOpen}
+                onClose={() => setIsLightboxOpen(false)}
+            />
+        </div>
     );
 }
 
