@@ -158,7 +158,7 @@ export function ProjectCard({ project, index, categories }: { project: Project; 
             transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
             key={project.id}
             data-spotlight-ignore="true"
-            className={`project-card flex flex-col ${isReversed ? "xl:flex-row-reverse" : "xl:flex-row"} gap-12 xl:gap-20 mb-32 lg:mb-40 items-center justify-between w-full`}
+            className={`project-card flex flex-col ${isReversed ? "xl:flex-row-reverse" : "xl:flex-row"} gap-12 xl:gap-20 mb-32 lg:mb-40 items-center justify-between w-full will-change-transform`}
         >
             {/* Image side */}
             <div className="w-full xl:w-[58%] relative group">
@@ -167,7 +167,7 @@ export function ProjectCard({ project, index, categories }: { project: Project; 
                 {/* Animated light border wrapper */}
                 <div className="relative rounded-[2rem] overflow-hidden p-[2px] shadow-2xl group">
                     {/* Spinning beam */}
-                    <div className="absolute top-1/2 left-1/2 h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_75%,var(--primary)_100%)] opacity-80" />
+                    <div className="absolute top-1/2 left-1/2 h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_75%,var(--primary)_100%)] opacity-80 will-change-transform transform-gpu" />
 
                     {/* Inner container */}
                     <div className="relative w-full h-full bg-surface rounded-[calc(2rem-2px)] p-2 z-10 overflow-hidden">

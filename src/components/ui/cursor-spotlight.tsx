@@ -58,7 +58,6 @@ export default function CursorSpotlight({
   const [mounted, setMounted] = useState(false);
   const [isOverContainer, setIsOverContainer] = useState(false);
   const isOverContainerRef = useRef(false);
-  const lastCoords = useRef({ x: -1, y: -1 });
 
   const pathname = usePathname();
   const isDashboard = pathname?.startsWith("/dashboard");
@@ -92,22 +91,13 @@ export default function CursorSpotlight({
     };
 
     const handlePointerMove = (e: MouseEvent) => {
-      lastCoords.current = { x: e.clientX, y: e.clientY };
       checkElement(e.target);
     };
 
-    const handleScroll = () => {
-      if (lastCoords.current.x < 0 || lastCoords.current.y < 0) return;
-      const el = document.elementFromPoint(lastCoords.current.x, lastCoords.current.y);
-      checkElement(el);
-    };
-
     window.addEventListener("mousemove", handlePointerMove, { passive: true });
-    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", handlePointerMove);
-      window.removeEventListener("scroll", handleScroll);
     };
   }, [mounted, isTouchDevice, isDashboard]);
 
