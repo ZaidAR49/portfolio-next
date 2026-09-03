@@ -25,7 +25,7 @@ export default async function ProjectsPage() {
     );
 
     return (
-        <section className="flex flex-col pt-28 pb-24 px-4 md:px-8 xl:px-12 max-w-[1600px] mx-auto w-full relative z-10">
+        <section id="projects" data-spotlight-ignore="true" className="flex flex-col pt-28 pb-24 px-4 md:px-8 xl:px-12 max-w-[1600px] mx-auto w-full relative z-10">
             {/* Page header */}
             <div className="flex flex-col items-center mb-16 text-center">
                 <div className="inline-flex items-center justify-center space-x-2 px-4 py-1.5 rounded-full bg-surface/50 border border-border mb-6 backdrop-blur-sm shadow-sm">

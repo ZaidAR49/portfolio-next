@@ -11,7 +11,7 @@ export default function Projects({ projects, categories }: { projects: Project[]
     const featured = sorted.slice(0, 3);
 
     return (
-        <section id="projects" className="flex flex-col pt-12 pb-24 px-4 md:px-8 xl:px-12 max-w-[1600px] mx-auto w-full relative z-10">
+        <section id="projects" data-spotlight-ignore="true" className="flex flex-col pt-12 pb-24 px-4 md:px-8 xl:px-12 max-w-[1600px] mx-auto w-full relative z-10">
             {/* Section header */}
             <motion.div
                 initial={{ opacity: 0, y: 30 }}

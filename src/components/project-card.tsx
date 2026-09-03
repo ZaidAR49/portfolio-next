@@ -107,7 +107,8 @@ export function ProjectCard({ project, index, categories }: { project: Project; 
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
             key={project.id}
-            className={`flex flex-col ${isReversed ? "xl:flex-row-reverse" : "xl:flex-row"} gap-12 xl:gap-20 mb-32 lg:mb-40 items-center justify-between w-full`}
+            data-spotlight-ignore="true"
+            className={`project-card flex flex-col ${isReversed ? "xl:flex-row-reverse" : "xl:flex-row"} gap-12 xl:gap-20 mb-32 lg:mb-40 items-center justify-between w-full`}
         >
             {/* Image side */}
             <div className="w-full xl:w-[58%] relative group">
