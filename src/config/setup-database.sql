@@ -173,6 +173,32 @@ CREATE TABLE public.auth_codes (
 
 ALTER SEQUENCE public.secret_key_id_seq OWNED BY public.auth_codes.id;
 
+-- -----------------------------------------------------------------------------
+-- _keepalive  (Supabase Free-Tier Keep-Alive — 2026)
+-- A minimal single-row table queried by /api/keep-alive to generate
+-- real Data-API (PostgREST) traffic that counts toward the rolling
+-- 7-day activity threshold Supabase uses to decide whether to pause
+-- an idle project.
+--
+-- HOW TO USE:
+--   Run this block once in the Supabase SQL Editor.
+--   The /api/keep-alive route handler upserts + reads this row on every
+--   invocation so each cron execution registers multiple REST requests.
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public._keepalive (
+    id        INT PRIMARY KEY,
+    last_ping TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Seed the single heartbeat row (idempotent)
+INSERT INTO public._keepalive (id, last_ping)
+VALUES (1, NOW())
+ON CONFLICT (id) DO NOTHING;
+
+-- Explicit grants for the Data API (service_role bypasses RLS by default,
+-- but granting explicitly avoids surprises if policies change later)
+GRANT SELECT, INSERT, UPDATE ON TABLE public._keepalive TO service_role;
+
 -- =============================================================================
 -- INDEXES  (in addition to the ones backing PK / UNIQUE constraints above)
 -- =============================================================================
